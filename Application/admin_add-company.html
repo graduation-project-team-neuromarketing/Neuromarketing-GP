@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Add Company | Neuromarketing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007AFF",
+                        "on-primary": "#ffffff",
+                        surface: "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#414755",
+                        outline: "#717786",
+                        "outline-variant": "#c1c6d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#d8e2ff",
+                        "on-primary-container": "#001a41",
+                        // Dark mode specifics
+                        "dark-surface": "#0f172a", 
+                        "dark-surface-container": "#1e293b", 
+                        "dark-border": "#334155" 
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                        lg: "12px",
+                        xl: "16px",
+                        "2xl": "20px",
+                        "3xl": "24px",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Dark Mode Overrides */
+        html.dark body { background-color: theme('colors.dark-surface'); color: white; }
+        html.dark .bg-surface { background-color: theme('colors.dark-surface'); }
+        html.dark .text-on-surface { color: #f8fafc; }
+        html.dark .text-on-surface-variant { color: #cbd5e1; }
+        html.dark .bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/30, html.dark .border-outline-variant\/10, html.dark .border-outline-variant\/50 { border-color: theme('colors.dark-border'); }
+        html.dark .bg-surface-container-lowest, html.dark .bg-surface-container, html.dark .bg-surface\/30 { background-color: #334155; }
+        html.dark .text-slate-500, html.dark .text-slate-400 { color: #94a3b8; }
+        html.dark aside.bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark input.bg-surface-container-lowest::placeholder { color: #94a3b8; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Toast Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast {
+            background: white;
+            color: theme('colors.on-surface');
+            border-left: 4px solid theme('colors.primary');
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        html.dark .toast {
+            background: theme('colors.dark-surface-container');
+            color: white;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen transition-colors duration-300">
+    
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 bg-white border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
+        <div class="flex items-center gap-8 pl-16">
+            <span class="text-xl font-bold tracking-tighter text-primary cursor-pointer transition-transform hover:scale-105" onclick="window.location.href='admin_directory.html'">Neuromarketing</span>
+            <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+                <input class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all outline-none dark:bg-slate-800 dark:border-slate-700 dark:text-white" placeholder="Search for products, companies..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+                <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" onclick="showToast('Language settings opened')" title="Language">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">language</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative group" onclick="showToast('You have 3 new notifications')" title="Notifications">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
+            </button>
+            <button class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95" onclick="showToast('User profile opened')">
+                <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40 transition-colors duration-300">
+        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="admin_directory.html">
+            <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_team.html">
+            <span class="material-symbols-outlined">group</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_statistics.html">
+            <span class="material-symbols-outlined">insights</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Deployments</span>
+        </a>
+        <div class="mt-auto flex flex-col gap-4 pb-8">
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">help</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Help</span>
+            </a>
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="ml-16 pt-20 p-8 min-h-screen flex items-center justify-center">
+        <div class="w-full max-w-xl">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_20px_40px_rgba(0,31,63,0.06)] dark:shadow-none border border-outline-variant/30 overflow-hidden transition-colors duration-300 transform transition-all hover:shadow-2xl">
+                <div class="p-8 border-b border-outline-variant/10">
+                    <h1 class="text-2xl font-semibold tracking-tight text-on-surface transition-colors">Add New Company</h1>
+                    <p class="text-on-surface-variant text-sm mt-1 transition-colors">Register a new client environment for neural analysis.</p>
+                </div>
+                <form id="add-company-form" class="p-8 space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors" for="company-name">Company Name</label>
+                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="company-name" placeholder="e.g. Global Tech Inc." required type="text"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors" for="business-email">Business Email</label>
+                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="business-email" placeholder="admin@company.com" required type="email"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors" for="password">Password</label>
+                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="password" placeholder="••••••••" required type="password"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors">Upload Company Icon</label>
+                        <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group" onclick="showToast('File explorer opened')">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-2xl">cloud_upload</span>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm font-medium text-on-surface transition-colors">Click to upload or drag and drop</p>
+                                <p class="text-xs text-on-surface-variant mt-1 transition-colors">SVG, PNG, JPG (max. 800x800px)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2" type="submit">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            Add Company
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="mt-6 text-center">
+                <button class="text-on-surface-variant text-sm hover:text-primary transition-colors flex items-center justify-center gap-1 mx-auto" onclick="window.location.href='admin_directory.html'">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back to Directory
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Dark Mode Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+            
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                htmlElement.classList.remove('light');
+                themeIcon.textContent = 'light_mode';
+            } else {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                themeIcon.textContent = 'dark_mode';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                    localStorage.theme = 'light';
+                    themeIcon.textContent = 'dark_mode';
+                    showToast('Light mode enabled');
+                } else {
+                    htmlElement.classList.add('dark');
+                    htmlElement.classList.remove('light');
+                    localStorage.theme = 'dark';
+                    themeIcon.textContent = 'light_mode';
+                    showToast('Dark mode enabled');
+                }
+            });
+
+            // --- Form Submission Logic ---
+            const form = document.getElementById('add-company-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const companyName = document.getElementById('company-name').value;
+                showToast(`Company '${companyName}' created successfully! Redirecting...`);
+                
+                // Simulate saving and redirect
+                setTimeout(() => {
+                    window.location.href = 'admin_directory.html';
+                }, 1500);
+            });
+        });
+
+        // --- Toast Notification System ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-primary">check_circle</span>
+                <p class="text-sm font-medium">${message}</p>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger reflow to ensure animation plays
+            void toast.offsetWidth;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

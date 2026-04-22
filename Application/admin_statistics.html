@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Statistics Dashboard | Neuromarketing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007AFF",
+                        "on-primary": "#ffffff",
+                        surface: "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#414755",
+                        outline: "#717786",
+                        "outline-variant": "#c1c6d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#d8e2ff",
+                        "on-primary-container": "#001a41",
+                        // Dark mode specifics
+                        "dark-surface": "#0f172a", 
+                        "dark-surface-container": "#1e293b", 
+                        "dark-border": "#334155"
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                        lg: "12px",
+                        xl: "16px",
+                        "2xl": "20px",
+                        "3xl": "24px",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Dark Mode Overrides */
+        html.dark body { background-color: theme('colors.dark-surface'); color: white; }
+        html.dark .bg-surface { background-color: theme('colors.dark-surface'); }
+        html.dark .text-on-surface { color: #f8fafc; }
+        html.dark .text-on-surface-variant { color: #cbd5e1; }
+        html.dark .bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/30, html.dark .border-white\/50 { border-color: theme('colors.dark-border'); }
+        html.dark .bg-surface-container-lowest, html.dark .bg-surface-container { background-color: #334155; }
+        html.dark .text-slate-500, html.dark .text-slate-400 { color: #94a3b8; }
+        html.dark aside.bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .glass-panel { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .bg-slate-100 { background-color: theme('colors.dark-border'); }
+        html.dark .hover\:bg-slate-100:hover { background-color: theme('colors.dark-border'); }
+        html.dark .border-slate-100 { border-color: theme('colors.dark-border'); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Toast Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast {
+            background: white;
+            color: theme('colors.on-surface');
+            border-left: 4px solid theme('colors.primary');
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        html.dark .toast {
+            background: theme('colors.dark-surface-container');
+            color: white;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen transition-colors duration-300">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 bg-white border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
+        <div class="flex items-center gap-8 pl-16">
+            <span class="text-xl font-bold tracking-tighter text-primary cursor-pointer transition-transform hover:scale-105" onclick="window.location.href='admin_directory.html'">Neuromarketing</span>
+            <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+                <input class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all outline-none dark:bg-slate-800 dark:border-slate-700 dark:text-white" placeholder="Search for products, companies..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+                <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" onclick="showToast('Language settings opened')" title="Language">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">language</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative group" onclick="showToast('You have 3 new notifications')" title="Notifications">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
+            </button>
+            <button class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95" onclick="showToast('User profile opened')">
+                <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40 transition-colors duration-300">
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_directory.html">
+            <span class="material-symbols-outlined">business</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_team.html">
+            <span class="material-symbols-outlined">group</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
+        </a>
+        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="#">
+            <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>insights</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Deployments</span>
+        </a>
+        <div class="mt-auto flex flex-col gap-4 pb-8">
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">help</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Help</span>
+            </a>
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="ml-16 pt-20 p-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-on-surface transition-colors">Statistics Dashboard</h1>
+                    <p class="text-on-surface-variant mt-1 transition-colors">Real-time cross-company neural resonance and sentiment analytics.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 text-on-surface px-4 py-2.5 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center gap-2 text-sm active:scale-95" onclick="showToast('Date range selector opened')">
+                        <span class="material-symbols-outlined text-lg">calendar_today</span>
+                        Last 30 Days
+                    </button>
+                    <button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2 text-sm active:scale-95" onclick="showToast('Report export started...')">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Export Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-primary material-symbols-outlined">groups</span>
+                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">trending_up</span> +12%
+                        </span>
+                    </div>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Total Participants</h3>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span class="text-3xl font-bold text-on-surface transition-colors">12,482</span>
+                        <span class="text-xs text-on-surface-variant/60 transition-colors">Live session</span>
+                    </div>
+                </div>
+                
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400 material-symbols-outlined">psychology</span>
+                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">trending_up</span> +4.2%
+                        </span>
+                    </div>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Avg. Cognitive Resonance</h3>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span class="text-3xl font-bold text-on-surface transition-colors">78.4</span>
+                        <span class="text-xs text-on-surface-variant/60 transition-colors">μV scale</span>
+                    </div>
+                </div>
+                
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400 material-symbols-outlined">favorite</span>
+                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">trending_down</span> -0.5%
+                        </span>
+                    </div>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Positive Sentiment %</h3>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span class="text-3xl font-bold text-on-surface transition-colors">64.2%</span>
+                        <span class="text-xs text-on-surface-variant/60 transition-colors">Baseline target: 60%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Large Line Chart -->
+                <div class="lg:col-span-2 glass-panel rounded-2xl p-8 border border-white/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none flex flex-col">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-on-surface transition-colors">Neural Acceptance Trends</h3>
+                            <p class="text-sm text-on-surface-variant transition-colors">Distribution across 4 core emotional classes</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="px-3 py-1 text-xs font-medium bg-primary text-white rounded-md transition-colors">Daily</button>
+                            <button class="px-3 py-1 text-xs font-medium text-on-surface-variant hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-colors">Weekly</button>
+                        </div>
+                    </div>
+                    
+                    <div class="h-64 relative flex items-end justify-between px-2 gap-4 flex-1">
+                        <!-- Simulated Line Chart with SVG -->
+                        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#007AFF" stop-opacity="0.2"></stop>
+                                    <stop offset="100%" stop-color="#007AFF" stop-opacity="0"></stop>
+                                </linearGradient>
+                                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#007AFF" flood-opacity="0.3"/>
+                                </filter>
+                            </defs>
+                            <path d="M0,80 Q10,70 20,75 T40,50 T60,60 T80,30 T100,45 V100 H0 Z" fill="url(#chartGradient)"></path>
+                            <path d="M0,80 Q10,70 20,75 T40,50 T60,60 T80,30 T100,45" fill="none" stroke="#007AFF" stroke-width="2.5" filter="url(#shadow)"></path>
+                        </svg>
+                        
+                        <div class="absolute bottom-0 w-full flex justify-between text-[10px] text-on-surface-variant font-medium pt-4 transition-colors">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie Chart Section -->
+                <div class="glass-panel rounded-2xl p-8 border border-white/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none flex flex-col">
+                    <h3 class="text-lg font-bold text-on-surface mb-1 transition-colors">Sentiment Distribution</h3>
+                    <p class="text-sm text-on-surface-variant mb-8 transition-colors">Distribution across 4 core emotional classes</p>
+                    
+                    <div class="relative w-48 h-48 mx-auto flex items-center justify-center flex-1 my-4">
+                        <!-- Robust SVG Donut Chart -->
+                        <svg class="w-full h-full transform -rotate-90 drop-shadow-md" viewBox="0 0 42 42">
+                            <!-- Background ring -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#f1f5f9" stroke-width="8" class="dark:stroke-slate-700"></circle>
+                            
+                            <!-- Neutral: 40% -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#94a3b8" stroke-width="8" stroke-dasharray="40 100" stroke-dashoffset="0"></circle>
+                            
+                            <!-- Sad: 20% -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#a855f7" stroke-width="8" stroke-dasharray="20 100" stroke-dashoffset="-40"></circle>
+                            
+                            <!-- Fear: 15% -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#4f46e5" stroke-width="8" stroke-dasharray="15 100" stroke-dashoffset="-60"></circle>
+                            
+                            <!-- Happy: 25% -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#007AFF" stroke-width="8" stroke-dasharray="25 100" stroke-dashoffset="-75"></circle>
+                        </svg>
+                        
+                        <!-- Inner Text -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <div class="bg-white dark:bg-slate-800 w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-sm">
+                                <span class="text-2xl font-bold text-on-surface transition-colors">40%</span>
+                                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider transition-colors">Neutral</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-400"></span><span class="text-sm text-on-surface-variant transition-colors">Neutral</span></div>
+                            <span class="text-sm font-semibold text-on-surface transition-colors">40.0%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-500"></span><span class="text-sm text-on-surface-variant transition-colors">Sad</span></div>
+                            <span class="text-sm font-semibold text-on-surface transition-colors">20.0%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-indigo-600"></span><span class="text-sm text-on-surface-variant transition-colors">Fear</span></div>
+                            <span class="text-sm font-semibold text-on-surface transition-colors">15.0%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span><span class="text-sm text-on-surface-variant transition-colors">Happy</span></div>
+                            <span class="text-sm font-semibold text-on-surface transition-colors">25.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart Section -->
+                <div class="lg:col-span-3 glass-panel rounded-2xl p-8 border border-white/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none mt-2">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-on-surface transition-colors">Corporate Benchmarking</h3>
+                            <p class="text-sm text-on-surface-variant transition-colors">Distribution across 4 core emotional classes</p>
+                        </div>
+                        <button class="text-primary text-sm font-semibold hover:underline" onclick="window.location.href='admin_directory.html'">View All Clients</button>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Global Tech -->
+                        <div class="space-y-2 group">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">Global Tech</span>
+                                <span class="font-bold text-primary">92/100</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="92%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Neuralis AI -->
+                        <div class="space-y-2 group">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">Neuralis AI</span>
+                                <span class="font-bold text-primary">88/100</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="88%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- AeroVance -->
+                        <div class="space-y-2 group">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">AeroVance</span>
+                                <span class="font-bold text-primary">76/100</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="76%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- EcoStrata -->
+                        <div class="space-y-2 group">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">EcoStrata</span>
+                                <span class="font-bold text-primary">64/100</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="64%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Dark Mode Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+            
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                htmlElement.classList.remove('light');
+                themeIcon.textContent = 'light_mode';
+            } else {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                themeIcon.textContent = 'dark_mode';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                    localStorage.theme = 'light';
+                    themeIcon.textContent = 'dark_mode';
+                    showToast('Light mode enabled');
+                } else {
+                    htmlElement.classList.add('dark');
+                    htmlElement.classList.remove('light');
+                    localStorage.theme = 'dark';
+                    themeIcon.textContent = 'light_mode';
+                    showToast('Dark mode enabled');
+                }
+            });
+
+            // --- Animate Progress Bars ---
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('[data-width]');
+                progressBars.forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            }, 300); // slight delay for visual effect
+        });
+
+        // --- Toast Notification System ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-primary">info</span>
+                <p class="text-sm font-medium">${message}</p>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger reflow to ensure animation plays
+            void toast.offsetWidth;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300); // Wait for transition to finish
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

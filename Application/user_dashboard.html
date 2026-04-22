@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Company Directory | Neuromarketing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#007AFF",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "surface-variant": "#e0e3e5",
+                    "on-surface-variant": "#414755",
+                    "outline": "#717786",
+                    "outline-variant": "#c1c6d7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container": "#eceef0",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#d8e2ff",
+                    "on-primary-container": "#001a41"
+            },
+            "borderRadius": {
+                    "DEFAULT": "8px",
+                    "lg": "12px",
+                    "xl": "16px",
+                    "2xl": "20px",
+                    "3xl": "24px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .company-card:hover .view-offers-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
+    <div class="flex items-center gap-8 pl-16">
+        <span class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</span>
+        <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+            <input class="w-full pl-10 pr-4 py-2 bg-slate-100/50 border-none rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:bg-white transition-all" placeholder="Search for products, companies..." type="text"/>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+            <span class="material-symbols-outlined text-slate-500">dark_mode</span>
+        </button>
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+            <span class="material-symbols-outlined text-slate-500">language</span>
+        </button>
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative">
+            <span class="material-symbols-outlined text-slate-500">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+        </button>
+        <div class="h-8 w-8 rounded-full bg-primary-container overflow-hidden">
+            <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"/>
+        </div>
+    </div>
+</header>
+
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40">
+    <a class="p-3 bg-primary/10 shadow-sm text-primary rounded-lg" href="user_dashboard.html">
+        <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
+    </a>
+    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_history.html">
+        <span class="material-symbols-outlined">history</span>
+    </a>
+    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+        <span class="material-symbols-outlined">person</span>
+    </a>
+    <div class="mt-auto flex flex-col gap-4 pb-8">
+        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="#">
+            <span class="material-symbols-outlined">help</span>
+        </a>
+        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+            <span class="material-symbols-outlined">settings</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content Area -->
+<main class="ml-16 pt-20 p-8 min-h-screen">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <h1 class="text-3xl font-semibold tracking-tight text-on-surface">Select a Brand to Evaluate</h1>
+                <p class="text-on-surface-variant mt-1">Share your genuine feedback and let your neural insights shape the future of products.</p>
+            </div>
+        </div>
+
+        <!-- Company Logo Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <!-- Company Item 1 -->
+            <a href="user_brand-details.html?brandId=globaltech" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">business</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">Global Tech</h3>
+                    <p class="text-xs text-on-surface-variant">Active Environment</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 2 -->
+            <a href="user_brand-details.html?brandId=neuralis" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">neurology</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">Neuralis AI</h3>
+                    <p class="text-xs text-on-surface-variant">Processing Data</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 3 -->
+            <a href="user_brand-details.html?brandId=aerovance" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">rocket_launch</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">AeroVance</h3>
+                    <p class="text-xs text-on-surface-variant">Setup Complete</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 4 -->
+            <a href="user_brand-details.html?brandId=ecostrata" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">eco</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">EcoStrata</h3>
+                    <p class="text-xs text-on-surface-variant">3 Projects Active</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 5 -->
+            <a href="user_brand-details.html?brandId=fincore" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">payments</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">FinCore</h3>
+                    <p class="text-xs text-on-surface-variant">Action Required</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 6 -->
+            <a href="user_brand-details.html?brandId=biotrust" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">shield_with_heart</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">BioTrust</h3>
+                    <p class="text-xs text-on-surface-variant">Environment Active</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 7 -->
+            <a href="user_brand-details.html?brandId=logixpath" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">local_shipping</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">LogixPath</h3>
+                    <p class="text-xs text-on-surface-variant">Pending Analysis</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+            
+            <!-- Company Item 8 -->
+            <a href="user_brand-details.html?brandId=buildsmart" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-4xl">home_repair_service</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-on-surface">BuildSmart</h3>
+                    <p class="text-xs text-on-surface-variant">No Active Projects</p>
+                </div>
+                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
+                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

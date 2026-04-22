@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Management | Neuromarketing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007AFF",
+                        "on-primary": "#ffffff",
+                        surface: "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#414755",
+                        outline: "#717786",
+                        "outline-variant": "#c1c6d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#d8e2ff",
+                        "on-primary-container": "#001a41",
+                        // Dark mode specifics
+                        "dark-surface": "#0f172a", 
+                        "dark-surface-container": "#1e293b", 
+                        "dark-border": "#334155"
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                        lg: "12px",
+                        xl: "16px",
+                        "2xl": "20px",
+                        "3xl": "24px",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Dark Mode Overrides */
+        html.dark body { background-color: theme('colors.dark-surface'); color: white; }
+        html.dark .bg-surface { background-color: theme('colors.dark-surface'); }
+        html.dark .text-on-surface { color: #f8fafc; }
+        html.dark .text-on-surface-variant { color: #cbd5e1; }
+        html.dark .bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/30, html.dark .border-outline-variant\/40 { border-color: theme('colors.dark-border'); }
+        html.dark .bg-surface-container-lowest, html.dark .bg-surface-container { background-color: #334155; }
+        html.dark .bg-surface-container\/50 { background-color: rgba(51, 65, 85, 0.5); }
+        html.dark .text-slate-500, html.dark .text-slate-400 { color: #94a3b8; }
+        html.dark aside.bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .glass-panel { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .hover\:bg-white\/50:hover { background-color: rgba(255, 255, 255, 0.05); }
+        html.dark .bg-white\/30 { background-color: transparent; }
+        html.dark .hover\:bg-white:hover { background-color: rgba(255, 255, 255, 0.1); }
+        html.dark .divide-outline-variant\/20 > :not([hidden]) ~ :not([hidden]) { border-color: theme('colors.dark-border'); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Toast Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast {
+            background: white;
+            color: theme('colors.on-surface');
+            border-left: 4px solid theme('colors.primary');
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        html.dark .toast {
+            background: theme('colors.dark-surface-container');
+            color: white;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen transition-colors duration-300">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 bg-white border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
+        <div class="flex items-center gap-8 pl-16">
+            <span class="text-xl font-bold tracking-tighter text-primary cursor-pointer transition-transform hover:scale-105" onclick="window.location.href='admin_directory.html'">Neuromarketing</span>
+            <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+                <input class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all outline-none dark:bg-slate-800 dark:border-slate-700 dark:text-white" placeholder="Search for products, companies..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+                <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" onclick="showToast('Language settings opened')" title="Language">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">language</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative group" onclick="showToast('You have 3 new notifications')" title="Notifications">
+                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
+            </button>
+            <button class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95" onclick="showToast('User profile opened')">
+                <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40 transition-colors duration-300">
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_directory.html">
+            <span class="material-symbols-outlined">business</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
+        </a>
+        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="#">
+            <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>group</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_statistics.html">
+            <span class="material-symbols-outlined">insights</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
+        </a>
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Deployments</span>
+        </a>
+        <div class="mt-auto flex flex-col gap-4 pb-8">
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">help</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Help</span>
+            </a>
+            <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="ml-16 pt-20 p-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-on-surface transition-colors">User Management</h1>
+                    <p class="text-on-surface-variant mt-1 transition-colors">Manage platform contributors and assign neural analysis permissions.</p>
+                </div>
+            </div>
+
+            <!-- User Management Table -->
+            <div class="glass-panel rounded-2xl overflow-hidden shadow-[0px_20px_40px_rgba(0,31,63,0.06)] dark:shadow-none border border-outline-variant/30 transition-colors duration-300">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-surface-container/50 border-b border-outline-variant/30 transition-colors duration-300">
+                            <tr>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Full Name</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Email Address</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Gender</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider text-right transition-colors">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/20 transition-colors duration-300">
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Alexander Wright')">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-white shadow-sm">
+                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmXsxAAd6Bt7Y0A4sw3ZGIFeFO3XFpqcJxGGSjatwO99dCZ5GZriuBg4PvnAu-n6B7ijmSEpGu15_2n3ZOZvG989MJQQGBZLZItsAD5bsFyCyTQzHQq9DKJ9YOVXn03ZpA6h4tA-VZGqZthAW21blFQGnDCT0d_98c6J8imJTaMbMKnPoU3Fub5LJtUTpdF4mV982zTDCSmL6z4_N4MyoPqLGqEgOlw26vHJhzD-zBCtNWguC1rWBnwzwCZasauj8KTDM5bmJMTAdA"/>
+                                        </div>
+                                        <span class="font-medium text-on-surface transition-colors">Alexander Wright</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">alex.wright@techglobal.com</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Alexander Wright removed')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Sarah Jenkins')">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold overflow-hidden border-2 border-white shadow-sm">
+                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3qOJyyK1BjkLly5jKJlJCcejrwv7aU314wjwXqDdCY5UXgkNI9JOrs6WF8NTIqzElJB55wzbuNEY-3drHIgofc7vzEQ5-x3CG-e-F74RObsTzOishkzM1O-2Ydd4oc96oNb1oAkwoUqlg0jqzafePctyU6uStWh3rakxt4dA21TikJ7D1I1Wpg9Qf5n3JeB_W2mCv-4IEUKf8HahYUGk9z5Mv4ZltvtvY7QXdXOKLVZlZbjvTdS66wHkHNdANnWHGbn8JhSDhyJvl"/>
+                                        </div>
+                                        <span class="font-medium text-on-surface transition-colors">Sarah Jenkins</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">s.jenkins@neuralis.ai</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Sarah Jenkins removed')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Marcus Thorne')">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold overflow-hidden border-2 border-white shadow-sm">
+                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDUAmgTAbMa9yYuv8UVSonKStSTJqJpl_39xTyCvejUc9MKYxPz25Hg7LVywfWkk7_gVgWE4E_sDoDHXv9ADD0gvkPxZBcMa5I25BKHKTtnstt5FcOv-yjZCXdhntIaVE9X-1KbHVdN-3kpO_JJU0RK4l6j76x1ogAy4mr2qOfxNq5mDlQwiQ6KwdtyNXsoaikN4l7mc30r7iwJYUz7dIWKKIEa4y9JV8R9LIJ8jf4KRs89MqOsTOe4UEN8j7k-0-gvcMG-jqUbEDp"/>
+                                        </div>
+                                        <span class="font-medium text-on-surface transition-colors">Marcus Thorne</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">m.thorne@aerovance.co</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Marcus Thorne removed')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 4 -->
+                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Elena Rodriguez')">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold overflow-hidden border-2 border-white shadow-sm">
+                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl3OkS0VCs-ZAktU_Nhkw6HjeIU1bEwWODDsuFkBcL9H-aQxMwo8sBPpyykuI1btldXf2Ao8A8Rb6VlZEmoDUIKq9efxXYfeTr4a55nuxEGsTCQwrrSPasD5GGtiH3hp8f_gSbt2lWvdVLjZN1cqAbTUHAR4ObeoYGSG4OYOE19VC6uxXrwIQ1RhrhXUkdkklTw3i9LQ8yP9ZPDaip6_30Y1TqaT4PovhWapREVNTCa2x6wDbXZ1_jndwh0DGpUv5JgRdSKNRcsYuX"/>
+                                        </div>
+                                        <span class="font-medium text-on-surface transition-colors">Elena Rodriguez</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">elena.r@ecostrata.org</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Elena Rodriguez removed')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 5 -->
+                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for David Chen')">
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold overflow-hidden border-2 border-white shadow-sm">
+                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBms4M1ZP1ebVSwgWv4Gthb2RnSPaw8TbVMJgNIwbhqXzSV3wZ9MIxK5nJ5jDz_nLHAwP9O4dhgMdQ_9PpfSk2qIUrtZ_CTuACt78o82Kaen9pCSkct4OmDKFB2EysqQ2FA0MlDlPMWaPND-nKRkrCvU_4de5M8bjLHCT2MNUasaeSFgl2OyuW5ZrCBglFkwkC6ceLKNsKe5h5wFxzUT3Fe77EYFxgKkmiaMAtbY5F8fQtHfcI_6M9EQI5OfzrGX-5vXOl746sSh584"/>
+                                        </div>
+                                        <span class="font-medium text-on-surface transition-colors">David Chen</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">d.chen@fincore.solutions</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
+                                <td class="px-8 py-5 text-right">
+                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('David Chen removed')">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-8 py-4 bg-white/30 flex items-center justify-between border-t border-outline-variant/20 transition-colors duration-300">
+                    <span class="text-sm text-on-surface-variant transition-colors">Showing 5 of 124 users</span>
+                    <div class="flex gap-2">
+                        <button class="px-4 py-1.5 text-sm font-medium text-on-surface border border-outline-variant/40 rounded hover:bg-white dark:hover:bg-slate-700 transition-colors active:scale-95" onclick="showToast('Loading previous page...')">Previous</button>
+                        <button class="px-4 py-1.5 text-sm font-medium text-on-surface border border-outline-variant/40 rounded hover:bg-white dark:hover:bg-slate-700 transition-colors active:scale-95" onclick="showToast('Loading next page...')">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Dark Mode Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+            
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                htmlElement.classList.remove('light');
+                themeIcon.textContent = 'light_mode';
+            } else {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                themeIcon.textContent = 'dark_mode';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                    localStorage.theme = 'light';
+                    themeIcon.textContent = 'dark_mode';
+                    showToast('Light mode enabled');
+                } else {
+                    htmlElement.classList.add('dark');
+                    htmlElement.classList.remove('light');
+                    localStorage.theme = 'dark';
+                    themeIcon.textContent = 'light_mode';
+                    showToast('Dark mode enabled');
+                }
+            });
+        });
+
+        // --- Toast Notification System ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-primary">info</span>
+                <p class="text-sm font-medium">${message}</p>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger reflow to ensure animation plays
+            void toast.offsetWidth;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300); // Wait for transition to finish
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

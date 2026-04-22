@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Company Showcase | Neuromarketing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#007AFF",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "surface-variant": "#e0e3e5",
+                    "on-surface-variant": "#414755",
+                    "outline": "#717786",
+                    "outline-variant": "#c1c6d7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container": "#eceef0",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#d8e2ff",
+                    "on-primary-container": "#001a41"
+            },
+            "borderRadius": {
+                    "DEFAULT": "8px",
+                    "lg": "12px",
+                    "xl": "16px",
+                    "2xl": "20px",
+                    "3xl": "24px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .video-overlay:hover .play-button {
+            transform: scale(1.1);
+            background-color: #007AFF;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
+    <div class="flex items-center gap-8 pl-16">
+        <a href="user_dashboard.html" class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</a>
+        <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+            <input class="w-full pl-10 pr-4 py-2 bg-slate-100/50 border-none rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:bg-white transition-all" placeholder="Search for products, companies..." type="text">
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+            <span class="material-symbols-outlined text-slate-500">dark_mode</span>
+        </button>
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+            <span class="material-symbols-outlined text-slate-500">language</span>
+        </button>
+        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative">
+            <span class="material-symbols-outlined text-slate-500">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+        </button>
+        <div class="h-8 w-8 rounded-full bg-primary-container overflow-hidden">
+            <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV">
+        </div>
+    </div>
+</header>
+
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40">
+    <a class="p-3 bg-primary/10 shadow-sm text-primary rounded-lg" href="user_dashboard.html">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">business</span>
+    </a>
+    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_history.html">
+        <span class="material-symbols-outlined">history</span>
+    </a>
+    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+        <span class="material-symbols-outlined">person</span>
+    </a>
+    <div class="mt-auto flex flex-col gap-4 pb-8">
+        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="#">
+            <span class="material-symbols-outlined">help</span>
+        </a>
+        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+            <span class="material-symbols-outlined">settings</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content Area -->
+<main class="ml-16 pt-24 p-8 min-h-screen">
+    <div class="max-w-5xl mx-auto">
+        <div class="mb-12">
+            <div class="flex items-center gap-6">
+                <div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary">
+                    <span id="brand-icon" class="material-symbols-outlined text-5xl">neurology</span>
+                </div>
+                <div>
+                    <h1 id="brand-title" class="text-4xl font-bold tracking-tight text-on-surface">Neuralis AI</h1>
+                    <p id="brand-description" class="text-on-surface-variant mt-1 text-lg italic">Leading the frontier of neural-integrated market analysis.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Player Section -->
+        <div class="relative group aspect-video w-full rounded-3xl overflow-hidden bg-slate-900 border border-outline-variant/30 shadow-2xl transition-all duration-500">
+            <!-- Thumbnail Placeholder -->
+            <img id="brand-video-thumbnail" alt="Promotional Video Thumbnail" class="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC98JmJLhaY1r5P0NUj3j2WaaVmt2q7_pnj8mOYj4AgbF2oN9kPYMHYg6UdHzg8mMmi8UDcKhpTaI1jf_xjK0LxEh89xUqWJeuXge3AOiVc7_FhpBnGZBw7ke2HJ1iMrBdIFI8l7xLkuM0yqHgqPWMoAnlk79j0takz2T5a1Aacv3NWOo4cfc9HjTOXTxEpoTGE-GrqR4_OBRcNj4iYEwG41eUMSR7EAjJt7HZspvZkCJgXqlS87vvHMhzR6YH4vXQoqUUuESJadx5C">
+            
+            <!-- Video Overlay Controls -->
+            <div class="video-overlay absolute inset-0 flex flex-col items-center justify-center bg-black/20 backdrop-blur-[2px] transition-all group-hover:bg-black/10">
+                <button class="play-button w-24 h-24 rounded-full glass-panel flex items-center justify-center text-primary transition-all duration-300 shadow-xl">
+                    <span class="material-symbols-outlined text-5xl translate-x-1" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                </button>
+                <div class="absolute bottom-0 left-0 w-full p-8 flex flex-col gap-4 bg-gradient-to-t from-black/60 to-transparent">
+                    <div class="flex items-center justify-between text-white">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium opacity-80 uppercase tracking-widest">Featured Presentation</span>
+                            <h2 id="brand-video-title" class="text-2xl font-bold">The Future of Consumer Cognition</h2>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <span class="text-sm font-medium">04:12</span>
+                            <span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">fullscreen</span>
+                        </div>
+                    </div>
+                    <!-- Mock Progress Bar -->
+                    <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary w-1/4 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Products Section -->
+        <div class="mt-12">
+            <h3 class="text-xl font-bold mb-6 text-on-surface">Core Products</h3>
+            <div id="core-products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Products injected by JS -->
+            </div>
+        </div>
+
+        <!-- Serve Section -->
+        <div class="mt-16 mb-24 p-10 rounded-3xl glass-panel shadow-sm border border-white">
+            <h3 class="text-2xl font-bold mb-8 text-on-surface flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary">volunteer_activism</span>Serve
+            </h3>
+            <form class="space-y-8">
+                <div class="space-y-4">
+                    <label class="block text-sm font-semibold text-on-surface">How would you describe your experience with our neural interface products?</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="seamless">
+                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Seamless Integration</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="moderate">
+                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Moderate Learning Curve</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="complex">
+                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Requires Specialization</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface" for="feedback">What features would you like to see in our next firmware update?</label>
+                    <textarea class="w-full p-4 bg-white/50 border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" id="feedback" placeholder="Your thoughts on future features..." rows="4"></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="submit">
+                        Submit Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        let brandId = params.get('brandId');
+        if (brandId) {
+            brandId = brandId.toLowerCase().trim();
+            if (brandId === 'global-tech') brandId = 'globaltech';
+        }
+        
+        const brandData = {
+            'neuralis': {
+                title: 'Neuralis AI',
+                icon: 'neurology',
+                description: 'Leading the frontier of neural-integrated market analysis.',
+                videoTitle: 'The Future of Consumer Cognition',
+                videoThumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC98JmJLhaY1r5P0NUj3j2WaaVmt2q7_pnj8mOYj4AgbF2oN9kPYMHYg6UdHzg8mMmi8UDcKhpTaI1jf_xjK0LxEh89xUqWJeuXge3AOiVc7_FhpBnGZBw7ke2HJ1iMrBdIFI8l7xLkuM0yqHgqPWMoAnlk79j0takz2T5a1Aacv3NWOo4cfc9HjTOXTxEpoTGE-GrqR4_OBRcNj4iYEwG41eUMSR7EAjJt7HZspvZkCJgXqlS87vvHMhzR6YH4vXQoqUUuESJadx5C',
+                products: [
+                    { name: 'NeuralScan', description: 'High-fidelity EEG monitoring for focus groups.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnz56XlD8E9A0u6N7i7_2tL-UfH6F7KzX9L7pM8U4W5Y6Z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R' },
+                    { name: 'CogniGraph', description: 'Visual mapping of subconscious brand associations.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjM7K0L1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R1S2T3U4V5W6X7Y8Z9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6' },
+                    { name: 'PulseInsight', description: 'Real-time biometric response tracking software.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD8E9A0u6N7i7_2tL-UfH6F7KzX9L7pM8U4W5Y6Z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8' },
+                    { name: 'EthosAI', description: 'Automated ethical compliance and data anonymization.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1D2E3F4G5H6I7J8K9L0M1N2O3P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6' }
+                ]
+            },
+            'globaltech': {
+                title: 'Global Tech',
+                icon: 'business',
+                description: 'Empowering global markets with advanced data ecosystems.',
+                videoTitle: 'Scaling Global Infrastructure',
+                videoThumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
+                products: [
+                    { name: 'DataSphere', description: 'Unified global data management platform.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'CloudSync', description: 'Seamless cross-border synchronization tools.', image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'MarketPredict', description: 'AI-driven global market forecasting.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'SecureNet', description: 'Enterprise-grade international security protocols.', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'aerovance': {
+                title: 'AeroVance',
+                icon: 'rocket_launch',
+                description: 'Pioneering next-generation aerospace technology.',
+                videoTitle: 'Future of Flight',
+                videoThumbnail: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'AeroDynamics Pro', description: 'Advanced flight simulation software.', image: 'https://images.unsplash.com/photo-1540829016269-e05670f88caa?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'OrbitTrack', description: 'Satellite tracking and telemetry.', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'SkyGuard', description: 'Aerospace security and monitoring.', image: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'PropulsionX', description: 'Next-gen engine analytics.', image: 'https://images.unsplash.com/photo-1583225214464-9296029427aa?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'ecostrata': {
+                title: 'EcoStrata',
+                icon: 'eco',
+                description: 'Sustainable solutions for a greener tomorrow.',
+                videoTitle: 'Sustainability in Action',
+                videoThumbnail: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'GreenGrid', description: 'Renewable energy management.', image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'EcoTrack', description: 'Carbon footprint analysis.', image: 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'PureWater', description: 'Advanced water filtration tech.', image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'BioCycle', description: 'Waste reduction systems.', image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'fincore': {
+                title: 'FinCore',
+                icon: 'payments',
+                description: 'Reimagining the future of digital finance.',
+                videoTitle: 'Digital Economy',
+                videoThumbnail: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'TradePro', description: 'High-frequency trading platform.', image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'LedgerSafe', description: 'Blockchain security solutions.', image: 'https://images.unsplash.com/photo-1639762681485-074b7f4aec63?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'PayStream', description: 'Global payment gateway.', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'WealthAI', description: 'Automated portfolio management.', image: 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'biotrust': {
+                title: 'BioTrust',
+                icon: 'shield_with_heart',
+                description: 'Securing health data with uncompromising privacy.',
+                videoTitle: 'Health Data Security',
+                videoThumbnail: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'MediVault', description: 'Encrypted patient records.', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'GenoSec', description: 'Genomic data protection.', image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'CareConnect', description: 'Secure telehealth platform.', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'PharmaChain', description: 'Supply chain transparency.', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'logixpath': {
+                title: 'LogixPath',
+                icon: 'local_shipping',
+                description: 'Intelligent logistics and supply chain optimization.',
+                videoTitle: 'Optimizing Global Delivery',
+                videoThumbnail: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c1590a?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'RouteAI', description: 'Smart delivery routing.', image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'WareSense', description: 'IoT warehouse management.', image: 'https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'FleetTrack', description: 'Real-time fleet monitoring.', image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'SupplyChain Pro', description: 'End-to-end logistics platform.', image: 'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=800&auto=format&fit=crop' }
+                ]
+            },
+            'buildsmart': {
+                title: 'BuildSmart',
+                icon: 'home_repair_service',
+                description: 'Innovating construction with smart technologies.',
+                videoTitle: 'Future of Construction',
+                videoThumbnail: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2000&auto=format&fit=crop',
+                products: [
+                    { name: 'BIM Connect', description: 'Collaborative building modeling.', image: 'https://images.unsplash.com/photo-1504307651254-35680f356f58?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'SiteDrone', description: 'Automated site surveying.', image: 'https://images.unsplash.com/photo-1527018601619-a508a2be00cd?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'MaterialSync', description: 'Construction supply management.', image: 'https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=800&auto=format&fit=crop' },
+                    { name: 'SafetyAI', description: 'Predictive site safety analytics.', image: 'https://images.unsplash.com/photo-1504917595217-d4bf2691e812?q=80&w=800&auto=format&fit=crop' }
+                ]
+            }
+        };
+        
+        const data = brandData[brandId];
+        
+        if (!data) {
+            document.getElementById('brand-title').textContent = 'Brand Not Found';
+            document.getElementById('brand-description').textContent = 'Please select a valid brand from the dashboard.';
+            document.getElementById('brand-icon').textContent = 'error';
+            document.getElementById('core-products-container').innerHTML = '<p class="text-on-surface-variant">No products available.</p>';
+            return;
+        }
+        
+        document.getElementById('brand-title').textContent = data.title;
+        document.getElementById('brand-description').textContent = data.description;
+        document.getElementById('brand-icon').textContent = data.icon;
+        
+        document.getElementById('brand-video-title').textContent = data.videoTitle;
+        document.getElementById('brand-video-thumbnail').src = data.videoThumbnail;
+        
+        const productsContainer = document.getElementById('core-products-container');
+        productsContainer.innerHTML = '';
+        
+        data.products.forEach(product => {
+            const productHTML = `
+                <div class="group p-4 rounded-2xl bg-white border border-outline-variant/30 shadow-sm hover:shadow-md transition-all">
+                    <div class="aspect-square rounded-xl bg-slate-100 overflow-hidden mb-4">
+                        <img alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="${product.image}">
+                    </div>
+                    <h4 class="font-bold text-on-surface">${product.name}</h4>
+                    <p class="text-xs text-on-surface-variant mt-1">${product.description}</p>
+                </div>
+            `;
+            productsContainer.innerHTML += productHTML;
+        });
+    });
+</script>
+</body>
+</html>

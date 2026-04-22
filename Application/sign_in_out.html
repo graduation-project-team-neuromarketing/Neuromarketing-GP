@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuromarketing Authentication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="split-layout">
+        <!-- Left Side: Hero Section -->
+        <div class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="logo">
+                    Neuromarketing
+                </div>
+                <div class="hero-text-block">
+                    <p class="hero-eyebrow">NEUROMARKETING INTELLIGENCE</p>
+                    <h1 class="hero-heading">Understand Your<br>Customers Beyond<br>Words.</h1>
+                    <p class="hero-subtext">Bridging the gap between neural signals and<br>consumer behavior through advanced AI analytics.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Auth Section -->
+        <div class="auth-section">
+            <!-- Top Navigation -->
+            <div class="top-nav">
+                <button class="lang-btn">
+                    <i class="ph ph-globe"></i>
+                    EN
+                </button>
+                <button class="theme-btn">
+                    <i class="ph ph-sun"></i>
+                </button>
+            </div>
+
+            <!-- Card Container -->
+            <div class="card-container">
+                <!-- Sign In Form -->
+                <div id="signin-view" class="auth-card">
+                    <h2 class="card-title">Sign In</h2>
+                    <p class="card-subtitle">Enter your credentials to access the prism.</p>
+
+                    <form onsubmit="event.preventDefault();">
+                        <div class="form-group">
+                            <label for="signin-email">EMAIL</label>
+                            <input type="email" id="signin-email" placeholder="name@company.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signin-password">PASSWORD</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="signin-password" placeholder="••••••••">
+                                <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="forgot-password">
+                            <a href="#">FORGOT PASSWORD?</a>
+                        </div>
+
+                        <button type="submit" class="primary-btn">
+                            Sign In <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <p class="card-footer-text">
+                        Don't have an account? <a href="#" onclick="toggleView('signup')">Sign up now</a>
+                    </p>
+                </div>
+
+                <!-- Create Account Form (Hidden by default) -->
+                <div id="signup-view" class="auth-card hidden">
+                    <h2 class="card-title">Create Your Account</h2>
+                    <p class="card-subtitle">Initialize your neural profile to start analyzing behavior.</p>
+
+                    <form onsubmit="event.preventDefault();">
+                        <div class="form-group">
+                            <label for="signup-name">FULL NAME</label>
+                            <input type="text" id="signup-name" placeholder="John Doe">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-email">EMAIL ADDRESS</label>
+                            <input type="email" id="signup-email" placeholder="name@company.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label>GENDER</label>
+                            <div class="gender-toggle">
+                                <button type="button" class="gender-btn active">Male</button>
+                                <button type="button" class="gender-btn">Female</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-age">AGE</label>
+                            <input type="number" id="signup-age" placeholder="25">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-password">PASSWORD</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="signup-password" placeholder="••••••••">
+                                <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-confirm">CONFIRM PASSWORD</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="signup-confirm" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="primary-btn">
+                            Create Account <i class="ph-fill ph-user-plus"></i>
+                        </button>
+                    </form>
+
+                    <p class="card-footer-text">
+                        Already have an account? <a href="#" onclick="toggleView('signin')">Sign In</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="auth-footer">
+                <a href="#">PRIVACY POLICY</a>
+                <a href="#">TERMS OF SERVICE</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleView(view) {
+            const signinView = document.getElementById('signin-view');
+            const signupView = document.getElementById('signup-view');
+            
+            if (view === 'signup') {
+                signinView.classList.add('hidden');
+                signupView.classList.remove('hidden');
+            } else {
+                signupView.classList.add('hidden');
+                signinView.classList.remove('hidden');
+            }
+        }
+
+        // Simple gender toggle logic
+        document.querySelectorAll('.gender-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const parent = e.target.parentElement;
+                parent.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
