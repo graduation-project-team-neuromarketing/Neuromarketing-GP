@@ -13,7 +13,6 @@
 </head>
 <body>
     <div class="split-layout">
-        <!-- Left Side: Hero Section -->
         <div class="hero-section">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -28,9 +27,7 @@
             </div>
         </div>
 
-        <!-- Right Side: Auth Section -->
         <div class="auth-section">
-            <!-- Top Navigation -->
             <div class="top-nav">
                 <button class="lang-btn">
                     <i class="ph ph-globe"></i>
@@ -41,23 +38,21 @@
                 </button>
             </div>
 
-            <!-- Card Container -->
             <div class="card-container">
-                <!-- Sign In Form -->
                 <div id="signin-view" class="auth-card">
                     <h2 class="card-title">Sign In</h2>
                     <p class="card-subtitle">Enter your credentials to access the prism.</p>
 
-                    <form onsubmit="event.preventDefault();">
+                    <form id="signin-form">
                         <div class="form-group">
                             <label for="signin-email">EMAIL</label>
-                            <input type="email" id="signin-email" placeholder="name@company.com">
+                            <input type="email" id="signin-email" placeholder="name@company.com" required>
                         </div>
 
                         <div class="form-group">
                             <label for="signin-password">PASSWORD</label>
                             <div class="password-input-wrapper">
-                                <input type="password" id="signin-password" placeholder="••••••••">
+                                <input type="password" id="signin-password" placeholder="••••••••" required>
                                 <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
                             </div>
                         </div>
@@ -76,20 +71,19 @@
                     </p>
                 </div>
 
-                <!-- Create Account Form (Hidden by default) -->
                 <div id="signup-view" class="auth-card hidden">
                     <h2 class="card-title">Create Your Account</h2>
                     <p class="card-subtitle">Initialize your neural profile to start analyzing behavior.</p>
 
-                    <form onsubmit="event.preventDefault();">
+                    <form id="signup-form">
                         <div class="form-group">
                             <label for="signup-name">FULL NAME</label>
-                            <input type="text" id="signup-name" placeholder="John Doe">
+                            <input type="text" id="signup-name" placeholder="John Doe" required>
                         </div>
 
                         <div class="form-group">
                             <label for="signup-email">EMAIL ADDRESS</label>
-                            <input type="email" id="signup-email" placeholder="name@company.com">
+                            <input type="email" id="signup-email" placeholder="name@company.com" required>
                         </div>
 
                         <div class="form-group">
@@ -107,13 +101,13 @@
 
                         <div class="form-group">
                             <label for="signup-age">AGE</label>
-                            <input type="number" id="signup-age" placeholder="25">
+                            <input type="number" id="signup-age" placeholder="25" required>
                         </div>
 
                         <div class="form-group">
                             <label for="signup-password">PASSWORD</label>
                             <div class="password-input-wrapper">
-                                <input type="password" id="signup-password" placeholder="••••••••">
+                                <input type="password" id="signup-password" placeholder="••••••••" required>
                                 <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
                             </div>
                         </div>
@@ -121,7 +115,7 @@
                         <div class="form-group">
                             <label for="signup-confirm">CONFIRM PASSWORD</label>
                             <div class="password-input-wrapper">
-                                <input type="password" id="signup-confirm" placeholder="••••••••">
+                                <input type="password" id="signup-confirm" placeholder="••••••••" required>
                                 <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
                             </div>
                         </div>
@@ -137,7 +131,6 @@
                 </div>
             </div>
 
-            <!-- Footer Links -->
             <div class="auth-footer">
                 <a href="#">PRIVACY POLICY</a>
                 <a href="#">TERMS OF SERVICE</a>
@@ -146,6 +139,7 @@
     </div>
 
     <script>
+        // UI Navigation logic
         function toggleView(view) {
             const signinView = document.getElementById('signin-view');
             const signupView = document.getElementById('signup-view');
@@ -159,7 +153,7 @@
             }
         }
 
-        // Simple gender toggle logic
+        // Gender selection logic
         document.querySelectorAll('.gender-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const parent = e.target.parentElement;
@@ -168,7 +162,7 @@
             });
         });
 
-        // Password visibility toggle
+        // Password visibility toggle logic
         document.querySelectorAll('.eye-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const input = this.previousElementSibling;
@@ -176,15 +170,98 @@
                 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    icon.classList.remove('ph-eye');
-                    icon.classList.add('ph-eye-slash');
+                    icon.classList.replace('ph-eye', 'ph-eye-slash');
                 } else {
                     input.type = 'password';
-                    icon.classList.remove('ph-eye-slash');
-                    icon.classList.add('ph-eye');
+                    icon.classList.replace('ph-eye-slash', 'ph-eye');
                 }
             });
         });
+
+        // --- BACKEND INTEGRATION: LOGIN LOGIC ---
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            // FastAPI OAuth2 requires data to be sent as application/x-www-form-urlencoded
+            const formData = new URLSearchParams();
+            formData.append('username', document.getElementById('signin-email').value);
+            formData.append('password', document.getElementById('signin-password').value);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store the JWT token in LocalStorage for authenticated requests
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('token_type', data.token_type);
+
+                    alert("Login successful! Token has been stored.");
+                    // window.location.href = "/dashboard"; // Redirect user after success
+                } else {
+                    const errorData = await response.json();
+                    alert("Login Failed: " + (errorData.detail || "Invalid email or password"));
+                }
+            } catch (error) {
+                console.error("Login Connection Error:", error);
+                alert("Server is unreachable. Please ensure the Backend is running.");
+            }
+        }
+
+        // --- BACKEND INTEGRATION: SIGNUP LOGIC ---
+        async function handleSignup(event) {
+            event.preventDefault();
+
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm').value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            const userData = {
+                full_name: document.getElementById('signup-name').value,
+                email: document.getElementById('signup-email').value,
+                phone: document.getElementById('signup-phone').value,
+                age: parseInt(document.getElementById('signup-age').value),
+                password: password,
+                gender: document.querySelector('.gender-btn.active').innerText,
+                role: "User"
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    alert("Account created successfully!");
+                    toggleView('signin');
+                } else {
+                    const errorData = await response.json();
+                    alert("Registration Error: " + (errorData.detail || "Failed to create account"));
+                }
+            } catch (error) {
+                console.error("Signup Connection Error:", error);
+                alert("Connection failed! Check Backend server status.");
+            }
+        }
+
+        // Bind event listeners to forms
+        document.getElementById('signin-form').onsubmit = handleLogin;
+        document.getElementById('signup-form').onsubmit = handleSignup;
     </script>
     <script src="dark-mode.js"></script>
 </body>
