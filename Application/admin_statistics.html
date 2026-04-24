@@ -131,9 +131,55 @@
                 <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
                 <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
             </button>
-            <button class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95" onclick="showToast('User profile opened')">
-                <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
-            </button>
+                        <!-- Profile Dropdown -->
+            <div class="relative" id="profile-menu-container">
+                <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
+                    <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
+                    <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
+                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                    </div>
+                    <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">logout</span>
+                        Log out
+                    </a>
+                </div>
+            </div>
+            
+            <script>
+                function toggleProfileDropdown(event) {
+                    event.stopPropagation();
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown.classList.contains('hidden')) {
+                        dropdown.classList.remove('hidden');
+                        setTimeout(() => {
+                            dropdown.classList.remove('opacity-0', 'scale-95');
+                            dropdown.classList.add('opacity-100', 'scale-100');
+                        }, 10);
+                    } else {
+                        dropdown.classList.remove('opacity-100', 'scale-100');
+                        dropdown.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            dropdown.classList.add('hidden');
+                        }, 200);
+                    }
+                }
+
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.getElementById('profileDropdown');
+                    const container = document.getElementById('profile-menu-container');
+                    if (dropdown && !dropdown.classList.contains('hidden') && container && !container.contains(event.target)) {
+                        dropdown.classList.remove('opacity-100', 'scale-100');
+                        dropdown.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            dropdown.classList.add('hidden');
+                        }, 200);
+                    }
+                });
+            </script>
         </div>
     </header>
 
