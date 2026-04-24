@@ -16,8 +16,8 @@ except ImportError:
     JWTError = jwt.InvalidTokenError
 
 
-import models, schemas
-from database import engine, get_db
+from . import models, schemas
+from .database import engine, get_db
 
 # Create the database tables
 models.Base.metadata.create_all(bind=engine)
@@ -135,7 +135,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         access_token = create_access_token(
             data={"sub": user.email, "role": user.role}, expires_delta=access_token_expires
         )
-        return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer", "role": user.role}
     
     # Check Companies table
     company = db.query(models.Company).filter(models.Company.email == form_data.username).first()
@@ -144,7 +144,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         access_token = create_access_token(
             data={"sub": company.email, "role": "Company"}, expires_delta=access_token_expires
         )
-        return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer", "role": "Company"}
     
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
