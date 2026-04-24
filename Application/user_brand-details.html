@@ -96,6 +96,10 @@
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
                         <p class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
+                    <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
+                        <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total Points</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> 130</span>
+                    </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
                         Log out
@@ -210,39 +214,11 @@
             </div>
         </div>
 
-        <!-- Serve Section -->
-        <div class="mt-16 mb-24 p-10 rounded-3xl glass-panel shadow-sm border border-white">
-            <h3 class="text-2xl font-bold mb-8 text-on-surface flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary">volunteer_activism</span>Serve
-            </h3>
-            <form class="space-y-8">
-                <div class="space-y-4">
-                    <label class="block text-sm font-semibold text-on-surface">How would you describe your experience with our neural interface products?</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="seamless">
-                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Seamless Integration</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="moderate">
-                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Moderate Learning Curve</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-                            <input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="complex">
-                            <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Requires Specialization</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-on-surface" for="feedback">What features would you like to see in our next firmware update?</label>
-                    <textarea class="w-full p-4 bg-white/50 border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" id="feedback" placeholder="Your thoughts on future features..." rows="4"></textarea>
-                </div>
-                <div class="flex justify-end">
-                    <button class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="submit">
-                        Submit Feedback
-                    </button>
-                </div>
-            </form>
+        <!-- Survey Button Section -->
+        <div class="mt-16 mb-24 flex justify-end">
+            <a href="user_survey.html" class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5 inline-block text-center">
+                go to survey -&gt;
+            </a>
         </div>
     </div>
 </main>

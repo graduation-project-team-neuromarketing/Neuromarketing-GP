@@ -233,6 +233,8 @@
                             <tr>
                                 <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Full Name</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Email Address</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Phone Number</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Age</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider transition-colors">Gender</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider text-right transition-colors">Actions</th>
                             </tr>
@@ -249,11 +251,18 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">alex.wright@techglobal.com</td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+1 (555) 123-4567</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">32</td>
                                 <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
                                 <td class="px-8 py-5 text-right">
-                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Alexander Wright removed')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Alexander+Wright'" title="View History">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
+                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Alexander Wright removed')" title="Remove User">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Row 2 -->
@@ -267,11 +276,18 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">s.jenkins@neuralis.ai</td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+1 (555) 987-6543</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">28</td>
                                 <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
                                 <td class="px-8 py-5 text-right">
-                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Sarah Jenkins removed')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Sarah+Jenkins'" title="View History">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
+                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Sarah Jenkins removed')" title="Remove User">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Row 3 -->
@@ -285,11 +301,18 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">m.thorne@aerovance.co</td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+44 20 7946 0958</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">45</td>
                                 <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
                                 <td class="px-8 py-5 text-right">
-                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Marcus Thorne removed')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Marcus+Thorne'" title="View History">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
+                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Marcus Thorne removed')" title="Remove User">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Row 4 -->
@@ -303,11 +326,18 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">elena.r@ecostrata.org</td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+34 91 123 45 67</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">36</td>
                                 <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
                                 <td class="px-8 py-5 text-right">
-                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Elena Rodriguez removed')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Elena+Rodriguez'" title="View History">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
+                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Elena Rodriguez removed')" title="Remove User">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <!-- Row 5 -->
@@ -321,11 +351,18 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">d.chen@fincore.solutions</td>
+                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+65 6123 4567</td>
+                                <td class="px-8 py-5 text-on-surface-variant transition-colors">41</td>
                                 <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
                                 <td class="px-8 py-5 text-right">
-                                    <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('David Chen removed')">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=David+Chen'" title="View History">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
+                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('David Chen removed')" title="Remove User">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Company Showcase | Neuromarketing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#007AFF",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "surface-variant": "#e0e3e5",
+                    "on-surface-variant": "#414755",
+                    "outline": "#717786",
+                    "outline-variant": "#c1c6d7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container": "#eceef0",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#d8e2ff",
+                    "on-primary-container": "#001a41"
+            },
+            "borderRadius": {
+                    "DEFAULT": "8px",
+                    "lg": "12px",
+                    "xl": "16px",
+                    "2xl": "20px",
+                    "3xl": "24px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            },
+            "animation": {
+                "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                "float": "float 6s ease-in-out infinite"
+            },
+            "keyframes": {
+                "float": {
+                    "0%, 100%": { transform: "translateY(0)" },
+                    "50%": { transform: "translateY(-10px)" }
+                }
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .modal-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        html.dark .modal-glass {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .video-overlay:hover .play-button {
+            transform: scale(1.1);
+            background-color: #007AFF;
+            color: white;
+        }
+        .neural-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,122,255,0.05) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+    <link rel="stylesheet" href="dark-mode.css">
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
+<div class="flex items-center gap-8 pl-16">
+<span class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</span>
+<div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100/50 border-none rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:bg-white transition-all" placeholder="Search for products, companies..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+<span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-slate-500">language</span>
+</button>
+<button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative">
+<span class="material-symbols-outlined text-slate-500">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+</button>
+            <!-- Profile Dropdown -->
+            <div class="relative" id="profile-menu-container">
+                <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
+                    <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
+                    <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
+                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                    </div>
+                    <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
+                        <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total Points</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> 130</span>
+                    </div>
+                    <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">logout</span>
+                        Log out
+                    </a>
+                </div>
+            </div>
+            
+            <script>
+                function toggleProfileDropdown(event) {
+                    event.stopPropagation();
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown.classList.contains('hidden')) {
+                        dropdown.classList.remove('hidden');
+                        setTimeout(() => {
+                            dropdown.classList.remove('opacity-0', 'scale-95');
+                            dropdown.classList.add('opacity-100', 'scale-100');
+                        }, 10);
+                    } else {
+                        dropdown.classList.remove('opacity-100', 'scale-100');
+                        dropdown.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            dropdown.classList.add('hidden');
+                        }, 200);
+                    }
+                }
+
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.getElementById('profileDropdown');
+                    const container = document.getElementById('profile-menu-container');
+                    if (dropdown && !dropdown.classList.contains('hidden') && container && !container.contains(event.target)) {
+                        dropdown.classList.remove('opacity-100', 'scale-100');
+                        dropdown.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            dropdown.classList.add('hidden');
+                        }, 200);
+                    }
+                });
+            </script>
+</div>
+</header>
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40">
+<a class="p-3 bg-primary/10 shadow-sm text-primary rounded-lg" href="user_dashboard.html">
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
+</a>
+<a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_history.html">
+<span class="material-symbols-outlined">history</span>
+</a>
+<a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+<span class="material-symbols-outlined">person</span>
+</a>
+<div class="mt-auto flex flex-col gap-4 pb-8">
+<a class="p-3 text-slate-400 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+</a>
+<a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</div>
+</aside>
+<!-- Surprise Modal Overlay -->
+<div id="promo-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-slate-900/10 dark:bg-slate-900/60 backdrop-blur-md hidden transition-opacity duration-300">
+<div class="modal-glass max-w-lg w-full rounded-3xl overflow-hidden relative animate-in fade-in zoom-in duration-300">
+<div class="neural-pulse animate-pulse-slow"></div>
+<!-- Celebration Content -->
+<div class="p-10 flex flex-col items-center text-center">
+<div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 animate-float">
+<span class="material-symbols-outlined text-primary text-4xl" style='font-variation-settings: "FILL" 1;'>celebration</span>
+</div>
+<h2 class="text-3xl font-extrabold text-on-surface dark:text-white mb-2">Thank You for Your Insights!</h2>
+<p class="text-on-surface-variant dark:text-slate-300 mb-8 px-4">Your feedback helps us evolve the Neuralis interface. As a token of our appreciation, here is an exclusive reward.</p>
+<!-- Promo Code Card -->
+<div class="w-full bg-white/80 dark:bg-slate-900/80 rounded-2xl p-6 border border-primary/20 dark:border-primary/40 shadow-[0_8px_30px_rgb(0,122,255,0.1)] mb-8 group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
+<span class="text-xs font-bold text-primary dark:text-blue-400 tracking-widest uppercase mb-2 block">Exclusive Access Code</span>
+<div class="flex items-center justify-between gap-4">
+<div class="bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-primary/30 dark:border-primary/50 rounded-lg px-4 py-3 flex-1">
+<span class="text-2xl font-mono font-bold tracking-wider text-on-surface dark:text-white">NEURAL-2024</span>
+</div>
+<button onclick="navigator.clipboard.writeText('NEURAL-2024')" class="bg-primary hover:bg-blue-600 text-white p-3 rounded-xl transition-all shadow-md active:scale-95 group/btn" title="Copy to clipboard">
+<span class="material-symbols-outlined block group-hover/btn:scale-110 transition-transform">content_copy</span>
+</button>
+</div>
+<p class="text-xs text-on-surface-variant/70 dark:text-slate-400 mt-3 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm">info</span> Valid for 30% off your next neural integration module.
+</p>
+</div>
+<div class="flex flex-col gap-3 w-full">
+<a href="user_dashboard.html" class="w-full py-4 bg-on-surface dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:bg-black dark:hover:bg-slate-200 transition-all active:scale-[0.98] text-center block">
+Return to Dashboard
+</a>
+<button type="button" id="close-modal-btn" class="text-on-surface-variant dark:text-slate-400 hover:text-on-surface dark:hover:text-white text-sm font-medium transition-colors">
+Maybe later
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Main Content Area -->
+<main id="main-content" class="ml-16 pt-24 p-8 min-h-[calc(100vh-theme(spacing.24))] flex items-center justify-center transition-all duration-300">
+<div class="max-w-3xl w-full mx-auto">
+<div class="mb-12 flex justify-center">
+<div class="flex flex-col items-center gap-4 text-center">
+<div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-5xl">neurology</span>
+</div>
+<div>
+<h1 class="text-4xl font-bold tracking-tight text-on-surface">Neuralis AI</h1>
+<p class="text-on-surface-variant mt-1 text-lg italic">Leading the frontier of neural-integrated market analysis.</p>
+</div>
+</div>
+</div>
+<!-- Serve (Survey) Section -->
+<div class="p-10 rounded-3xl glass-panel shadow-sm border border-white">
+<h3 class="text-2xl font-bold mb-8 text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">volunteer_activism</span>Survey
+</h3>
+<form class="space-y-8">
+<div class="space-y-4">
+<label class="block text-sm font-semibold text-on-surface">How would you describe your experience with our neural interface products?</label>
+<div class="grid grid-cols-1 gap-4">
+<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="seamless"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Seamless Integration</span>
+</label>
+<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="moderate"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Moderate Learning Curve</span>
+</label>
+<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="complex"/>
+<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Requires Specialization</span>
+</label>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface" for="feedback">What features would you like to see in our next firmware update?</label>
+<textarea class="w-full p-4 bg-white/50 border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" id="feedback" placeholder="Your thoughts on future features..." rows="5"></textarea>
+</div>
+<div class="flex justify-end pt-4">
+<button id="submit-feedback-btn" class="px-10 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="button">
+Submit Feedback
+</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+
+<script>
+    document.getElementById('submit-feedback-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const modal = document.getElementById('promo-modal');
+        const main = document.getElementById('main-content');
+        
+        modal.classList.remove('hidden');
+        main.classList.add('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
+        document.body.classList.add('overflow-hidden');
+    });
+
+    document.getElementById('close-modal-btn').addEventListener('click', function() {
+        const modal = document.getElementById('promo-modal');
+        const main = document.getElementById('main-content');
+        
+        modal.classList.add('hidden');
+        main.classList.remove('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
+        document.body.classList.remove('overflow-hidden');
+    });
+</script>
+
+<script src="dark-mode.js"></script>
+</body></html>
