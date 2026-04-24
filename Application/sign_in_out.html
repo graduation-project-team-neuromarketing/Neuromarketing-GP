@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
     <div class="split-layout">
@@ -35,8 +36,8 @@
                     <i class="ph ph-globe"></i>
                     EN
                 </button>
-                <button class="theme-btn">
-                    <i class="ph ph-sun"></i>
+                <button id="theme-toggle" class="theme-btn">
+                    <i id="theme-icon" class="ph ph-moon"></i>
                 </button>
             </div>
 
@@ -92,6 +93,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="signup-phone">PHONE NUMBER</label>
+                            <input type="tel" id="signup-phone" placeholder="+20 123 456 7890">
+                        </div>
+
+                        <div class="form-group">
                             <label>GENDER</label>
                             <div class="gender-toggle">
                                 <button type="button" class="gender-btn active">Male</button>
@@ -116,11 +122,12 @@
                             <label for="signup-confirm">CONFIRM PASSWORD</label>
                             <div class="password-input-wrapper">
                                 <input type="password" id="signup-confirm" placeholder="••••••••">
+                                <button type="button" class="eye-btn"><i class="ph ph-eye"></i></button>
                             </div>
                         </div>
 
                         <button type="submit" class="primary-btn">
-                            Create Account <i class="ph-fill ph-user-plus"></i>
+                            Create Account <i class="ph ph-arrow-right"></i>
                         </button>
                     </form>
 
@@ -160,6 +167,25 @@
                 e.target.classList.add('active');
             });
         });
+
+        // Password visibility toggle
+        document.querySelectorAll('.eye-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('ph-eye');
+                    icon.classList.add('ph-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('ph-eye-slash');
+                    icon.classList.add('ph-eye');
+                }
+            });
+        });
     </script>
+    <script src="dark-mode.js"></script>
 </body>
 </html>

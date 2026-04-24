@@ -7,17 +7,91 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007AFF",
+                        "on-primary": "#ffffff",
+                        surface: "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#414755",
+                        outline: "#717786",
+                        "outline-variant": "#c1c6d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#d8e2ff",
+                        "on-primary-container": "#001a41",
+                        // Dark mode specifics
+                        "dark-surface": "#0f172a", 
+                        "dark-surface-container": "#1e293b", 
+                        "dark-border": "#334155" 
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                        lg: "12px",
+                        xl: "16px",
+                        "2xl": "20px",
+                        "3xl": "24px",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Dark Mode Overrides */
+        html.dark body { background-color: theme('colors.dark-surface'); color: white; }
+        html.dark .bg-surface { background-color: theme('colors.dark-surface'); }
+        html.dark .text-on-surface { color: #f8fafc; }
+        html.dark .text-on-surface-variant { color: #cbd5e1; }
+        html.dark .bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/30, html.dark .border-outline-variant\/40 { border-color: theme('colors.dark-border'); }
+        html.dark .bg-surface-container { background-color: #334155; }
+        html.dark .text-slate-500, html.dark .text-slate-400 { color: #94a3b8; }
+        html.dark aside.bg-white { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .glass-card { background-color: theme('colors.dark-surface-container'); border-color: theme('colors.dark-border'); }
+        html.dark .border-slate-100 { border-color: theme('colors.dark-border'); }
+        html.dark .bg-slate-100 { background-color: theme('colors.dark-border'); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 31, 63, 0.04);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007AFF;
+            border-radius: 8px;
+        }
+    </style>
 </head>
-<body class="bg-surface text-on-surface min-h-screen">
+<body class="bg-surface text-on-surface min-h-screen transition-colors duration-300">
     <!-- Top Navigation Bar -->
-    <header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
+    <header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md border-b border-outline-variant/30 dark:border-slate-700 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
         <div class="flex items-center gap-8 pl-16">
             <span class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</span>
         </div>
         <div class="flex items-center gap-4">
-            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
-                <span class="material-symbols-outlined text-slate-500">dark_mode</span>
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+                <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
             </button>
             <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
                 <span class="material-symbols-outlined text-slate-500">language</span>
@@ -180,5 +254,6 @@
             </section>
         </div>
     </main>
+    <script src="dark-mode.js"></script>
 </body>
 </html>

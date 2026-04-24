@@ -61,6 +61,7 @@
             transform: translateY(0);
         }
     </style>
+    <link rel="stylesheet" href="dark-mode.css">
 </head>
 <body class="bg-surface text-on-surface min-h-screen">
 <!-- Top Navigation Bar -->
@@ -73,8 +74,8 @@
         </div>
     </div>
     <div class="flex items-center gap-4">
-        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
-            <span class="material-symbols-outlined text-slate-500">dark_mode</span>
+        <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
+            <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
         </button>
         <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
             <span class="material-symbols-outlined text-slate-500">language</span>
@@ -236,5 +237,6 @@
         </div>
     </div>
 </main>
+<script src="dark-mode.js"></script>
 </body>
 </html>

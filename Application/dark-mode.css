@@ -1,0 +1,65 @@
+/* Dark Mode Global Overrides */
+html.dark body { background-color: #0f172a; color: white; }
+html.dark .bg-surface { background-color: #0f172a !important; }
+html.dark .text-on-surface { color: #f8fafc !important; }
+html.dark .text-on-surface-variant { color: #cbd5e1 !important; }
+html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .bg-white\/70 { background-color: rgba(30, 41, 59, 0.8) !important; border-color: #334155 !important; }
+html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/30, html.dark .border-outline-variant\/40 { border-color: #334155 !important; }
+html.dark .bg-surface-container-lowest, html.dark .bg-surface-container { background-color: #334155 !important; }
+html.dark .bg-surface-container\/50 { background-color: rgba(51, 65, 85, 0.5) !important; }
+html.dark .text-slate-500, html.dark .text-slate-400 { color: #94a3b8 !important; }
+html.dark input.bg-slate-100\/50::placeholder, html.dark input.bg-white::placeholder, html.dark input.bg-slate-50::placeholder { color: #94a3b8 !important; }
+html.dark input.bg-slate-100\/50, html.dark input.bg-white, html.dark input.bg-slate-50, html.dark select.bg-slate-50 { background-color: #334155 !important; border-color: #475569 !important; color: white !important; }
+html.dark .hover\:bg-slate-100\/50:hover { background-color: #475569 !important; }
+html.dark aside.bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .company-card { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .company-card:hover { box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.4) !important; }
+html.dark .glass-panel { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .glass-card { background-color: #1e293b !important; border-color: #334155 !important; box-shadow: none !important; }
+html.dark .hover\:bg-white\/50:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
+html.dark .bg-white\/30 { background-color: transparent !important; }
+html.dark .hover\:bg-white:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
+html.dark .divide-outline-variant\/20 > :not([hidden]) ~ :not([hidden]) { border-color: #334155 !important; }
+html.dark header.bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark header.bg-white\/70 { background-color: rgba(30, 41, 59, 0.8) !important; border-color: #334155 !important; }
+html.dark .text-slate-700 { color: #cbd5e1 !important; }
+html.dark .text-slate-800 { color: #f8fafc !important; }
+html.dark .modal-content { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .border-slate-100, html.dark .border-slate-200 { border-color: #334155 !important; }
+html.dark .bg-slate-100, html.dark .bg-slate-50 { background-color: #334155 !important; }
+html.dark .text-slate-600 { color: #cbd5e1 !important; }
+
+/* sign_in_out.html specific dark mode overrides */
+html.dark {
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --bg-input: #334155;
+    --bg-input-focus: #475569;
+}
+html.dark .auth-section {
+    background-color: #0f172a !important;
+    background-image: radial-gradient(#334155 1px, transparent 1px) !important;
+}
+html.dark .hero-section {
+    background-color: #1e293b !important;
+}
+html.dark .hero-overlay {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.4) 50%, rgba(15, 23, 42, 0.9) 100%) !important;
+}
+/* html.dark .logo color override removed to match admin page logo color */
+html.dark .hero-heading {
+    color: #f8fafc !important;
+}
+html.dark .hero-subtext {
+    color: #cbd5e1 !important;
+}
+html.dark .top-nav {
+    background-color: rgba(30, 41, 59, 0.8) !important;
+    border-bottom-color: #334155 !important;
+}
+html.dark label {
+    color: #94a3b8 !important;
+}

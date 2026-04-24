@@ -24,7 +24,6 @@ body {
     background-color: var(--bg-main);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
-    overflow: hidden;
 }
 
 .split-layout {
@@ -67,14 +66,23 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .logo {
-    font-size: 1.5rem;
+    position: absolute;
+    top: 1.5rem;
+    left: 4rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #0f172a;
-    letter-spacing: -0.02em;
+    color: var(--primary-blue);
+    letter-spacing: -0.05em;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    transform-origin: left center;
+}
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .hero-text-block {
@@ -122,10 +130,14 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    padding: 2rem 3rem;
+    padding: 0.5rem 1.5rem;
     position: sticky;
     top: 0;
-    background: #f8fafc;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(193, 198, 215, 0.3);
+    box-shadow: 0px 20px 40px rgba(0, 31, 63, 0.06);
     z-index: 20;
 }
 
@@ -216,7 +228,8 @@ label {
 input[type="email"],
 input[type="password"],
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+input[type="tel"] {
     width: 100%;
     padding: 1rem;
     background-color: var(--bg-input);
@@ -234,9 +247,19 @@ input::placeholder {
 
 input:focus {
     outline: none;
-    background-color: #fff;
+    background-color: var(--bg-card);
     border-color: var(--primary-blue);
     box-shadow: 0 0 0 4px rgba(0, 111, 238, 0.1);
+}
+
+/* Remove arrows from number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 .password-input-wrapper {
@@ -350,7 +373,7 @@ input:focus {
 }
 
 .gender-btn.active {
-    background-color: #fff;
+    background-color: var(--bg-card);
     border-color: var(--primary-blue);
     color: var(--primary-blue);
     font-weight: 600;
