@@ -156,6 +156,38 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 def read_users_me(current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
     return current_user
 
+@app.put("/users/me", response_model=schemas.UserOut)
+def update_user_me(user_update: schemas.UserUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
+    # Depending on the application, we might want this to apply to companies as well, but the instruction is for users
+    if hasattr(current_user, 'full_name'):
+        if user_update.full_name is not None:
+            current_user.full_name = user_update.full_name
+        if user_update.gender is not None:
+            current_user.gender = user_update.gender
+        if user_update.age is not None:
+            current_user.age = user_update.age
+        if user_update.phone is not None:
+            current_user.phone = user_update.phone
+        db.commit()
+        db.refresh(current_user)
+        return current_user
+    else:
+        raise HTTPException(status_code=400, detail="Only standard users can update their profile via this endpoint")
+
+@app.post("/users/change-password")
+def change_password(password_data: schemas.UserPasswordChange, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
+    if not verify_password(password_data.current_password, current_user.password):
+        raise HTTPException(status_code=400, detail="Incorrect current password")
+    
+    current_user.password = get_password_hash(password_data.new_password)
+    db.commit()
+    return {"message": "Password updated successfully"}
+
+@app.get("/admin/users", response_model=List[schemas.UserOut])
+def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin"]))):
+    users = db.query(models.User).all()
+    return users
+
 # Example RBAC endpoint for Admin only
 @app.get("/admin/dashboard")
 def get_admin_data(current_user: models.User = Depends(require_role(["Admin"]))):
