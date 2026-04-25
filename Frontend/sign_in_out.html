@@ -61,6 +61,7 @@
                             <a href="#">FORGOT PASSWORD?</a>
                         </div>
 
+                        <div id="signin-error" style="display: none; color: #ef4444; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem; text-align: center; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 6px;"></div>
                         <button type="submit" class="primary-btn">
                             Sign In <i class="ph ph-arrow-right"></i>
                         </button>
@@ -120,6 +121,7 @@
                             </div>
                         </div>
 
+                        <div id="signup-error" style="display: none; color: #ef4444; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem; text-align: center; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 6px;"></div>
                         <button type="submit" class="primary-btn">
                             Create Account <i class="ph ph-arrow-right"></i>
                         </button>
@@ -139,6 +141,25 @@
     </div>
 
     <script>
+        
+        // Error handling UI helpers
+        function showError(type, message, isSuccess = false) {
+            const errorDiv = document.getElementById(type + '-error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            if (isSuccess) {
+                errorDiv.style.color = '#10b981'; // Emerald 500
+                errorDiv.style.background = 'rgba(16, 185, 129, 0.1)';
+            } else {
+                errorDiv.style.color = '#ef4444'; // Red 500
+                errorDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+            }
+        }
+        function hideError(type) {
+            const errorDiv = document.getElementById(type + '-error');
+            errorDiv.style.display = 'none';
+        }
+
         // UI Navigation logic
         function toggleView(view) {
             const signinView = document.getElementById('signin-view');
@@ -180,6 +201,7 @@
 
         // --- BACKEND INTEGRATION: LOGIN LOGIC ---
         async function handleLogin(event) {
+            hideError('signin');
             event.preventDefault();
 
             // FastAPI OAuth2 requires data to be sent as application/x-www-form-urlencoded
@@ -213,23 +235,24 @@
                     }
                 } else {
                     const errorData = await response.json();
-                    alert("Login Failed: " + (errorData.detail || "Invalid email or password"));
+                    showError("signin", "Login Failed: " + (errorData.detail || "Invalid email or password"));
                 }
             } catch (error) {
                 console.error("Login Connection Error:", error);
-                alert("Server is unreachable. Please ensure the Backend is running.");
+                showError("signin", "Server is unreachable. Please ensure the Backend is running.");
             }
         }
 
         // --- BACKEND INTEGRATION: SIGNUP LOGIC ---
         async function handleSignup(event) {
+            hideError('signup');
             event.preventDefault();
 
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('signup-confirm').value;
 
             if (password !== confirmPassword) {
-                alert("Passwords do not match!");
+                showError("signup", "Passwords do not match!");
                 return;
             }
 
@@ -253,15 +276,15 @@
                 });
 
                 if (response.ok) {
-                    alert("Account created successfully!");
+                    showError("signin", "Account created successfully! Please sign in.", true);
                     toggleView('signin');
                 } else {
                     const errorData = await response.json();
-                    alert("Registration Error: " + (errorData.detail || "Failed to create account"));
+                    showError("signup", "Registration Error: " + (errorData.detail || "Email already registered"));
                 }
             } catch (error) {
                 console.error("Signup Connection Error:", error);
-                alert("Connection failed! Check Backend server status.");
+                showError("signup", "Connection failed! Check Backend server status.");
             }
         }
 

@@ -167,14 +167,14 @@
         <div class="grid grid-cols-1 gap-8">
             <div class="space-y-8">
                 <!-- Profile Photo Card -->
-                <div class="bg-white/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
-                    <h2 class="text-lg font-bold mb-6 text-on-surface">Profile Photo</h2>
+                <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
+                    <h2 class="text-lg font-bold mb-6 text-on-surface dark:text-white">Profile Photo</h2>
                     <div class="flex items-center gap-8">
                         <div class="relative group">
-                            <div class="h-24 w-24 rounded-full bg-primary-container overflow-hidden border-4 border-white shadow-md">
+                            <div class="h-24 w-24 rounded-full bg-primary-container dark:bg-slate-700 overflow-hidden border-4 border-white dark:border-slate-800 shadow-md">
                                 <img alt="Large User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"/>
                             </div>
-                            <button class="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform">
+                            <button class="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full border-2 border-white dark:border-slate-800 shadow-sm hover:scale-105 transition-transform">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </button>
                         </div>
@@ -183,50 +183,46 @@
                                 <button class="px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">
                                     Upload New
                                 </button>
-                                <button class="px-4 py-2 bg-white border border-outline-variant/30 text-on-surface-variant text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition-colors">
+                                <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-600 text-on-surface-variant dark:text-slate-300 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
                                     Remove
                                 </button>
                             </div>
-                            <p class="text-xs text-on-surface-variant mt-1">Recommended size: 400x400px. JPG or PNG.</p>
+                            <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Recommended size: 400x400px. JPG or PNG.</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Personal Information Form -->
-                <div class="bg-white/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
-                    <h2 class="text-lg font-bold mb-6 text-on-surface">Personal Information</h2>
+                <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
+                    <h2 class="text-lg font-bold mb-6 text-on-surface dark:text-white">Personal Information</h2>
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-on-surface-variant ml-1" for="full-name">Full Name</label>
-                                <input class="w-full px-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none" id="full-name" placeholder="Alex Thompson" type="text" value="Alex Thompson"/>
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="full-name">Full Name</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="full-name" placeholder="Alex Thompson" type="text" value="Alex Thompson"/>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-on-surface-variant ml-1" for="email">Email Address</label>
-                                <input class="w-full px-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none" id="email" placeholder="alex@neuralis.ai" type="email" value="alex@neuralis.ai"/>
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="email">Email Address</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="email" placeholder="alex@neuralis.ai" type="email" value="alex@neuralis.ai"/>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-on-surface-variant ml-1" for="phone">Phone Number</label>
-                                <div class="flex gap-2">
-                                    <select class="w-24 px-2 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none">
-                                        <option>+1</option>
-                                        <option>+44</option>
-                                        <option>+49</option>
-                                        <option>+33</option>
-                                    </select>
-                                    <input class="flex-1 px-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none" id="phone" placeholder="(555) 000-0000" type="text"/>
-                                </div>
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="phone">Phone Number</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="phone" placeholder="(555) 000-0000" type="text"/>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-on-surface-variant ml-1">Gender</label>
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1">Gender</label>
                                 <div class="grid gap-2 grid-cols-2">
-                                    <button class="py-2.5 px-3 border border-outline-variant/30 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary active:bg-primary/5" type="button">Male</button>
-                                    <button class="py-2.5 px-3 border border-primary bg-primary/5 rounded-xl text-sm font-bold text-primary transition-colors" type="button">Female</button>
+                                    <button class="py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button">Male</button>
+                                    <button class="py-2.5 px-3 border border-primary bg-primary/5 dark:bg-primary/20 rounded-xl text-sm font-bold text-primary dark:text-primary transition-colors" type="button">Female</button>
                                 </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="age">Age</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="age" placeholder="e.g. 28" type="number" min="16" max="120" value="28"/>
                             </div>
                         </div>
-                        <div class="pt-6 border-t border-outline-variant/10 flex justify-end gap-3">
-                            <button class="px-6 py-2.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+                        <div class="pt-6 border-t border-outline-variant/10 dark:border-slate-700 flex justify-end gap-3">
+                            <button class="px-6 py-2.5 text-sm font-bold text-on-surface-variant dark:text-slate-400 hover:text-on-surface dark:hover:text-white transition-colors" type="button">
                                 Cancel
                             </button>
                             <button class="px-8 py-2.5 bg-primary text-white text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-primary/90 transition-all active:scale-95 shadow-md" type="submit">
@@ -235,8 +231,40 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Security Settings Form -->
+                <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-red-50 dark:bg-red-900/30 rounded-lg text-red-500">
+                            <span class="material-symbols-outlined">lock</span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-on-surface dark:text-white">Security Settings</h2>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Update your password to keep your account secure.</p>
+                        </div>
+                    </div>
+                    
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="current-password">Current Password</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="current-password" placeholder="Enter current password" type="password" required/>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="new-password">New Password</label>
+                                <input class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none dark:text-white" id="new-password" placeholder="Create new password" type="password" required/>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-outline-variant/10 dark:border-slate-700 flex justify-end gap-3">
+                            <button class="px-8 py-2.5 bg-primary text-white text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-primary/90 transition-all active:scale-95 shadow-md flex items-center gap-2" type="submit">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-        </div>
+</div>
     </div>
 </main>
 <script src="dark-mode.js"></script>

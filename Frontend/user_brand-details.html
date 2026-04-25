@@ -208,8 +208,8 @@
 
         <!-- Company Products Section -->
         <div class="mt-12">
-            <h3 class="text-xl font-bold mb-6 text-on-surface">Core Products</h3>
-            <div id="core-products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <h3 class="text-xl font-bold mb-6 text-on-surface">Featured Product</h3>
+            <div id="core-products-container" class="bg-white dark:bg-slate-800 rounded-3xl border border-outline-variant/30 dark:border-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
                 <!-- Products injected by JS -->
             </div>
         </div>
@@ -359,18 +359,31 @@
         const productsContainer = document.getElementById('core-products-container');
         productsContainer.innerHTML = '';
         
-        data.products.forEach(product => {
-            const productHTML = `
-                <div class="group p-4 rounded-2xl bg-white border border-outline-variant/30 shadow-sm hover:shadow-md transition-all">
-                    <div class="aspect-square rounded-xl bg-slate-100 overflow-hidden mb-4">
-                        <img alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="${product.image}">
-                    </div>
-                    <h4 class="font-bold text-on-surface">${product.name}</h4>
-                    <p class="text-xs text-on-surface-variant mt-1">${product.description}</p>
+        // Grab the first product to display as the single core product
+        const product = data.products[0];
+        const price = "$299.99"; // Fallback price
+        const ingredients = "Advanced Neuro-Sensors, Medical-grade Hypoallergenic Silicone, Quantum Processing Unit, Lithium-ion Power Cell";
+        
+        const productHTML = `
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-5/12 aspect-square md:aspect-auto bg-slate-100 dark:bg-slate-900 relative">
+                    <img alt="${product.name}" class="absolute inset-0 w-full h-full object-cover" src="${product.image}">
                 </div>
-            `;
-            productsContainer.innerHTML += productHTML;
-        });
+                <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
+                    <div class="flex justify-between items-start mb-4 gap-4">
+                        <h4 class="text-3xl font-bold text-on-surface dark:text-white">${product.name}</h4>
+                        <span class="text-2xl font-bold text-primary whitespace-nowrap">${price}</span>
+                    </div>
+                    <p class="text-on-surface-variant dark:text-slate-400 text-lg mb-8 leading-relaxed">${product.description}</p>
+                    
+                    <div>
+                        <h5 class="text-sm font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">Ingredients / Materials</h5>
+                        <p class="text-on-surface dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-outline-variant/20 dark:border-slate-700 leading-relaxed shadow-inner">${ingredients}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        productsContainer.innerHTML = productHTML;
     });
 </script>
 <script src="dark-mode.js"></script>
