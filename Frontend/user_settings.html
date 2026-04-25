@@ -195,7 +195,7 @@
                 <!-- Personal Information Form -->
                 <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
                     <h2 class="text-lg font-bold mb-6 text-on-surface dark:text-white">Personal Information</h2>
-                    <form class="space-y-6">
+                    <form id="personal-info-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="full-name">Full Name</label>
@@ -212,8 +212,8 @@
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1">Gender</label>
                                 <div class="grid gap-2 grid-cols-2">
-                                    <button class="py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button">Male</button>
-                                    <button class="py-2.5 px-3 border border-primary bg-primary/5 dark:bg-primary/20 rounded-xl text-sm font-bold text-primary dark:text-primary transition-colors" type="button">Female</button>
+                                    <button class="gender-btn py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button" data-gender="Male">Male</button>
+                                    <button class="gender-btn py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button" data-gender="Female">Female</button>
                                 </div>
                             </div>
                             <div class="space-y-2">
@@ -244,7 +244,7 @@
                         </div>
                     </div>
                     
-                    <form class="space-y-6">
+                    <form id="security-settings-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="current-password">Current Password</label>
@@ -267,6 +267,138 @@
 </div>
     </div>
 </main>
+<!-- Toast Container -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3"></div>
+
 <script src="dark-mode.js"></script>
+<script>
+const API_BASE_URL = 'http://127.0.0.1:8000'; // Make sure this matches backend
+
+function showToast(message, isError = false) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `p-4 rounded-lg shadow-lg flex items-center gap-3 transition-transform transform translate-y-full ${isError ? 'bg-red-50 text-red-600 border-l-4 border-red-500' : 'bg-white text-on-surface border-l-4 border-primary dark:bg-slate-800 dark:text-white dark:border-primary'}`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined">${isError ? 'error' : 'check_circle'}</span>
+        <span class="text-sm font-medium">${message}</span>
+    `;
+    container.appendChild(toast);
+    
+    // Trigger reflow
+    void toast.offsetWidth;
+    toast.classList.remove('translate-y-full');
+    
+    setTimeout(() => {
+        toast.classList.add('translate-y-full');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+        window.location.href = 'sign_in_out.html';
+        return;
+    }
+
+    // Gender selection logic
+    let selectedGender = null;
+    document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.gender-btn').forEach(b => {
+                b.classList.remove('border-primary', 'bg-primary/5', 'dark:bg-primary/20', 'text-primary', 'font-bold');
+                b.classList.add('border-outline-variant/30', 'dark:border-slate-700', 'font-medium', 'dark:text-slate-200');
+            });
+            const target = e.currentTarget;
+            target.classList.remove('border-outline-variant/30', 'dark:border-slate-700', 'font-medium', 'dark:text-slate-200');
+            target.classList.add('border-primary', 'bg-primary/5', 'dark:bg-primary/20', 'text-primary', 'font-bold');
+            selectedGender = target.getAttribute('data-gender');
+        });
+    });
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            document.getElementById('full-name').value = userData.full_name || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('phone').value = userData.phone || '';
+            document.getElementById('age').value = userData.age || '';
+            if (userData.gender) {
+                const btn = document.querySelector(`.gender-btn[data-gender="${userData.gender}"]`);
+                if (btn) btn.click();
+            }
+        } else {
+            showToast('Failed to load profile data', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+});
+
+document.getElementById('personal-info-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('access_token');
+    
+    const data = {
+        full_name: document.getElementById('full-name').value,
+        phone: document.getElementById('phone').value,
+        age: parseInt(document.getElementById('age').value) || null,
+        gender: document.querySelector('.gender-btn.border-primary')?.getAttribute('data-gender') || null
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/me`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showToast('Profile updated successfully');
+        } else {
+            showToast('Failed to update profile', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+});
+
+document.getElementById('security-settings-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('access_token');
+    
+    const data = {
+        current_password: document.getElementById('current-password').value,
+        new_password: document.getElementById('new-password').value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/change-password`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showToast('Password updated successfully');
+            e.target.reset();
+        } else {
+            const errorData = await response.json();
+            showToast(errorData.detail || 'Failed to update password', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+});
+</script>
 </body>
 </html>
