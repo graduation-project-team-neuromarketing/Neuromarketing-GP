@@ -166,127 +166,189 @@
     <div class="max-w-7xl mx-auto">
         <div class="flex items-end justify-between mb-10">
             <div>
-                <h1 class="text-3xl font-semibold tracking-tight text-on-surface">Select a Brand to Evaluate</h1>
-                <p class="text-on-surface-variant mt-1">Share your genuine feedback and let your neural insights shape the future of products.</p>
+                <h1 class="text-3xl font-semibold tracking-tight text-on-surface dark:text-white">Select a Brand to Evaluate</h1>
+                <p class="text-on-surface-variant dark:text-slate-400 mt-1">Choose a category to view the available brands for your neural insights.</p>
+            </div>
+            <button id="back-to-categories-btn" class="hidden bg-surface-variant dark:bg-slate-700 text-on-surface-variant dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                Back to Categories
+            </button>
+        </div>
+
+        <!-- Categories Grid -->
+        <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('FMCG')">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-4xl">shopping_cart</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Fast-Moving Consumer Goods</p>
+                </div>
+            </div>
+
+            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Beauty & Fragrances')">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-4xl">spa</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Cosmetics and Scents</p>
+                </div>
+            </div>
+
+            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Sportswear & Athletics')">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-4xl">directions_run</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Athletic Apparel & Gear</p>
+                </div>
+            </div>
+
+            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Consumer Electronics')">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-4xl">devices</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Consumer Electronics</p>
+                </div>
             </div>
         </div>
 
         <!-- Company Logo Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            <!-- Company Item 1 -->
-            <a href="user_brand-details.html?brandId=globaltech" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+        <div id="companies-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden mt-6">
+            <a href="user_brand-details.html?brandId=globaltech" data-category="FMCG" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">business</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">Global Tech</h3>
-                    <p class="text-xs text-on-surface-variant">Active Environment</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">Global Tech</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Active Environment</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 2 -->
-            <a href="user_brand-details.html?brandId=neuralis" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=neuralis" data-category="FMCG" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">neurology</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">Neuralis AI</h3>
-                    <p class="text-xs text-on-surface-variant">Processing Data</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">Neuralis AI</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Processing Data</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 3 -->
-            <a href="user_brand-details.html?brandId=aerovance" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=aerovance" data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">rocket_launch</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">AeroVance</h3>
-                    <p class="text-xs text-on-surface-variant">Setup Complete</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">AeroVance</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Setup Complete</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 4 -->
-            <a href="user_brand-details.html?brandId=ecostrata" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=ecostrata" data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">eco</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">EcoStrata</h3>
-                    <p class="text-xs text-on-surface-variant">3 Projects Active</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">EcoStrata</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">3 Projects Active</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 5 -->
-            <a href="user_brand-details.html?brandId=fincore" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=fincore" data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">payments</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">FinCore</h3>
-                    <p class="text-xs text-on-surface-variant">Action Required</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">FinCore</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Action Required</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 6 -->
-            <a href="user_brand-details.html?brandId=biotrust" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=biotrust" data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">shield_with_heart</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">BioTrust</h3>
-                    <p class="text-xs text-on-surface-variant">Environment Active</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">BioTrust</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Environment Active</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 7 -->
-            <a href="user_brand-details.html?brandId=logixpath" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=logixpath" data-category="Consumer Electronics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">local_shipping</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">LogixPath</h3>
-                    <p class="text-xs text-on-surface-variant">Pending Analysis</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">LogixPath</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Pending Analysis</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
             
-            <!-- Company Item 8 -->
-            <a href="user_brand-details.html?brandId=buildsmart" class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary/40">
+            <a href="user_brand-details.html?brandId=buildsmart" data-category="Consumer Electronics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
                     <span class="material-symbols-outlined text-4xl">home_repair_service</span>
                 </div>
                 <div class="text-center">
-                    <h3 class="font-semibold text-on-surface">BuildSmart</h3>
-                    <p class="text-xs text-on-surface-variant">No Active Projects</p>
+                    <h3 class="font-semibold text-on-surface dark:text-white">BuildSmart</h3>
+                    <p class="text-xs text-on-surface-variant dark:text-slate-400">No Active Projects</p>
                 </div>
                 <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
+                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
                 </div>
             </a>
         </div>
     </div>
 </main>
+
+<script>
+    function selectCategory(category) {
+        document.getElementById('categories-grid').classList.add('hidden');
+        document.getElementById('companies-grid').classList.remove('hidden');
+        document.getElementById('back-to-categories-btn').classList.remove('hidden');
+        
+        const companies = document.querySelectorAll('.company-item');
+        companies.forEach(company => {
+            if (company.getAttribute('data-category') === category) {
+                company.style.display = 'flex';
+            } else {
+                company.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('back-to-categories-btn').addEventListener('click', () => {
+        document.getElementById('categories-grid').classList.remove('hidden');
+        document.getElementById('companies-grid').classList.add('hidden');
+        document.getElementById('back-to-categories-btn').classList.add('hidden');
+    });
+</script>
 <script src="dark-mode.js"></script>
 </body>
 </html>

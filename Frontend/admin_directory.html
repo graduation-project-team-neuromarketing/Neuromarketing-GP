@@ -229,10 +229,6 @@
             <span class="material-symbols-outlined">insights</span>
             <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
         </a>
-        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="#" onclick="setActiveNav(this, 'Deployments')">
-            <span class="material-symbols-outlined">rocket_launch</span>
-            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Deployments</span>
-        </a>
         
         <div class="mt-auto flex flex-col gap-4 pb-8">
             <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#" onclick="showToast('Help Center opened')">
@@ -254,14 +250,27 @@
                     <h1 id="page-title" class="text-3xl font-semibold tracking-tight text-on-surface transition-colors">Client Directory</h1>
                     <p class="text-on-surface-variant mt-1 transition-colors">Manage and monitor neural analysis environments for your registered companies.</p>
                 </div>
-                <button onclick="window.location.href='admin_add-company.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2 active:scale-95">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                    New Company
-                </button>
+                
+                <div class="flex items-center gap-4">
+                    <button id="back-to-categories-btn" class="hidden bg-surface-variant dark:bg-slate-700 text-on-surface-variant dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+                        Back to Categories
+                    </button>
+                    
+                    <button id="new-category-btn" onclick="window.location.href='admin_add-category.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2 active:scale-95">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        New Category
+                    </button>
+                    
+                    <button id="new-company-btn" onclick="window.location.href='admin_add-company.html'" class="hidden bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2 active:scale-95">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        New Company
+                    </button>
+                </div>
             </div>
 
             <!-- Empty State (Hidden by default) -->
-            <div id="empty-state" class="flex-col items-center justify-center py-20 text-center">
+            <div id="empty-state" class="flex-col items-center justify-center py-20 text-center hidden">
                 <div class="w-24 h-24 bg-surface-container rounded-full flex items-center justify-center mb-6 text-slate-400">
                     <span class="material-symbols-outlined text-5xl">search_off</span>
                 </div>
@@ -270,10 +279,52 @@
                 <button onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));" class="mt-6 text-primary font-medium hover:underline">Clear Search</button>
             </div>
 
+            <!-- Categories Grid -->
+            <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer" onclick="selectCategory('FMCG')">
+                    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">shopping_cart</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
+                        <p class="text-xs text-on-surface-variant mt-1">Fast-Moving Consumer Goods</p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Beauty & Fragrances')">
+                    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">spa</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
+                        <p class="text-xs text-on-surface-variant mt-1">Cosmetics and Scents</p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Sportswear & Athletics')">
+                    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">directions_run</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
+                        <p class="text-xs text-on-surface-variant mt-1">Athletic Apparel & Gear</p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Consumer Electronics')">
+                    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">devices</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
+                        <p class="text-xs text-on-surface-variant mt-1">Consumer Electronics</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Company Logo Grid -->
-            <div id="company-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                <!-- Company Item 1 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+            <div id="company-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
+                <div data-category="FMCG" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">business</span>
                     </div>
@@ -286,8 +337,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 2 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="FMCG" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">neurology</span>
                     </div>
@@ -300,8 +350,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 3 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">rocket_launch</span>
                     </div>
@@ -314,8 +363,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 4 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">eco</span>
                     </div>
@@ -328,8 +376,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 5 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">payments</span>
                     </div>
@@ -342,8 +389,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 6 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">shield_with_heart</span>
                     </div>
@@ -356,8 +402,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 7 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Consumer Electronics" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">local_shipping</span>
                     </div>
@@ -370,8 +415,7 @@
                     </div>
                 </div>
 
-                <!-- Company Item 8 -->
-                <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
+                <div data-category="Consumer Electronics" class="company-card company-item group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer">
                     <div class="w-16 h-16 rounded-2xl bg-transparent flex items-center justify-center text-primary/60 transition-colors group-hover:text-primary group-hover:bg-primary/10">
                         <span class="material-symbols-outlined text-4xl">home_repair_service</span>
                     </div>
@@ -386,6 +430,34 @@
             </div>
         </div>
     </main>
+    <script>
+        function selectCategory(category) {
+            document.getElementById('categories-grid').classList.add('hidden');
+            document.getElementById('company-grid').classList.remove('hidden');
+            document.getElementById('back-to-categories-btn').classList.remove('hidden');
+            document.getElementById('new-category-btn').classList.add('hidden');
+            document.getElementById('new-company-btn').classList.remove('hidden');
+            
+            const companies = document.querySelectorAll('.company-item');
+            let hasVisible = false;
+            companies.forEach(company => {
+                if (company.getAttribute('data-category') === category) {
+                    company.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    company.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('back-to-categories-btn').addEventListener('click', () => {
+            document.getElementById('categories-grid').classList.remove('hidden');
+            document.getElementById('company-grid').classList.add('hidden');
+            document.getElementById('back-to-categories-btn').classList.add('hidden');
+            document.getElementById('new-category-btn').classList.remove('hidden');
+            document.getElementById('new-company-btn').classList.add('hidden');
+        });
+    </script>
 
     <!-- New Company Modal -->
     <div id="new-company-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">

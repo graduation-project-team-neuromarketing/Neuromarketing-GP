@@ -202,9 +202,15 @@
                     // Store the JWT token in LocalStorage for authenticated requests
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('token_type', data.token_type);
-
-                    alert("Login successful! Token has been stored.");
-                    // window.location.href = "/dashboard"; // Redirect user after success
+                    localStorage.setItem('user_role', data.role);
+                    
+                    if (data.role === "Admin") {
+                        window.location.href = "admin_analytics.html";
+                    } else if (data.role === "Company") {
+                        window.location.href = "company_dashboard.html";
+                    } else {
+                        window.location.href = "user_dashboard.html";
+                    }
                 } else {
                     const errorData = await response.json();
                     alert("Login Failed: " + (errorData.detail || "Invalid email or password"));
