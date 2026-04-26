@@ -41,11 +41,22 @@ class CompanyOut(CompanyBase):
 
 # --- CAMPAIGN SCHEMAS ---
 class CampaignBase(BaseModel):
-    video_url: str
-    description: str
-    questions_list: List[Dict[str, Any]]
+    video_url: Optional[str] = None
+    description: Optional[str] = None
+    product_name: Optional[str] = None
+    product_price: Optional[str] = None
+    product_description: Optional[str] = None
+    product_ingredients: Optional[str] = None
+    questions_list: Optional[List[Dict[str, Any]]] = None
     promo_code: Optional[str] = None
     discount_value: Optional[str] = None
+
+class CampaignUpdate(BaseModel):
+    video_url: Optional[str] = None
+    product_name: Optional[str] = None
+    product_price: Optional[str] = None
+    product_description: Optional[str] = None
+    product_ingredients: Optional[str] = None
 
 class CampaignCreate(CampaignBase):
     company_id: int

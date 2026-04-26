@@ -37,9 +37,13 @@ class Campaign(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     company_id = Column(Integer, ForeignKey("companies.id"))
-    video_url = Column(String)
-    description = Column(String)
-    questions_list = Column(JSON)  # JSON format to allow flexibility
+    video_url = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    product_name = Column(String, nullable=True)
+    product_price = Column(String, nullable=True)
+    product_description = Column(String, nullable=True)
+    product_ingredients = Column(String, nullable=True)
+    questions_list = Column(JSON, nullable=True)  # JSON format to allow flexibility
     promo_code = Column(String, nullable=True)
     discount_value = Column(String, nullable=True)
 

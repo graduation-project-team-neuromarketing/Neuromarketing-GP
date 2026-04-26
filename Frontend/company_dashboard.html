@@ -208,7 +208,7 @@
                                 </span>
                                 <input class="block w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-white outline-none transition-all text-sm" id="video-url" placeholder="https://youtube.com/watch?v=..." type="text"/>
                             </div>
-                            <button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm whitespace-nowrap active:scale-95">
+                            <button id="update-video-btn" class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm whitespace-nowrap active:scale-95">
                                 Update Video
                             </button>
                         </div>
@@ -272,7 +272,7 @@
                         </div>
 
                         <div class="pt-2 flex justify-end">
-                            <button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
+                            <button id="save-product-btn" class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
                                 <span class="material-symbols-outlined text-lg">save</span>
                                 Save Product Details
                             </button>
@@ -413,5 +413,78 @@
         </div>
     </main>
     <script src="dark-mode.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCurrentData();
+        });
+
+        async function loadCurrentData() {
+            const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/company/my-campaign', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.video_url) document.getElementById('video-url').value = data.video_url;
+                    if (data.product_name) document.getElementById('product-name').value = data.product_name;
+                    if (data.product_price) document.getElementById('product-price').value = data.product_price;
+                    if (data.product_description) document.getElementById('product-desc').value = data.product_description;
+                    if (data.product_ingredients) document.getElementById('product-ingredients').value = data.product_ingredients;
+                }
+            } catch (err) {
+                console.error('Error loading current data:', err);
+            }
+        }
+
+        async function updateCampaign(data) {
+            const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+            if (!token) {
+                alert('You are not logged in! Please log in first.');
+                return;
+            }
+            try {
+                const response = await fetch('http://127.0.0.1:8000/company/update-campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    alert('Campaign updated successfully!');
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to update campaign: ${error.detail || 'Unknown error'}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating campaign.');
+            }
+        }
+
+        document.getElementById('update-video-btn').addEventListener('click', () => {
+            const videoUrl = document.getElementById('video-url').value;
+            if (videoUrl) {
+                updateCampaign({ video_url: videoUrl });
+            } else {
+                alert('Please enter a video URL');
+            }
+        });
+
+        document.getElementById('save-product-btn').addEventListener('click', () => {
+            updateCampaign({
+                product_name: document.getElementById('product-name').value,
+                product_price: document.getElementById('product-price').value,
+                product_description: document.getElementById('product-desc').value,
+                product_ingredients: document.getElementById('product-ingredients').value
+            });
+        });
+    </script>
 </body>
 </html>
