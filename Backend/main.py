@@ -252,6 +252,20 @@ def get_all_users(db: Session = Depends(get_db), current_user: models.User = Dep
     users = db.query(models.User).filter(models.User.role == "User").all()
     return users
 
+@app.delete("/admin/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin"]))):
+    user_to_delete = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user_to_delete:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # We shouldn't delete other Admins using this endpoint, though they're already filtered out in the get request
+    if user_to_delete.role == "Admin":
+         raise HTTPException(status_code=403, detail="Cannot delete an admin account")
+
+    db.delete(user_to_delete)
+    db.commit()
+    return {"message": "User deleted successfully"}
+
 # Example RBAC endpoint for Admin only
 @app.get("/admin/dashboard")
 def get_admin_data(current_user: models.User = Depends(require_role(["Admin"]))):

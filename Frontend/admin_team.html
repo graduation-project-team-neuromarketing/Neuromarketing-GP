@@ -142,7 +142,7 @@
                 <!-- Dropdown Menu -->
                 <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
-                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                        <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -351,8 +351,9 @@
                 
                 const initials = user.full_name ? user.full_name.substring(0, 2).toUpperCase() : 'U';
                 const defaultAvatarHtml = `<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-white shadow-sm">${initials}</div>`;
-                const avatarHtml = user.profile_pic ? 
-                    `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm"><img src="${user.profile_pic}" alt="Avatar" class="w-full h-full object-cover"></div>` : 
+                const profilePicUrl = user.profile_pic ? (user.profile_pic.startsWith('http') ? user.profile_pic : `http://127.0.0.1:8000${user.profile_pic}`) : null;
+                const avatarHtml = profilePicUrl ? 
+                    `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm"><img src="${profilePicUrl}" alt="Avatar" class="w-full h-full object-cover"></div>` : 
                     defaultAvatarHtml;
 
                 row.innerHTML = `
@@ -371,7 +372,7 @@
                             <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=${encodeURIComponent(user.full_name || '')}'" title="View History">
                                 <span class="material-symbols-outlined text-[20px]">history</span>
                             </button>
-                            <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('${user.full_name || 'User'} removed')" title="Remove User">
+                            <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); deleteUser(${user.id}, '${(user.full_name || 'User').replace(/'/g, "\\'")}', this)" title="Remove User">
                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                             </button>
                         </div>
@@ -379,6 +380,40 @@
                 `;
                 tbody.appendChild(row);
             });
+        }
+
+        async function deleteUser(userId, userName, btnElement) {
+            if (!confirm(`Are you sure you want to remove ${userName}?`)) return;
+            
+            const token = localStorage.getItem('access_token');
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showToast(`${userName} removed successfully`);
+                    const row = btnElement.closest('tr');
+                    if (row) row.remove();
+                    
+                    // Update counter
+                    const counterElement = document.querySelector('.bg-white\\/30 span');
+                    if (counterElement) {
+                        const match = counterElement.textContent.match(/(\d+) of (\d+)/);
+                        if (match) {
+                            const newTotal = parseInt(match[2]) - 1;
+                            counterElement.textContent = `Showing ${newTotal} of ${newTotal} users`;
+                        }
+                    }
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.detail || `Failed to remove ${userName}`, true);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showToast(`Network error when removing ${userName}`, true);
+            }
         }
 
         // --- Toast Notification System ---
@@ -412,11 +447,15 @@
         }
     </script>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     const headerProfileImg = document.getElementById('header-profile-img');
-    if (token && headerProfileImg) {
+    const headerUserName = document.getElementById('header-user-name');
+    const headerUserPoints = document.getElementById('header-user-points');
+    
+    if (token) {
         try {
             const API_BASE = 'http://127.0.0.1:8000';
             const response = await fetch(`${API_BASE}/users/me`, {
@@ -424,12 +463,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             if (response.ok) {
                 const userData = await response.json();
-                if (userData.profile_pic) {
+                if (headerProfileImg && userData.profile_pic) {
                     headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+                }
+                if (headerUserName && userData.full_name) {
+                    headerUserName.textContent = userData.full_name;
+                }
+                if (headerUserPoints && userData.points !== undefined) {
+                    headerUserPoints.textContent = userData.points;
                 }
             }
         } catch (error) {
-            console.error('Error fetching profile pic for header:', error);
+            console.error('Error fetching profile data for header:', error);
         }
     }
 });

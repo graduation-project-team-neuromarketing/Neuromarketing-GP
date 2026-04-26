@@ -109,7 +109,7 @@
                 <!-- Dropdown Menu -->
                 <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
-                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                        <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -414,11 +414,15 @@
     </main>
     <script src="dark-mode.js"></script>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     const headerProfileImg = document.getElementById('header-profile-img');
-    if (token && headerProfileImg) {
+    const headerUserName = document.getElementById('header-user-name');
+    const headerUserPoints = document.getElementById('header-user-points');
+    
+    if (token) {
         try {
             const API_BASE = 'http://127.0.0.1:8000';
             const response = await fetch(`${API_BASE}/users/me`, {
@@ -426,12 +430,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             if (response.ok) {
                 const userData = await response.json();
-                if (userData.profile_pic) {
+                if (headerProfileImg && userData.profile_pic) {
                     headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+                }
+                if (headerUserName && userData.full_name) {
+                    headerUserName.textContent = userData.full_name;
+                }
+                if (headerUserPoints && userData.points !== undefined) {
+                    headerUserPoints.textContent = userData.points;
                 }
             }
         } catch (error) {
-            console.error('Error fetching profile pic for header:', error);
+            console.error('Error fetching profile data for header:', error);
         }
     }
 });
