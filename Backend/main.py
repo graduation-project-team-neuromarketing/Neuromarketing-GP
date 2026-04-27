@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 import os
 import shutil
+import json
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Form
 from fastapi.staticfiles import StaticFiles
 
@@ -219,34 +220,53 @@ def get_companies_by_category(category: str, db: Session = Depends(get_db)):
 
 @app.post("/company/update-campaign", response_model=schemas.CampaignOut)
 def update_campaign(
-    campaign_update: schemas.CampaignUpdate,
+    video_url: Optional[str] = Form(None),
+    product_name: Optional[str] = Form(None),
+    product_price: Optional[str] = Form(None),
+    product_description: Optional[str] = Form(None),
+    product_ingredients: Optional[str] = Form(None),
+    promo_code: Optional[str] = Form(None),
+    discount_value: Optional[str] = Form(None),
+    questions_list: Optional[str] = Form(None),
+    product_photo: Optional[UploadFile] = File(None),
     current_user: models.Company = Depends(require_role(["Company"])),
     db: Session = Depends(get_db)
 ):
     # Check if campaign exists
     db_campaign = db.query(models.Campaign).filter(models.Campaign.company_id == current_user.id).first()
     
+    update_data = {}
+    if video_url is not None: update_data["video_url"] = video_url
+    if product_name is not None: update_data["product_name"] = product_name
+    if product_price is not None: update_data["product_price"] = product_price
+    if product_description is not None: update_data["product_description"] = product_description
+    if product_ingredients is not None: update_data["product_ingredients"] = product_ingredients
+    if promo_code is not None: update_data["promo_code"] = promo_code
+    if discount_value is not None: update_data["discount_value"] = discount_value
+    
+    if questions_list is not None:
+        try:
+            update_data["questions_list"] = json.loads(questions_list)
+        except json.JSONDecodeError:
+            pass
+            
+    if product_photo is not None and product_photo.filename:
+        photo_filename = f"{int(datetime.utcnow().timestamp())}_{product_photo.filename}"
+        os.makedirs("static/products", exist_ok=True)
+        photo_path = os.path.join("static", "products", photo_filename)
+        with open(photo_path, "wb") as buffer:
+            shutil.copyfileobj(product_photo.file, buffer)
+        update_data["product_photo_url"] = f"/{photo_path}".replace("\\", "/")
+    
     if db_campaign:
         # Update existing
-        if campaign_update.video_url is not None:
-            db_campaign.video_url = campaign_update.video_url
-        if campaign_update.product_name is not None:
-            db_campaign.product_name = campaign_update.product_name
-        if campaign_update.product_price is not None:
-            db_campaign.product_price = campaign_update.product_price
-        if campaign_update.product_description is not None:
-            db_campaign.product_description = campaign_update.product_description
-        if campaign_update.product_ingredients is not None:
-            db_campaign.product_ingredients = campaign_update.product_ingredients
+        for key, value in update_data.items():
+            setattr(db_campaign, key, value)
     else:
         # Create new
         db_campaign = models.Campaign(
             company_id=current_user.id,
-            video_url=campaign_update.video_url,
-            product_name=campaign_update.product_name,
-            product_price=campaign_update.product_price,
-            product_description=campaign_update.product_description,
-            product_ingredients=campaign_update.product_ingredients
+            **update_data
         )
         db.add(db_campaign)
     
@@ -261,7 +281,7 @@ def get_my_campaign(
 ):
     campaign = db.query(models.Campaign).filter(models.Campaign.company_id == current_user.id).first()
     if not campaign:
-        return {"id": 0, "company_id": current_user.id}
+        raise HTTPException(status_code=404, detail="Campaign not found")
     return campaign
 
 @app.get("/campaign/{company_name}", response_model=schemas.CampaignOut)
@@ -287,3 +307,24 @@ def get_campaign_by_company(company_name: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Campaign not found for this company")
         
     return campaign
+
+from pydantic import BaseModel
+class UserResultSubmit(BaseModel):
+    campaign_id: int
+    survey_data: dict
+
+@app.post("/user/submit-result")
+def submit_result(
+    result_data: UserResultSubmit,
+    current_user: models.User = Depends(require_role(["User"])),
+    db: Session = Depends(get_db)
+):
+    new_result = models.Result(
+        user_id=current_user.id,
+        campaign_id=result_data.campaign_id,
+        survey_data=result_data.survey_data
+    )
+    db.add(new_result)
+    db.commit()
+    db.refresh(new_result)
+    return {"status": "success", "result_id": new_result.id}

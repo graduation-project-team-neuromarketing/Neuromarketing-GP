@@ -47,6 +47,7 @@ class CampaignBase(BaseModel):
     product_price: Optional[str] = None
     product_description: Optional[str] = None
     product_ingredients: Optional[str] = None
+    product_photo_url: Optional[str] = None
     questions_list: Optional[List[Dict[str, Any]]] = None
     promo_code: Optional[str] = None
     discount_value: Optional[str] = None
@@ -57,6 +58,10 @@ class CampaignUpdate(BaseModel):
     product_price: Optional[str] = None
     product_description: Optional[str] = None
     product_ingredients: Optional[str] = None
+    product_photo_url: Optional[str] = None
+    promo_code: Optional[str] = None
+    discount_value: Optional[str] = None
+    questions_list: Optional[List[Dict[str, Any]]] = None
 
 class CampaignCreate(CampaignBase):
     company_id: int

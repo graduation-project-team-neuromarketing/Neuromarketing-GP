@@ -260,10 +260,16 @@
                 if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
                     // Extract Video ID
                     let videoId = '';
-                    if (videoUrl.includes('youtu.be/')) {
-                        videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
-                    } else if (videoUrl.includes('youtube.com/watch')) {
-                        videoId = new URLSearchParams(videoUrl.split('?')[1]).get('v');
+                    try {
+                        if (videoUrl.includes('youtu.be/')) {
+                            videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                        } else if (videoUrl.includes('youtube.com/watch')) {
+                            videoId = new URL(videoUrl).searchParams.get('v');
+                        } else if (videoUrl.includes('youtube.com/embed/')) {
+                            videoId = videoUrl.split('youtube.com/embed/')[1].split('?')[0];
+                        }
+                    } catch (e) {
+                        console.error('Error parsing YouTube URL:', e);
                     }
                     
                     if (videoId) {
@@ -282,12 +288,29 @@
                 videoContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-slate-800 text-white">No Video Available</div>`;
             }
             
+            // Handle Survey Questions
+            if (data.questions_list) {
+                localStorage.setItem(`survey_questions_${brandId}`, JSON.stringify(data.questions_list));
+            }
+            
+            // Update Survey Link
+            const surveyLink = document.querySelector('a[href^="user_survey.html"]');
+            if (surveyLink) {
+                surveyLink.href = `user_survey.html?brandId=${brandId}`;
+            }
+            
             // Handle Product Data
             const productsContainer = document.getElementById('core-products-container');
+            
+            let productImageHtml = `<span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600">inventory_2</span>`;
+            if (data.product_photo_url) {
+                productImageHtml = `<img src="http://127.0.0.1:8000${data.product_photo_url}" alt="${data.product_name || 'Product Photo'}" class="w-full h-full object-cover">`;
+            }
+            
             const productHTML = `
                 <div class="flex flex-col md:flex-row">
-                    <div class="md:w-5/12 aspect-square md:aspect-auto bg-slate-100 dark:bg-slate-900 relative flex items-center justify-center border-r border-outline-variant/30 dark:border-slate-700">
-                        <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600">inventory_2</span>
+                    <div class="md:w-5/12 aspect-square md:aspect-auto bg-slate-100 dark:bg-slate-900 relative flex items-center justify-center border-r border-outline-variant/30 dark:border-slate-700 overflow-hidden">
+                        ${productImageHtml}
                     </div>
                     <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
                         <div class="flex justify-between items-start mb-4 gap-4">

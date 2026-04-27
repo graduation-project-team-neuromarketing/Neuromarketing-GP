@@ -43,6 +43,7 @@ class Campaign(Base):
     product_price = Column(String, nullable=True)
     product_description = Column(String, nullable=True)
     product_ingredients = Column(String, nullable=True)
+    product_photo_url = Column(String, nullable=True)
     questions_list = Column(JSON, nullable=True)  # JSON format to allow flexibility
     promo_code = Column(String, nullable=True)
     discount_value = Column(String, nullable=True)
