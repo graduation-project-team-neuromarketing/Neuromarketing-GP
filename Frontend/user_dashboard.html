@@ -1,61 +1,69 @@
 <!DOCTYPE html>
 <html class="light" lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Company Directory | Neuromarketing</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
     <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "primary": "#007AFF",
-                    "on-primary": "#ffffff",
-                    "surface": "#f7f9fb",
-                    "on-surface": "#191c1e",
-                    "surface-variant": "#e0e3e5",
-                    "on-surface-variant": "#414755",
-                    "outline": "#717786",
-                    "outline-variant": "#c1c6d7",
-                    "surface-container-lowest": "#ffffff",
-                    "surface-container-low": "#f2f4f6",
-                    "surface-container": "#eceef0",
-                    "surface-container-high": "#e6e8ea",
-                    "surface-container-highest": "#e0e3e5",
-                    "primary-container": "#d8e2ff",
-                    "on-primary-container": "#001a41"
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#007AFF",
+                        "on-primary": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#414755",
+                        "outline": "#717786",
+                        "outline-variant": "#c1c6d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#d8e2ff",
+                        "on-primary-container": "#001a41"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "8px",
+                        "lg": "12px",
+                        "xl": "16px",
+                        "2xl": "20px",
+                        "3xl": "24px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
             },
-            "borderRadius": {
-                    "DEFAULT": "8px",
-                    "lg": "12px",
-                    "xl": "16px",
-                    "2xl": "20px",
-                    "3xl": "24px",
-                    "full": "9999px"
-            },
-            "fontFamily": {
-                    "headline": ["Inter"],
-                    "body": ["Inter"],
-                    "label": ["Inter"]
-            }
-          },
-        },
-      }
+        }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         .glass-panel {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
         .company-card:hover .view-offers-btn {
             opacity: 1;
             transform: translateY(0);
@@ -63,49 +71,67 @@
     </style>
     <link rel="stylesheet" href="dark-mode.css">
 </head>
+
 <body class="bg-surface text-on-surface min-h-screen">
-<!-- Top Navigation Bar -->
-<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
-    <div class="flex items-center gap-8 pl-16">
-        <span class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</span>
-        <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
-            <input class="w-full pl-10 pr-4 py-2 bg-slate-100/50 border-none rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:bg-white transition-all" placeholder="Search for products, companies..." type="text"/>
+    <!-- Top Navigation Bar -->
+    <header
+        class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-outline-variant/30 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2">
+        <div class="flex items-center gap-8 pl-16">
+            <span class="text-xl font-bold tracking-tighter text-primary">Neuromarketing</span>
+            <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+                <input
+                    class="w-full pl-10 pr-4 py-2 bg-slate-100/50 border-none rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:bg-white transition-all"
+                    placeholder="Search for products, companies..." type="text" />
+            </div>
         </div>
-    </div>
-    <div class="flex items-center gap-4">
-        <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
-            <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
-        </button>
-        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
-            <span class="material-symbols-outlined text-slate-500">language</span>
-        </button>
-        <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative">
-            <span class="material-symbols-outlined text-slate-500">notifications</span>
-            <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
-        </button>
-                    <!-- Profile Dropdown -->
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group"
+                title="Toggle Dark Mode">
+                <span id="theme-icon"
+                    class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95">
+                <span class="material-symbols-outlined text-slate-500">language</span>
+            </button>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative">
+                <span class="material-symbols-outlined text-slate-500">notifications</span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+            </button>
+            <!-- Profile Dropdown -->
             <div class="relative" id="profile-menu-container">
-                <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
-                    <img id="header-profile-img" alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                <button onclick="toggleProfileDropdown(event)"
+                    class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
+                    <img alt="User Profile"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"
+                        class="w-full h-full object-cover" />
+
                 </button>
-                
+
                 <!-- Dropdown Menu -->
-                <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
+                <div id="profileDropdown"
+                    class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
                         <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
-                    <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
-                        <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total Points</span>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> <span id="header-user-points">130</span></span>
+                    <div
+                        class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
+                        <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total
+                            Points</span>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span
+                                class="material-symbols-outlined text-[12px]">stars</span> 130</span>
+
                     </div>
-                    <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <a href="sign_in_out.html"
+                        class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
                         Log out
                     </a>
                 </div>
             </div>
-            
+
             <script>
                 function toggleProfileDropdown(event) {
                     event.stopPropagation();
@@ -125,7 +151,7 @@
                     }
                 }
 
-                document.addEventListener('click', function(event) {
+                document.addEventListener('click', function (event) {
                     const dropdown = document.getElementById('profileDropdown');
                     const container = document.getElementById('profile-menu-container');
                     if (dropdown && !dropdown.classList.contains('hidden') && container && !container.contains(event.target)) {
@@ -137,211 +163,318 @@
                     }
                 });
             </script>
-    </div>
-</header>
+        </div>
+    </header>
 
-<!-- Side Navigation -->
-<aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40">
-    <a class="p-3 bg-primary/10 shadow-sm text-primary rounded-lg" href="user_dashboard.html">
-        <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
-    </a>
-    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_history.html">
-        <span class="material-symbols-outlined">history</span>
-    </a>
-    <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
-        <span class="material-symbols-outlined">person</span>
-    </a>
-    <div class="mt-auto flex flex-col gap-4 pb-8">
-        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="#">
-            <span class="material-symbols-outlined">help</span>
+    <!-- Side Navigation -->
+    <aside
+        class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40">
+        <a class="p-3 bg-primary/10 shadow-sm text-primary rounded-lg" href="user_dashboard.html">
+            <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
+        </a>
+        <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_history.html">
+            <span class="material-symbols-outlined">history</span>
         </a>
         <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
-            <span class="material-symbols-outlined">settings</span>
+            <span class="material-symbols-outlined">person</span>
         </a>
-    </div>
-</aside>
-
-<!-- Main Content Area -->
-<main class="ml-16 pt-20 p-8 min-h-screen">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex items-end justify-between mb-10">
-            <div>
-                <h1 class="text-3xl font-semibold tracking-tight text-on-surface dark:text-white">Select a Brand to Evaluate</h1>
-                <p class="text-on-surface-variant dark:text-slate-400 mt-1">Choose a category to view the available brands for your neural insights.</p>
-            </div>
-            <button id="back-to-categories-btn" class="hidden bg-surface-variant dark:bg-slate-700 text-on-surface-variant dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
-                <span class="material-symbols-outlined text-sm">arrow_back</span>
-                Back to Categories
-            </button>
-        </div>
-
-        <!-- Categories Grid -->
-        <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('FMCG')">
-                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-4xl">shopping_cart</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Fast-Moving Consumer Goods</p>
-                </div>
-            </div>
-
-            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Beauty & Fragrances')">
-                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-4xl">spa</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Cosmetics and Scents</p>
-                </div>
-            </div>
-
-            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Sportswear & Athletics')">
-                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-4xl">directions_run</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Athletic Apparel & Gear</p>
-                </div>
-            </div>
-
-            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer" onclick="selectCategory('Consumer Electronics')">
-                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-4xl">devices</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Consumer Electronics</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Company Logo Grid -->
-        <div id="companies-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden mt-6">
-            <a href="user_brand-details.html?brandId=globaltech" data-category="FMCG" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">business</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">Global Tech</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Active Environment</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
+        <div class="mt-auto flex flex-col gap-4 pb-8">
+            <a class="p-3 text-slate-400 hover:text-primary transition-all" href="#">
+                <span class="material-symbols-outlined">help</span>
             </a>
-            
-            <a href="user_brand-details.html?brandId=neuralis" data-category="FMCG" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">neurology</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">Neuralis AI</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Processing Data</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=aerovance" data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">rocket_launch</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">AeroVance</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Setup Complete</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=ecostrata" data-category="Beauty & Fragrances" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">eco</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">EcoStrata</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">3 Projects Active</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=fincore" data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">payments</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">FinCore</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Action Required</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=biotrust" data-category="Sportswear & Athletics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">shield_with_heart</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">BioTrust</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Environment Active</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=logixpath" data-category="Consumer Electronics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">local_shipping</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">LogixPath</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Pending Analysis</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
-            </a>
-            
-            <a href="user_brand-details.html?brandId=buildsmart" data-category="Consumer Electronics" class="company-card company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                <div class="w-16 h-16 rounded-2xl bg-surface-container dark:bg-slate-700 flex items-center justify-center text-primary/60 dark:text-primary">
-                    <span class="material-symbols-outlined text-4xl">home_repair_service</span>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-semibold text-on-surface dark:text-white">BuildSmart</h3>
-                    <p class="text-xs text-on-surface-variant dark:text-slate-400">No Active Projects</p>
-                </div>
-                <div class="view-offers-btn opacity-0 translate-y-2 transition-all duration-300 mt-2 w-full">
-                    <div class="w-full py-2 bg-surface-container dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary hover:text-white text-primary text-center text-xs font-bold uppercase tracking-wider rounded-lg transition-colors">View Offers</div>
-                </div>
+            <a class="p-3 text-slate-400 hover:text-primary transition-all" href="user_settings.html">
+                <span class="material-symbols-outlined">settings</span>
             </a>
         </div>
-    </div>
-</main>
+    </aside>
 
-<script>
-    function selectCategory(category) {
-        document.getElementById('categories-grid').classList.add('hidden');
-        document.getElementById('companies-grid').classList.remove('hidden');
-        document.getElementById('back-to-categories-btn').classList.remove('hidden');
-        
-        const companies = document.querySelectorAll('.company-item');
-        companies.forEach(company => {
-            if (company.getAttribute('data-category') === category) {
-                company.style.display = 'flex';
-            } else {
-                company.style.display = 'none';
+    <!-- Main Content Area -->
+    <main class="ml-16 pt-20 p-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-on-surface dark:text-white">Select a Brand to
+                        Evaluate</h1>
+                    <p class="text-on-surface-variant dark:text-slate-400 mt-1">Choose a category to view the available
+                        brands for your neural insights.</p>
+                </div>
+                <button id="back-to-categories-btn"
+                    class="hidden bg-surface-variant dark:bg-slate-700 text-on-surface-variant dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back to Categories
+                </button>
+            </div>
+
+            <!-- Categories Grid -->
+            <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    onclick="selectCategory('FMCG')">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">shopping_cart</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Fast-Moving Consumer Goods
+                        </p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    onclick="selectCategory('Beauty & Fragrances')">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">spa</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Cosmetics and Scents</p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    onclick="selectCategory('Sportswear & Athletics')">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">directions_run</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Athletic Apparel & Gear</p>
+                    </div>
+                </div>
+
+                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    onclick="selectCategory('Consumer Electronics')">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">devices</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Consumer Electronics</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Logo Grid -->
+            <div id="companies-grid"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden mt-6">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <script src="dark-mode.js"></script>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/users/me`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        const userData = await response.json();
+                        const headerProfileImg = document.getElementById('header-profile-img');
+                        const headerUserName = document.getElementById('header-user-name');
+                        const headerUserPoints = document.getElementById('header-user-points');
+
+                        if (headerProfileImg && userData.profile_pic) {
+                            headerProfileImg.src = userData.profile_pic.startsWith('http') 
+                                ? userData.profile_pic 
+                                : `${API_BASE}${userData.profile_pic}`;
+                        }
+                        if (headerUserName && userData.full_name) {
+                            headerUserName.textContent = userData.full_name;
+                        }
+                        if (headerUserPoints && userData.points !== undefined) {
+                            headerUserPoints.textContent = userData.points;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching profile data:', error);
+                }
+            }
+
+            await loadCompaniesForUser();
+
+            const backBtn = document.getElementById('back-to-categories-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    document.getElementById('categories-grid').classList.remove('hidden');
+                    document.getElementById('companies-grid').classList.add('hidden');
+                    backBtn.classList.add('hidden');
+                    document.querySelector('h1').textContent = 'Select a Brand to Evaluate';
+                });
             }
         });
-    }
+
+        async function loadCompaniesForUser() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/companies`);
+                if (response.ok) {
+                    const companies = await response.json();
+                    const companiesGrid = document.getElementById('companies-grid');
+                    if (!companiesGrid) return;
+                    
+                    companiesGrid.innerHTML = '';
+
+                    companies.forEach(company => {
+                        const brandId = encodeURIComponent(company.company_name.toLowerCase().replace(/\s+/g, ''));
+
+                        const newCardHTML = `
+                            <a href="user_brand-details.html?brandId=${brandId}" 
+                            data-category="${company.industry_category}" 
+                            class="company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                                <div class="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                                    ${company.logo_url 
+                                        ? `<img src="${API_BASE}${company.logo_url}" class="w-full h-full object-cover" />` 
+                                        : '<span class="material-symbols-outlined text-4xl">business</span>'}
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="font-semibold text-on-surface dark:text-white">${company.company_name}</h3>
+                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">${company.industry_category}</p>
+                                </div>
+                                <div class="view-offers-btn opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 mt-2 w-full">
+                                    <div class="w-full py-2 bg-primary text-white text-center text-xs font-bold uppercase rounded-lg">Start Survey</div>
+                                </div>
+                            </a>
+                        `;
+                        companiesGrid.insertAdjacentHTML('beforeend', newCardHTML);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching companies:', error);
+            }
+        }
+
+        function selectCategory(categoryName) {
+            const categoriesGrid = document.getElementById('categories-grid');
+            const companiesGrid = document.getElementById('companies-grid');
+            const backBtn = document.getElementById('back-to-categories-btn');
+            const pageTitle = document.querySelector('h1');
+
+            if (categoriesGrid && companiesGrid && backBtn) {
+                categoriesGrid.classList.add('hidden');
+                companiesGrid.classList.remove('hidden');
+                backBtn.classList.remove('hidden');
+                pageTitle.textContent = categoryName;
+
+                const allItems = document.querySelectorAll('.company-item');
+                let found = false;
+
+                allItems.forEach(item => {
+                    const itemCat = item.getAttribute('data-category').trim();
+                    if (itemCat === categoryName) {
+                        item.style.setProperty('display', 'flex', 'important');
+                        found = true;
+                    } else {
+                        item.style.setProperty('display', 'none', 'important');
+                    }
+                });
+
+                if (!found) {
+                    companiesGrid.innerHTML = `
+                        <p class="col-span-full text-center text-slate-400 py-10">
+                            No brands available in ${categoryName} yet.
+                        </p>`;
+                }
+            }
+        }
+    </script>
+
+
+
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCompaniesForUser();
+
+
+            document.getElementById('back-to-categories-btn').addEventListener('click', () => {
+                document.getElementById('categories-grid').classList.remove('hidden');
+                document.getElementById('companies-grid').classList.add('hidden');
+                document.getElementById('back-to-categories-btn').classList.add('hidden');
+
+                document.querySelector('h1').textContent = 'Select a Brand to Evaluate';
+            });
+        });
+
+        
+
+        async function loadCompaniesForUser() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/admin/companies');
+                if (response.ok) {
+                    const companies = await response.json();
+                    const companiesGrid = document.getElementById('companies-grid');
+                    companiesGrid.innerHTML = '';
+
+                    companies.forEach(company => {
+                        const brandId = encodeURIComponent(company.company_name.toLowerCase().replace(/\s+/g, ''));
+
+
+                        const newCardHTML = `
+                    <a href="user_brand-details.html?brandId=${brandId}" 
+                       data-category="${company.industry_category}" 
+                       class="company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                            ${company.logo_url ? `<img src="http://127.0.0.1:8000${company.logo_url}" class="w-full h-full object-cover" />` : '<span class="material-symbols-outlined text-4xl">business</span>'}
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-semibold text-on-surface dark:text-white">${company.company_name}</h3>
+                            <p class="text-xs text-on-surface-variant dark:text-slate-400">${company.industry_category}</p>
+                        </div>
+                        <div class="view-offers-btn opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 mt-2 w-full">
+                            <div class="w-full py-2 bg-primary text-white text-center text-xs font-bold uppercase rounded-lg">Start Survey</div>
+                        </div>
+                    </a>
+                `;
+                        companiesGrid.insertAdjacentHTML('beforeend', newCardHTML);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching companies:', error);
+            }
+        }
+
+        function selectCategory(categoryName) {
+            const categoriesGrid = document.getElementById('categories-grid');
+            const companiesGrid = document.getElementById('companies-grid');
+            const backBtn = document.getElementById('back-to-categories-btn');
+            const pageTitle = document.querySelector('h1');
+
+
+            categoriesGrid.classList.add('hidden');
+            companiesGrid.classList.remove('hidden');
+            backBtn.classList.remove('hidden');
+            pageTitle.textContent = categoryName;
+
+            const allItems = document.querySelectorAll('.company-item');
+            let found = false;
+
+            allItems.forEach(item => {
+
+                const itemCat = item.getAttribute('data-category').trim();
+                if (itemCat === categoryName) {
+                    item.style.setProperty('display', 'flex', 'important');
+                    found = true;
+                } else {
+                    item.style.setProperty('display', 'none', 'important');
+                }
+            });
+
+
+            if (!found) {
+                companiesGrid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-10">No brands available in ${categoryName} yet.</p>`;
+            }
+        }
+    </script>
+    <script src="dark-mode.js"></script>
+---------------------------
 
     document.getElementById('back-to-categories-btn').addEventListener('click', () => {
         document.getElementById('categories-grid').classList.remove('hidden');
@@ -382,6 +515,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
-</script>
+</script>-->
 </body>
+
 </html>

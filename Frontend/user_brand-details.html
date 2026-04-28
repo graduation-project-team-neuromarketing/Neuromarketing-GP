@@ -224,166 +224,113 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(window.location.search);
         let brandId = params.get('brandId');
         if (brandId) {
-            brandId = brandId.toLowerCase().trim();
+            brandId = decodeURIComponent(brandId).toLowerCase().trim();
             if (brandId === 'global-tech') brandId = 'globaltech';
-        }
-        
-        const brandData = {
-            'neuralis': {
-                title: 'Neuralis AI',
-                icon: 'neurology',
-                description: 'Leading the frontier of neural-integrated market analysis.',
-                videoTitle: 'The Future of Consumer Cognition',
-                videoThumbnail: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC98JmJLhaY1r5P0NUj3j2WaaVmt2q7_pnj8mOYj4AgbF2oN9kPYMHYg6UdHzg8mMmi8UDcKhpTaI1jf_xjK0LxEh89xUqWJeuXge3AOiVc7_FhpBnGZBw7ke2HJ1iMrBdIFI8l7xLkuM0yqHgqPWMoAnlk79j0takz2T5a1Aacv3NWOo4cfc9HjTOXTxEpoTGE-GrqR4_OBRcNj4iYEwG41eUMSR7EAjJt7HZspvZkCJgXqlS87vvHMhzR6YH4vXQoqUUuESJadx5C',
-                products: [
-                    { name: 'NeuralScan', description: 'High-fidelity EEG monitoring for focus groups.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnz56XlD8E9A0u6N7i7_2tL-UfH6F7KzX9L7pM8U4W5Y6Z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R' },
-                    { name: 'CogniGraph', description: 'Visual mapping of subconscious brand associations.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBjM7K0L1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R1S2T3U4V5W6X7Y8Z9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6' },
-                    { name: 'PulseInsight', description: 'Real-time biometric response tracking software.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD8E9A0u6N7i7_2tL-UfH6F7KzX9L7pM8U4W5Y6Z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8' },
-                    { name: 'EthosAI', description: 'Automated ethical compliance and data anonymization.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1D2E3F4G5H6I7J8K9L0M1N2O3P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6' }
-                ]
-            },
-            'globaltech': {
-                title: 'Global Tech',
-                icon: 'business',
-                description: 'Empowering global markets with advanced data ecosystems.',
-                videoTitle: 'Scaling Global Infrastructure',
-                videoThumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
-                products: [
-                    { name: 'DataSphere', description: 'Unified global data management platform.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'CloudSync', description: 'Seamless cross-border synchronization tools.', image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'MarketPredict', description: 'AI-driven global market forecasting.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'SecureNet', description: 'Enterprise-grade international security protocols.', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'aerovance': {
-                title: 'AeroVance',
-                icon: 'rocket_launch',
-                description: 'Pioneering next-generation aerospace technology.',
-                videoTitle: 'Future of Flight',
-                videoThumbnail: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'AeroDynamics Pro', description: 'Advanced flight simulation software.', image: 'https://images.unsplash.com/photo-1540829016269-e05670f88caa?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'OrbitTrack', description: 'Satellite tracking and telemetry.', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'SkyGuard', description: 'Aerospace security and monitoring.', image: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'PropulsionX', description: 'Next-gen engine analytics.', image: 'https://images.unsplash.com/photo-1583225214464-9296029427aa?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'ecostrata': {
-                title: 'EcoStrata',
-                icon: 'eco',
-                description: 'Sustainable solutions for a greener tomorrow.',
-                videoTitle: 'Sustainability in Action',
-                videoThumbnail: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'GreenGrid', description: 'Renewable energy management.', image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'EcoTrack', description: 'Carbon footprint analysis.', image: 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'PureWater', description: 'Advanced water filtration tech.', image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'BioCycle', description: 'Waste reduction systems.', image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'fincore': {
-                title: 'FinCore',
-                icon: 'payments',
-                description: 'Reimagining the future of digital finance.',
-                videoTitle: 'Digital Economy',
-                videoThumbnail: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'TradePro', description: 'High-frequency trading platform.', image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'LedgerSafe', description: 'Blockchain security solutions.', image: 'https://images.unsplash.com/photo-1639762681485-074b7f4aec63?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'PayStream', description: 'Global payment gateway.', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'WealthAI', description: 'Automated portfolio management.', image: 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'biotrust': {
-                title: 'BioTrust',
-                icon: 'shield_with_heart',
-                description: 'Securing health data with uncompromising privacy.',
-                videoTitle: 'Health Data Security',
-                videoThumbnail: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'MediVault', description: 'Encrypted patient records.', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'GenoSec', description: 'Genomic data protection.', image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'CareConnect', description: 'Secure telehealth platform.', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'PharmaChain', description: 'Supply chain transparency.', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'logixpath': {
-                title: 'LogixPath',
-                icon: 'local_shipping',
-                description: 'Intelligent logistics and supply chain optimization.',
-                videoTitle: 'Optimizing Global Delivery',
-                videoThumbnail: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c1590a?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'RouteAI', description: 'Smart delivery routing.', image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'WareSense', description: 'IoT warehouse management.', image: 'https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'FleetTrack', description: 'Real-time fleet monitoring.', image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'SupplyChain Pro', description: 'End-to-end logistics platform.', image: 'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=800&auto=format&fit=crop' }
-                ]
-            },
-            'buildsmart': {
-                title: 'BuildSmart',
-                icon: 'home_repair_service',
-                description: 'Innovating construction with smart technologies.',
-                videoTitle: 'Future of Construction',
-                videoThumbnail: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2000&auto=format&fit=crop',
-                products: [
-                    { name: 'BIM Connect', description: 'Collaborative building modeling.', image: 'https://images.unsplash.com/photo-1504307651254-35680f356f58?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'SiteDrone', description: 'Automated site surveying.', image: 'https://images.unsplash.com/photo-1527018601619-a508a2be00cd?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'MaterialSync', description: 'Construction supply management.', image: 'https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=800&auto=format&fit=crop' },
-                    { name: 'SafetyAI', description: 'Predictive site safety analytics.', image: 'https://images.unsplash.com/photo-1504917595217-d4bf2691e812?q=80&w=800&auto=format&fit=crop' }
-                ]
-            }
-        };
-        
-        const data = brandData[brandId];
-        
-        if (!data) {
-            document.getElementById('brand-title').textContent = 'Brand Not Found';
-            document.getElementById('brand-description').textContent = 'Please select a valid brand from the dashboard.';
-            document.getElementById('brand-icon').textContent = 'error';
-            document.getElementById('core-products-container').innerHTML = '<p class="text-on-surface-variant">No products available.</p>';
+        } else {
+            console.error('No brand selected');
             return;
         }
         
-        document.getElementById('brand-title').textContent = data.title;
-        document.getElementById('brand-description').textContent = data.description;
-        document.getElementById('brand-icon').textContent = data.icon;
-        
-        document.getElementById('brand-video-title').textContent = data.videoTitle;
-        document.getElementById('brand-video-thumbnail').src = data.videoThumbnail;
-        
-        const productsContainer = document.getElementById('core-products-container');
-        productsContainer.innerHTML = '';
-        
-        // Grab the first product to display as the single core product
-        const product = data.products[0];
-        const price = "$299.99"; // Fallback price
-        const ingredients = "Advanced Neuro-Sensors, Medical-grade Hypoallergenic Silicone, Quantum Processing Unit, Lithium-ion Power Cell";
-        
-        const productHTML = `
-            <div class="flex flex-col md:flex-row">
-                <div class="md:w-5/12 aspect-square md:aspect-auto bg-slate-100 dark:bg-slate-900 relative">
-                    <img alt="${product.name}" class="absolute inset-0 w-full h-full object-cover" src="${product.image}">
-                </div>
-                <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
-                    <div class="flex justify-between items-start mb-4 gap-4">
-                        <h4 class="text-3xl font-bold text-on-surface dark:text-white">${product.name}</h4>
-                        <span class="text-2xl font-bold text-primary whitespace-nowrap">${price}</span>
-                    </div>
-                    <p class="text-on-surface-variant dark:text-slate-400 text-lg mb-8 leading-relaxed">${product.description}</p>
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/campaign/${brandId}`);
+            
+            if (!response.ok) {
+                if (response.status === 404) {
+                    document.getElementById('brand-title').textContent = 'Campaign Not Ready';
+                    document.getElementById('brand-description').textContent = 'This brand has not published a campaign yet.';
+                    document.getElementById('core-products-container').innerHTML = '<p class="text-on-surface-variant p-8">No products available.</p>';
+                    document.querySelector('.aspect-video').innerHTML = '<div class="w-full h-full flex items-center justify-center bg-slate-800 text-white">No Video Available</div>';
+                    return;
+                }
+                throw new Error('Failed to fetch campaign');
+            }
+            
+            const data = await response.json();
+            
+            // Handle Video Embedding
+            const videoContainer = document.querySelector('.aspect-video');
+            if (data.video_url) {
+                let videoUrl = data.video_url;
+                let videoHTML = '';
+                
+                if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+                    // Extract Video ID
+                    let videoId = '';
+                    try {
+                        if (videoUrl.includes('youtu.be/')) {
+                            videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                        } else if (videoUrl.includes('youtube.com/watch')) {
+                            videoId = new URL(videoUrl).searchParams.get('v');
+                        } else if (videoUrl.includes('youtube.com/embed/')) {
+                            videoId = videoUrl.split('youtube.com/embed/')[1].split('?')[0];
+                        }
+                    } catch (e) {
+                        console.error('Error parsing YouTube URL:', e);
+                    }
                     
-                    <div>
-                        <h5 class="text-sm font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">Ingredients / Materials</h5>
-                        <p class="text-on-surface dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-outline-variant/20 dark:border-slate-700 leading-relaxed shadow-inner">${ingredients}</p>
+                    if (videoId) {
+                        videoHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    }
+                } else if (videoUrl.endsWith('.mp4')) {
+                    videoHTML = `<video controls class="w-full h-full"><source src="${videoUrl}" type="video/mp4"></video>`;
+                } else {
+                    videoHTML = `<div class="w-full h-full flex items-center justify-center bg-slate-800 text-white">Unsupported Video Format</div>`;
+                }
+                
+                if (videoHTML) {
+                    videoContainer.innerHTML = videoHTML;
+                }
+            } else {
+                videoContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-slate-800 text-white">No Video Available</div>`;
+            }
+            
+            // Handle Survey Questions
+            if (data.questions_list) {
+                localStorage.setItem(`survey_questions_${brandId}`, JSON.stringify(data.questions_list));
+            }
+            
+            // Update Survey Link
+            const surveyLink = document.querySelector('a[href^="user_survey.html"]');
+            if (surveyLink) {
+                surveyLink.href = `user_survey.html?brandId=${brandId}`;
+            }
+            
+            // Handle Product Data
+            const productsContainer = document.getElementById('core-products-container');
+            
+            let productImageHtml = `<span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600">inventory_2</span>`;
+            if (data.product_photo_url) {
+                productImageHtml = `<img src="http://127.0.0.1:8000${data.product_photo_url}" alt="${data.product_name || 'Product Photo'}" class="w-full h-full object-cover">`;
+            }
+            
+            const productHTML = `
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-5/12 aspect-square md:aspect-auto bg-slate-100 dark:bg-slate-900 relative flex items-center justify-center border-r border-outline-variant/30 dark:border-slate-700 overflow-hidden">
+                        ${productImageHtml}
+                    </div>
+                    <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
+                        <div class="flex justify-between items-start mb-4 gap-4">
+                            <h4 class="text-3xl font-bold text-on-surface dark:text-white">${data.product_name || 'Unnamed Product'}</h4>
+                            <span class="text-2xl font-bold text-primary whitespace-nowrap">${data.product_price ? '$' + data.product_price : ''}</span>
+                        </div>
+                        <p class="text-on-surface-variant dark:text-slate-400 text-lg mb-8 leading-relaxed">${data.product_description || 'No description provided.'}</p>
+                        
+                        <div>
+                            <h5 class="text-sm font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">Ingredients / Materials</h5>
+                            <p class="text-on-surface dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-outline-variant/20 dark:border-slate-700 leading-relaxed shadow-inner">${data.product_ingredients || 'No ingredients listed.'}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        productsContainer.innerHTML = productHTML;
+            `;
+            productsContainer.innerHTML = productHTML;
+            
+        } catch (error) {
+            console.error('Error:', error);
+        }
     });
 </script>
 <script src="dark-mode.js"></script>

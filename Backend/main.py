@@ -8,7 +8,11 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 import os
 import shutil
+import json
+from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Form
+from fastapi.staticfiles import StaticFiles
 import uuid
+
 
 # Adjust import based on the library used. Here we use 'jose'
 # Install via: pip install python-jose[cryptography] passlib[bcrypt]
@@ -27,10 +31,14 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Neuromarketing Backend API")
 
+os.makedirs("static/logos", exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Setup CORS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust for production
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -275,3 +283,158 @@ def get_admin_data(current_user: models.User = Depends(require_role(["Admin"])))
 @app.get("/company/data")
 def get_company_data(current_user: models.Company = Depends(require_role(["Company"]))):
     return {"message": "Welcome to the Company Portal", "company_name": current_user.company_name}
+
+@app.post("/admin/add-company", response_model=schemas.CompanyOut, status_code=status.HTTP_201_CREATED)
+def add_company(
+    company_name: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    industry_category: str = Form(...),
+    logo: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    if db.query(models.User).filter(models.User.email == email).first() or \
+       db.query(models.Company).filter(models.Company.email == email).first():
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    logo_filename = f"{int(datetime.utcnow().timestamp())}_{logo.filename}"
+    logo_path = os.path.join("static", "logos", logo_filename)
+    with open(logo_path, "wb") as buffer:
+        shutil.copyfileobj(logo.file, buffer)
+    
+    logo_url = f"/{logo_path}".replace("\\", "/")
+    
+    hashed_password = get_password_hash(password)
+    db_company = models.Company(
+        company_name=company_name,
+        email=email,
+        password=hashed_password,
+        logo_url=logo_url,
+        industry_category=industry_category
+    )
+    db.add(db_company)
+    db.commit()
+    db.refresh(db_company)
+    return db_company
+
+@app.get("/admin/companies", response_model=List[schemas.CompanyOut])
+def get_companies(industry_category: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(models.Company)
+    if industry_category:
+        query = query.filter(models.Company.industry_category == industry_category)
+    return query.all()
+
+@app.get("/admin/companies/{category}", response_model=List[schemas.CompanyOut])
+def get_companies_by_category(category: str, db: Session = Depends(get_db)):
+    return db.query(models.Company).filter(models.Company.industry_category == category).all()
+
+@app.post("/company/update-campaign", response_model=schemas.CampaignOut)
+def update_campaign(
+    video_url: Optional[str] = Form(None),
+    product_name: Optional[str] = Form(None),
+    product_price: Optional[str] = Form(None),
+    product_description: Optional[str] = Form(None),
+    product_ingredients: Optional[str] = Form(None),
+    promo_code: Optional[str] = Form(None),
+    discount_value: Optional[str] = Form(None),
+    questions_list: Optional[str] = Form(None),
+    product_photo: Optional[UploadFile] = File(None),
+    current_user: models.Company = Depends(require_role(["Company"])),
+    db: Session = Depends(get_db)
+):
+    # Check if campaign exists
+    db_campaign = db.query(models.Campaign).filter(models.Campaign.company_id == current_user.id).first()
+    
+    update_data = {}
+    if video_url is not None: update_data["video_url"] = video_url
+    if product_name is not None: update_data["product_name"] = product_name
+    if product_price is not None: update_data["product_price"] = product_price
+    if product_description is not None: update_data["product_description"] = product_description
+    if product_ingredients is not None: update_data["product_ingredients"] = product_ingredients
+    if promo_code is not None: update_data["promo_code"] = promo_code
+    if discount_value is not None: update_data["discount_value"] = discount_value
+    
+    if questions_list is not None:
+        try:
+            update_data["questions_list"] = json.loads(questions_list)
+        except json.JSONDecodeError:
+            pass
+            
+    if product_photo is not None and product_photo.filename:
+        photo_filename = f"{int(datetime.utcnow().timestamp())}_{product_photo.filename}"
+        os.makedirs("static/products", exist_ok=True)
+        photo_path = os.path.join("static", "products", photo_filename)
+        with open(photo_path, "wb") as buffer:
+            shutil.copyfileobj(product_photo.file, buffer)
+        update_data["product_photo_url"] = f"/{photo_path}".replace("\\", "/")
+    
+    if db_campaign:
+        # Update existing
+        for key, value in update_data.items():
+            setattr(db_campaign, key, value)
+    else:
+        # Create new
+        db_campaign = models.Campaign(
+            company_id=current_user.id,
+            **update_data
+        )
+        db.add(db_campaign)
+    
+    db.commit()
+    db.refresh(db_campaign)
+    return db_campaign
+
+@app.get("/company/my-campaign", response_model=schemas.CampaignOut)
+def get_my_campaign(
+    current_user: models.Company = Depends(require_role(["Company"])),
+    db: Session = Depends(get_db)
+):
+    campaign = db.query(models.Campaign).filter(models.Campaign.company_id == current_user.id).first()
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    return campaign
+
+@app.get("/campaign/{company_name}", response_model=schemas.CampaignOut)
+def get_campaign_by_company(company_name: str, db: Session = Depends(get_db)):
+    # company_name might be formatted like "globaltech", so we search using ilike and removing spaces
+    # Alternatively, the frontend encodes the exact DB name or we just do a direct match or case-insensitive match
+    # A simple ilike will handle basic case differences, but replacing spaces in SQL might be needed if frontend strips them
+    # Since sqlite doesn't easily support REPLACE without extensions, let's just do a direct match and assume the frontend can handle encoding spaces or we fetch all and match.
+    # Actually, the user's frontend is using: brandId = encodeURIComponent(company.company_name.toLowerCase().replace(/\s+/g, ''))
+    # This means the backend receives "globaltechinc". We need to match this.
+    companies = db.query(models.Company).all()
+    target_company = None
+    for c in companies:
+        if c.company_name.lower().replace(" ", "") == company_name.lower():
+            target_company = c
+            break
+            
+    if not target_company:
+        raise HTTPException(status_code=404, detail="Company not found")
+        
+    campaign = db.query(models.Campaign).filter(models.Campaign.company_id == target_company.id).first()
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found for this company")
+        
+    return campaign
+
+from pydantic import BaseModel
+class UserResultSubmit(BaseModel):
+    campaign_id: int
+    survey_data: dict
+
+@app.post("/user/submit-result")
+def submit_result(
+    result_data: UserResultSubmit,
+    current_user: models.User = Depends(require_role(["User"])),
+    db: Session = Depends(get_db)
+):
+    new_result = models.Result(
+        user_id=current_user.id,
+        campaign_id=result_data.campaign_id,
+        survey_data=result_data.survey_data
+    )
+    db.add(new_result)
+    db.commit()
+    db.refresh(new_result)
+    return {"status": "success", "result_id": new_result.id}

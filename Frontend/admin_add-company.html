@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html class="light" lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Add Company | Neuromarketing</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -29,9 +32,9 @@
                         "primary-container": "#d8e2ff",
                         "on-primary-container": "#001a41",
                         // Dark mode specifics
-                        "dark-surface": "#0f172a", 
-                        "dark-surface-container": "#1e293b", 
-                        "dark-border": "#334155" 
+                        "dark-surface": "#0f172a",
+                        "dark-surface-container": "#1e293b",
+                        "dark-border": "#334155"
                     },
                     borderRadius: {
                         DEFAULT: "8px",
@@ -106,46 +109,66 @@
         }
     </style>
 </head>
+
 <body class="bg-surface text-on-surface min-h-screen transition-colors duration-300">
-    
+
     <!-- Top Navigation Bar -->
-    <header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md border-b border-outline-variant/30 dark:border-slate-700 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
+    <header
+        class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md border-b border-outline-variant/30 dark:border-slate-700 shadow-[0px_20px_40px_rgba(0,31,63,0.06)] flex justify-between items-center px-6 py-2 transition-colors duration-300">
         <div class="flex items-center gap-8 pl-16">
-            <span class="text-xl font-bold tracking-tighter text-primary cursor-pointer transition-transform hover:scale-105" onclick="window.location.href='admin_directory.html'">Neuromarketing</span>
+            <span
+                class="text-xl font-bold tracking-tighter text-primary cursor-pointer transition-transform hover:scale-105"
+                onclick="window.location.href='admin_directory.html'">Neuromarketing</span>
             <div class="relative flex-1 min-w-[320px] max-w-md mx-8 group">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
-                <input class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all outline-none dark:bg-slate-800 dark:border-slate-700 dark:text-white" placeholder="Search for products, companies..." type="text"/>
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+                <input
+                    class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-on-surface placeholder:text-slate-400 focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all outline-none dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                    placeholder="Search for products, companies..." type="text" />
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" title="Toggle Dark Mode">
-                <span id="theme-icon" class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
+            <button id="theme-toggle" class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group"
+                title="Toggle Dark Mode">
+                <span id="theme-icon"
+                    class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dark_mode</span>
             </button>
-            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group" onclick="showToast('Language settings opened')" title="Language">
-                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">language</span>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 group"
+                onclick="showToast('Language settings opened')" title="Language">
+                <span
+                    class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">language</span>
             </button>
-            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative group" onclick="showToast('You have 3 new notifications')" title="Notifications">
-                <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
+            <button class="p-2 hover:bg-slate-100/50 rounded-lg transition-all active:scale-95 relative group"
+                onclick="showToast('You have 3 new notifications')" title="Notifications">
+                <span
+                    class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">notifications</span>
+                <span
+                    class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-slate-800 transition-colors"></span>
             </button>
-                        <!-- Profile Dropdown -->
+            <!-- Profile Dropdown -->
             <div class="relative" id="profile-menu-container">
-                <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
-                    <img id="header-profile-img" alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                <button onclick="toggleProfileDropdown(event)"
+                    class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
+                    <img alt="User Profile"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"
+                        class="w-full h-full object-cover" />
+
                 </button>
-                
+
                 <!-- Dropdown Menu -->
-                <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
+                <div id="profileDropdown"
+                    class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
                         <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
-                    <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <a href="sign_in_out.html"
+                        class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
                         Log out
                     </a>
                 </div>
             </div>
-            
+
             <script>
                 function toggleProfileDropdown(event) {
                     event.stopPropagation();
@@ -165,7 +188,7 @@
                     }
                 }
 
-                document.addEventListener('click', function(event) {
+                document.addEventListener('click', function (event) {
                     const dropdown = document.getElementById('profileDropdown');
                     const container = document.getElementById('profile-menu-container');
                     if (dropdown && !dropdown.classList.contains('hidden') && container && !container.contains(event.target)) {
@@ -181,27 +204,35 @@
     </header>
 
     <!-- Side Navigation -->
-    <aside class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40 transition-colors duration-300">
-        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="admin_directory.html">
+    <aside
+        class="fixed left-0 top-0 h-screen w-16 bg-white border-r border-outline-variant/20 flex flex-col items-center py-20 gap-6 z-40 transition-colors duration-300">
+        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all"
+            href="admin_directory.html">
             <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>business</span>
-            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
+            <span
+                class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
         </a>
         <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_team.html">
             <span class="material-symbols-outlined">group</span>
-            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
+            <span
+                class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
         </a>
-        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group" href="admin_statistics.html">
+        <a class="nav-item p-3 text-slate-400 hover:text-primary transition-all relative group"
+            href="admin_statistics.html">
             <span class="material-symbols-outlined">insights</span>
-            <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
+            <span
+                class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Statistics</span>
         </a>
         <div class="mt-auto flex flex-col gap-4 pb-8">
             <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
                 <span class="material-symbols-outlined">help</span>
-                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Help</span>
+                <span
+                    class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Help</span>
             </a>
             <a class="p-3 text-slate-400 hover:text-primary transition-all relative group" href="#">
                 <span class="material-symbols-outlined">settings</span>
-                <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Settings</span>
+                <span
+                    class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Settings</span>
             </a>
         </div>
     </aside>
@@ -209,38 +240,71 @@
     <!-- Main Content Area -->
     <main class="ml-16 pt-20 p-8 min-h-screen flex items-center justify-center">
         <div class="w-full max-w-xl">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_20px_40px_rgba(0,31,63,0.06)] dark:shadow-none border border-outline-variant/30 overflow-hidden transition-colors duration-300 transform transition-all hover:shadow-2xl">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_20px_40px_rgba(0,31,63,0.06)] dark:shadow-none border border-outline-variant/30 overflow-hidden transition-colors duration-300 transform transition-all hover:shadow-2xl">
                 <div class="p-8 border-b border-outline-variant/10">
-                    <h1 class="text-2xl font-semibold tracking-tight text-on-surface transition-colors">Add New Company</h1>
-                    <p class="text-on-surface-variant text-sm mt-1 transition-colors">Register a new client environment for neural analysis.</p>
+                    <h1 class="text-2xl font-semibold tracking-tight text-on-surface transition-colors">Add New Company
+                    </h1>
+                    <p class="text-on-surface-variant text-sm mt-1 transition-colors">Register a new client environment
+                        for neural analysis.</p>
                 </div>
                 <form id="add-company-form" class="p-8 space-y-6">
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-on-surface transition-colors" for="company-name">Company Name</label>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="company-name" placeholder="e.g. Global Tech Inc." required type="text"/>
+                        <label class="text-sm font-medium text-on-surface transition-colors" for="company-name">Company
+                            Name</label>
+                        <input
+                            class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                            id="company-name" placeholder="e.g. Global Tech Inc." required type="text" />
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-on-surface transition-colors" for="business-email">Business Email</label>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="business-email" placeholder="admin@company.com" required type="email"/>
+                        <label class="text-sm font-medium text-on-surface transition-colors"
+                            for="business-email">Business Email</label>
+                        <input
+                            class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                            id="business-email" placeholder="admin@company.com" required type="email" />
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-on-surface transition-colors" for="password">Password</label>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="password" placeholder="••••••••" required type="password"/>
+                        <label class="text-sm font-medium text-on-surface transition-colors"
+                            for="password">Password</label>
+                        <input
+                            class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                            id="password" placeholder="••••••••" required type="password" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors"
+                            for="industry-category">Industry Category</label>
+                        <select id="industry-category"
+                            class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                            required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="FMCG">FMCG</option>
+                            <option value="Beauty & Fragrances">Beauty & Fragrances</option>
+                            <option value="Sportswear & Athletics">Sportswear & Athletics</option>
+                            <option value="Consumer Electronics">Consumer Electronics</option>
+                        </select>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium text-on-surface transition-colors">Upload Company Icon</label>
-                        <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group" onclick="showToast('File explorer opened')">
-                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+                        <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group"
+                            onclick="document.getElementById('logo-file').click()">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
                                 <span class="material-symbols-outlined text-2xl">cloud_upload</span>
                             </div>
                             <div class="text-center">
-                                <p class="text-sm font-medium text-on-surface transition-colors">Click to upload or drag and drop</p>
-                                <p class="text-xs text-on-surface-variant mt-1 transition-colors">SVG, PNG, JPG (max. 800x800px)</p>
+                                <p class="text-sm font-medium text-on-surface transition-colors" id="logo-file-name">
+                                    Click to upload</p>
+                                <p class="text-xs text-on-surface-variant mt-1 transition-colors">SVG, PNG, JPG (max.
+                                    800x800px)</p>
                             </div>
                         </div>
+                        <input type="file" id="logo-file" accept="image/*" class="hidden" required
+                            onchange="document.getElementById('logo-file-name').textContent = this.files[0] ? this.files[0].name : 'Click to upload'" />
                     </div>
                     <div class="pt-4">
-                        <button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2" type="submit">
+                        <button
+                            class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2"
+                            type="submit">
                             <span class="material-symbols-outlined text-lg">add</span>
                             Add Company
                         </button>
@@ -248,7 +312,9 @@
                 </form>
             </div>
             <div class="mt-6 text-center">
-                <button class="text-on-surface-variant text-sm hover:text-primary transition-colors flex items-center justify-center gap-1 mx-auto" onclick="window.location.href='admin_directory.html'">
+                <button
+                    class="text-on-surface-variant text-sm hover:text-primary transition-colors flex items-center justify-center gap-1 mx-auto"
+                    onclick="window.location.href='admin_directory.html'">
                     <span class="material-symbols-outlined text-sm">arrow_back</span>
                     Back to Directory
                 </button>
@@ -262,12 +328,12 @@
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
+
             // --- Dark Mode Logic ---
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeIcon = document.getElementById('theme-icon');
             const htmlElement = document.documentElement;
-            
+
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 htmlElement.classList.add('dark');
                 htmlElement.classList.remove('light');
@@ -296,15 +362,54 @@
 
             // --- Form Submission Logic ---
             const form = document.getElementById('add-company-form');
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const companyName = document.getElementById('company-name').value;
-                showToast(`Company '${companyName}' created successfully! Redirecting...`);
-                
-                // Simulate saving and redirect
-                setTimeout(() => {
-                    window.location.href = 'admin_directory.html';
-                }, 1500);
+                const email = document.getElementById('business-email').value;
+                const password = document.getElementById('password').value;
+                const industryCategory = document.getElementById('industry-category').value;
+                const logoFile = document.getElementById('logo-file').files[0];
+
+                if (!logoFile) {
+                    showToast('Please select a logo image.');
+                    return;
+                }
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Adding...';
+                submitBtn.disabled = true;
+
+                const formData = new FormData();
+                formData.append('company_name', companyName);
+                formData.append('email', email);
+                formData.append('password', password);
+                formData.append('industry_category', industryCategory);
+                formData.append('logo', logoFile);
+
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/admin/add-company', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        showToast(`Company '${companyName}' created successfully! Redirecting...`);
+
+                        window.location.href = 'admin_directory.html';
+
+                    } else {
+                        const errorData = await response.json();
+                        showToast(`Error: ${errorData.detail || 'Failed to create company'}`);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                } catch (error) {
+                    showToast('Error connecting to the server.');
+                    console.error(error);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
             });
         });
 
@@ -313,19 +418,19 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            
+
             toast.innerHTML = `
                 <span class="material-symbols-outlined text-primary">check_circle</span>
                 <p class="text-sm font-medium">${message}</p>
             `;
-            
+
             container.appendChild(toast);
-            
+
             // Trigger reflow to ensure animation plays
             void toast.offsetWidth;
-            
+
             toast.classList.add('show');
-            
+
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => {
@@ -368,4 +473,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 </body>
+
 </html>

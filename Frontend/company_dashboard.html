@@ -208,7 +208,7 @@
                                 </span>
                                 <input class="block w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-white outline-none transition-all text-sm" id="video-url" placeholder="https://youtube.com/watch?v=..." type="text"/>
                             </div>
-                            <button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm whitespace-nowrap active:scale-95">
+                            <button id="update-video-btn" class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm whitespace-nowrap active:scale-95">
                                 Update Video
                             </button>
                         </div>
@@ -259,20 +259,21 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-sm font-semibold text-on-surface">Product Photos</label>
-                            <div class="border-2 border-dashed border-outline-variant/50 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 dark:bg-slate-800/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group">
+                            <label class="text-sm font-semibold text-on-surface">Product Photo</label>
+                            <div class="relative border-2 border-dashed border-outline-variant/50 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 dark:bg-slate-800/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group" onclick="document.getElementById('product-photo').click()">
+                                <input type="file" id="product-photo" class="hidden" accept="image/png, image/jpeg, image/svg+xml" onchange="document.getElementById('photo-name').textContent = this.files[0] ? this.files[0].name : 'Click to upload or drag and drop photos'">
                                 <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
                                     <span class="material-symbols-outlined text-2xl">add_photo_alternate</span>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-sm font-medium text-on-surface transition-colors">Click to upload or drag and drop photos</p>
+                                    <p id="photo-name" class="text-sm font-medium text-on-surface transition-colors">Click to upload or drag and drop photos</p>
                                     <p class="text-xs text-on-surface-variant mt-1 transition-colors">SVG, PNG, JPG (max. 5MB per file)</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="pt-2 flex justify-end">
-                            <button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
+                            <button id="save-product-btn" class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
                                 <span class="material-symbols-outlined text-lg">save</span>
                                 Save Product Details
                             </button>
@@ -309,7 +310,7 @@
                     </div>
                     
                     <div class="pt-6 flex justify-end">
-                        <button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
+                        <button id="save-promo-btn" class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
                             <span class="material-symbols-outlined text-lg">check_circle</span>
                             Save Promo Code
                         </button>
@@ -334,77 +335,19 @@
                         <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Current Survey Questions</h3>
                         
                         <div class="space-y-4" id="survey-questions-container">
-                            <!-- Question 1 -->
-                            <div class="p-5 border border-outline-variant/30 rounded-xl bg-white/50 dark:bg-slate-800/50">
-                                <div class="flex gap-3 items-start">
-                                    <span class="text-slate-400 font-medium w-4 mt-2">1.</span>
-                                    <div class="flex-grow space-y-4">
-                                        <input class="w-full bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 dark:text-white" value="How would you rate the neural response latency during the last session?" placeholder="Enter question text..."/>
-                                        
-                                        <!-- Options Area -->
-                                        <div class="pl-4 border-l-2 border-outline-variant/20 dark:border-slate-700 space-y-2">
-                                            <div class="flex items-center gap-2 group">
-                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
-                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="Excellent" placeholder="Option text..."/>
-                                                <button class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
-                                            </div>
-                                            <div class="flex items-center gap-2 group">
-                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
-                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="Good" placeholder="Option text..."/>
-                                                <button class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
-                                            </div>
-                                            <div class="flex items-center gap-2 group">
-                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
-                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="Average" placeholder="Option text..."/>
-                                                <button class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
-                                            </div>
-                                            <button class="text-xs text-primary font-medium flex items-center gap-1 hover:underline mt-2 py-1">
-                                                <span class="material-symbols-outlined text-[14px]">add</span> Add Option
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <button class="p-2 text-slate-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete Question">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Question 2 -->
-                            <div class="p-5 border border-outline-variant/30 rounded-xl bg-white/50 dark:bg-slate-800/50">
-                                <div class="flex gap-3 items-start">
-                                    <span class="text-slate-400 font-medium w-4 mt-2">2.</span>
-                                    <div class="flex-grow space-y-4">
-                                        <input class="w-full bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 dark:text-white" value="Did you feel any cognitive fatigue after the 30-minute benchmark?" placeholder="Enter question text..."/>
-                                        
-                                        <!-- Options Area -->
-                                        <div class="pl-4 border-l-2 border-outline-variant/20 dark:border-slate-700 space-y-2">
-                                            <div class="flex items-center gap-2 group">
-                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
-                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="Yes, significant fatigue" placeholder="Option text..."/>
-                                                <button class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
-                                            </div>
-                                            <div class="flex items-center gap-2 group">
-                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
-                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="No, felt fine" placeholder="Option text..."/>
-                                                <button class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
-                                            </div>
-                                            <button class="text-xs text-primary font-medium flex items-center gap-1 hover:underline mt-2 py-1">
-                                                <span class="material-symbols-outlined text-[14px]">add</span> Add Option
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <button class="p-2 text-slate-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete Question">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                         
                         <!-- Add New Question Button -->
                         <div class="pt-2">
-                            <button class="w-full border-2 border-dashed border-outline-variant/40 dark:border-slate-700 bg-surface/30 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 py-4 rounded-xl font-medium hover:bg-primary/5 hover:border-primary/50 hover:text-primary dark:hover:text-primary transition-all flex items-center justify-center gap-2">
+                            <button onclick="addNewQuestion()" class="w-full border-2 border-dashed border-outline-variant/40 dark:border-slate-700 bg-surface/30 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 py-4 rounded-xl font-medium hover:bg-primary/5 hover:border-primary/50 hover:text-primary dark:hover:text-primary transition-all flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined">add_circle</span>
                                 Add New Question
+                            </button>
+                        </div>
+                        <div class="pt-6 flex justify-end">
+                            <button id="save-survey-btn" class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/20 transition-all text-sm flex items-center gap-2 active:scale-95">
+                                <span class="material-symbols-outlined text-lg">save</span>
+                                Save Survey
                             </button>
                         </div>
                     </div>
@@ -413,38 +356,230 @@
         </div>
     </main>
     <script src="dark-mode.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCurrentData();
+        });
 
+        async function loadCurrentData() {
+            const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+            if (!token) return;
 
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('access_token');
-    const headerProfileImg = document.getElementById('header-profile-img');
-    const headerUserName = document.getElementById('header-user-name');
-    const headerUserPoints = document.getElementById('header-user-points');
-    
-    if (token) {
-        try {
-            const API_BASE = 'http://127.0.0.1:8000';
-            const response = await fetch(`${API_BASE}/users/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const userData = await response.json();
-                if (headerProfileImg && userData.profile_pic) {
-                    headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+            try {
+                const response = await fetch('http://127.0.0.1:8000/company/my-campaign', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.video_url) document.getElementById('video-url').value = data.video_url;
+                    if (data.product_name) document.getElementById('product-name').value = data.product_name;
+                    if (data.product_price) document.getElementById('product-price').value = data.product_price;
+                    if (data.product_description) document.getElementById('product-desc').value = data.product_description;
+                    if (data.product_ingredients) document.getElementById('product-ingredients').value = data.product_ingredients;
+                    if (data.promo_code) document.getElementById('promo-code').value = data.promo_code;
+                    if (data.discount_value) document.getElementById('promo-discount').value = data.discount_value;
+                    
+                    if (data.questions_list && data.questions_list.length > 0) {
+                        const container = document.getElementById('survey-questions-container');
+                        container.innerHTML = '';
+                        data.questions_list.forEach((q, index) => {
+                            const optionsHtml = (q.options || []).map(opt => `
+                                            <div class="flex items-center gap-2 group option-block">
+                                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
+                                                <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="${opt}" placeholder="Option text..."/>
+                                                <button onclick="deleteOption(this)" class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
+                                            </div>
+                            `).join('');
+                            
+                            const html = `
+                                <div class="p-5 border border-outline-variant/30 rounded-xl bg-white/50 dark:bg-slate-800/50 question-block">
+                                    <div class="flex gap-3 items-start">
+                                        <span class="text-slate-400 font-medium w-4 mt-2 question-number">${index + 1}.</span>
+                                        <div class="flex-grow space-y-4">
+                                            <input class="w-full bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 dark:text-white" value="${q.question}" placeholder="Enter question text..."/>
+                                            <div class="pl-4 border-l-2 border-outline-variant/20 dark:border-slate-700 space-y-2 options-container">
+                                                ${optionsHtml}
+                                                <button onclick="addOption(this)" class="text-xs text-primary font-medium flex items-center gap-1 hover:underline mt-2 py-1">
+                                                    <span class="material-symbols-outlined text-[14px]">add</span> Add Option
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button onclick="deleteQuestion(this)" class="p-2 text-slate-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete Question">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            container.insertAdjacentHTML('beforeend', html);
+                        });
+                    }
+                } else if (response.status === 404) {
+                    // Do nothing, leave fields empty
+                } else {
+                    console.error('Failed to load current data');
                 }
-                if (headerUserName && userData.full_name) {
-                    headerUserName.textContent = userData.full_name;
-                }
-                if (headerUserPoints && userData.points !== undefined) {
-                    headerUserPoints.textContent = userData.points;
+            } catch (err) {
+                console.error('Error loading current data:', err);
+            }
+        }
+
+        async function updateCampaign(data) {
+            const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+            if (!token) {
+                alert('You are not logged in! Please log in first.');
+                return;
+            }
+            
+            const formData = new FormData();
+            for (const key in data) {
+                if (data[key] !== null && data[key] !== undefined) {
+                    if (key === 'questions_list') {
+                        formData.append(key, JSON.stringify(data[key]));
+                    } else if (key === 'product_photo') {
+                        if (data[key] instanceof File) {
+                            formData.append(key, data[key]);
+                        }
+                    } else {
+                        formData.append(key, data[key]);
+                    }
                 }
             }
-        } catch (error) {
-            console.error('Error fetching profile data for header:', error);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/company/update-campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                if (response.ok) {
+                    alert('Campaign updated successfully!');
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to update campaign: ${error.detail || 'Unknown error'}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating campaign.');
+            }
         }
-    }
-});
-</script>
+
+        document.getElementById('update-video-btn').addEventListener('click', () => {
+            const videoUrl = document.getElementById('video-url').value;
+            if (videoUrl) {
+                updateCampaign({ video_url: videoUrl });
+            } else {
+                alert('Please enter a video URL');
+            }
+        });
+
+        document.getElementById('save-product-btn').addEventListener('click', () => {
+            const data = {
+                product_name: document.getElementById('product-name').value,
+                product_price: document.getElementById('product-price').value,
+                product_description: document.getElementById('product-desc').value,
+                product_ingredients: document.getElementById('product-ingredients').value
+            };
+            const photoInput = document.getElementById('product-photo');
+            if (photoInput && photoInput.files.length > 0) {
+                data.product_photo = photoInput.files[0];
+            }
+            updateCampaign(data);
+        });
+
+        document.getElementById('save-promo-btn')?.addEventListener('click', () => {
+            updateCampaign({
+                promo_code: document.getElementById('promo-code').value,
+                discount_value: document.getElementById('promo-discount').value
+            });
+        });
+
+        document.getElementById('save-survey-btn')?.addEventListener('click', () => {
+            const container = document.getElementById('survey-questions-container');
+            const questions = [];
+            
+            const questionBlocks = container.children;
+            for (let i = 0; i < questionBlocks.length; i++) {
+                const block = questionBlocks[i];
+                const questionInput = block.querySelector('input[placeholder="Enter question text..."]');
+                if (!questionInput || !questionInput.value.trim()) continue;
+                
+                const optionsInputs = block.querySelectorAll('input[placeholder="Option text..."]');
+                const options = Array.from(optionsInputs).map(opt => opt.value.trim()).filter(val => val);
+                
+                questions.push({
+                    question: questionInput.value.trim(),
+                    options: options
+                });
+            }
+            
+            updateCampaign({
+                questions_list: questions
+            });
+        });
+
+        function addNewQuestion() {
+            const container = document.getElementById('survey-questions-container');
+            const index = container.children.length + 1;
+            const html = `
+                <div class="p-5 border border-outline-variant/30 rounded-xl bg-white/50 dark:bg-slate-800/50 question-block">
+                    <div class="flex gap-3 items-start">
+                        <span class="text-slate-400 font-medium w-4 mt-2 question-number">${index}.</span>
+                        <div class="flex-grow space-y-4">
+                            <input class="w-full bg-white dark:bg-slate-800 border border-outline-variant/40 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 dark:text-white" value="" placeholder="Enter question text..."/>
+                            <div class="pl-4 border-l-2 border-outline-variant/20 dark:border-slate-700 space-y-2 options-container">
+                                <div class="flex items-center gap-2 group option-block">
+                                    <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
+                                    <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="" placeholder="Option text..."/>
+                                    <button onclick="deleteOption(this)" class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
+                                </div>
+                                <button onclick="addOption(this)" class="text-xs text-primary font-medium flex items-center gap-1 hover:underline mt-2 py-1">
+                                    <span class="material-symbols-outlined text-[14px]">add</span> Add Option
+                                </button>
+                            </div>
+                        </div>
+                        <button onclick="deleteQuestion(this)" class="p-2 text-slate-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete Question">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            updateQuestionNumbers();
+        }
+
+        function addOption(btn) {
+            const html = `
+                <div class="flex items-center gap-2 group option-block">
+                    <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-sm">radio_button_unchecked</span>
+                    <input class="flex-grow bg-transparent border-b border-transparent hover:border-outline-variant/30 dark:hover:border-slate-700 focus:border-primary dark:focus:border-primary px-2 py-1 text-sm outline-none transition-colors dark:text-slate-200" value="" placeholder="Option text..."/>
+                    <button onclick="deleteOption(this)" class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-sm">close</span></button>
+                </div>
+            `;
+            btn.insertAdjacentHTML('beforebegin', html);
+        }
+
+        function deleteOption(btn) {
+            btn.closest('.option-block').remove();
+        }
+
+        function deleteQuestion(btn) {
+            btn.closest('.question-block').remove();
+            updateQuestionNumbers();
+        }
+
+        function updateQuestionNumbers() {
+            const container = document.getElementById('survey-questions-container');
+            const questions = container.querySelectorAll('.question-block');
+            questions.forEach((q, idx) => {
+                const numSpan = q.querySelector('.question-number');
+                if (numSpan) numSpan.textContent = (idx + 1) + '.';
+            });
+        }
+    </script>
 </body>
 </html>

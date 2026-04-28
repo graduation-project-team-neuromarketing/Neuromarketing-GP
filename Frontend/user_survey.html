@@ -249,47 +249,140 @@ Maybe later
 <h3 class="text-2xl font-bold mb-8 text-on-surface flex items-center gap-3">
 <span class="material-symbols-outlined text-primary">volunteer_activism</span>Survey
 </h3>
-<form class="space-y-8">
-<div class="space-y-4">
-<label class="block text-sm font-semibold text-on-surface">How would you describe your experience with our neural interface products?</label>
-<div class="grid grid-cols-1 gap-4">
-<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="seamless"/>
-<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Seamless Integration</span>
-</label>
-<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="moderate"/>
-<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Moderate Learning Curve</span>
-</label>
-<label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
-<input class="w-4 h-4 text-primary focus:ring-primary/20" name="experience" type="radio" value="complex"/>
-<span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Requires Specialization</span>
-</label>
-</div>
-</div>
-<div class="space-y-2">
-<label class="block text-sm font-semibold text-on-surface" for="feedback">What features would you like to see in our next firmware update?</label>
-<textarea class="w-full p-4 bg-white/50 border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none" id="feedback" placeholder="Your thoughts on future features..." rows="5"></textarea>
-</div>
-<div class="flex justify-end pt-4">
-<button id="submit-feedback-btn" class="px-10 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="button">
-Submit Feedback
-</button>
-</div>
+<form class="space-y-8" id="survey-form">
+    <div id="dynamic-questions-container" class="space-y-8">
+        <!-- Dynamic questions will be injected here -->
+    </div>
+    <div class="flex justify-end pt-4">
+        <button id="submit-feedback-btn" class="px-10 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="button">
+            Submit Feedback
+        </button>
+    </div>
 </form>
 </div>
 </div>
 </main>
 
 <script>
-    document.getElementById('submit-feedback-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        const modal = document.getElementById('promo-modal');
-        const main = document.getElementById('main-content');
+    let currentCampaignId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const params = new URLSearchParams(window.location.search);
+        let brandId = params.get('brandId');
+        const container = document.getElementById('dynamic-questions-container');
+
+        if (!brandId) {
+            container.innerHTML = '<p class="text-on-surface-variant p-4">No survey available for this brand.</p>';
+            document.getElementById('submit-feedback-btn').style.display = 'none';
+            return;
+        }
         
-        modal.classList.remove('hidden');
-        main.classList.add('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
-        document.body.classList.add('overflow-hidden');
+        brandId = decodeURIComponent(brandId).toLowerCase().trim();
+        if (brandId === 'global-tech') brandId = 'globaltech';
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/campaign/${brandId}`);
+            if (!response.ok) {
+                container.innerHTML = '<p class="text-on-surface-variant p-4">No survey available for this brand.</p>';
+                document.getElementById('submit-feedback-btn').style.display = 'none';
+                return;
+            }
+
+            const data = await response.json();
+            currentCampaignId = data.id;
+
+            if (!data.questions_list || data.questions_list.length === 0) {
+                container.innerHTML = '<p class="text-on-surface-variant p-4">No survey available for this brand.</p>';
+                document.getElementById('submit-feedback-btn').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = '';
+            data.questions_list.forEach((q, idx) => {
+                const optionsHtml = (q.options || []).map(opt => `
+                    <label class="flex items-center gap-3 p-4 rounded-xl border border-outline-variant/30 bg-white/50 cursor-pointer hover:bg-white transition-colors group">
+                        <input class="w-4 h-4 text-primary focus:ring-primary/20" name="question_${idx}" type="radio" value="${opt}" required />
+                        <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">${opt}</span>
+                    </label>
+                `).join('');
+
+                const questionHtml = `
+                    <div class="space-y-4 question-item" data-question="${q.question}">
+                        <label class="block text-sm font-semibold text-on-surface">${idx + 1}. ${q.question}</label>
+                        <div class="grid grid-cols-1 gap-4">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', questionHtml);
+            });
+
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<p class="text-on-surface-variant p-4">Error loading survey.</p>';
+            document.getElementById('submit-feedback-btn').style.display = 'none';
+        }
+    });
+
+    document.getElementById('submit-feedback-btn').addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        if (!currentCampaignId) return;
+
+        const container = document.getElementById('dynamic-questions-container');
+        const questionItems = container.querySelectorAll('.question-item');
+        let survey_data = {};
+        let allAnswered = true;
+
+        questionItems.forEach((item, idx) => {
+            const questionText = item.getAttribute('data-question');
+            const selectedRadio = item.querySelector(`input[name="question_${idx}"]:checked`);
+            if (selectedRadio) {
+                survey_data[questionText] = selectedRadio.value;
+            } else {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+        if (!token) {
+            alert('You must be logged in to submit a survey.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/user/submit-result', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    campaign_id: currentCampaignId,
+                    survey_data: survey_data
+                })
+            });
+
+            if (response.ok) {
+                const modal = document.getElementById('promo-modal');
+                const main = document.getElementById('main-content');
+                
+                modal.classList.remove('hidden');
+                main.classList.add('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
+                document.body.classList.add('overflow-hidden');
+            } else {
+                const errData = await response.json();
+                alert(`Error submitting survey: ${errData.detail || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Failed to submit survey.');
+        }
     });
 
     document.getElementById('close-modal-btn').addEventListener('click', function() {
