@@ -136,13 +136,13 @@
                         <!-- Profile Dropdown -->
             <div class="relative" id="profile-menu-container">
                 <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
-                    <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                    <img id="header-profile-img" alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
                 </button>
                 
                 <!-- Dropdown Menu -->
                 <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
-                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                        <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -235,132 +235,8 @@
                                 <th class="px-8 py-5 text-sm font-semibold text-on-surface-variant uppercase tracking-wider text-right transition-colors">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-outline-variant/20 transition-colors duration-300">
-                            <!-- Row 1 -->
-                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Alexander Wright')">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-white shadow-sm">
-                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmXsxAAd6Bt7Y0A4sw3ZGIFeFO3XFpqcJxGGSjatwO99dCZ5GZriuBg4PvnAu-n6B7ijmSEpGu15_2n3ZOZvG989MJQQGBZLZItsAD5bsFyCyTQzHQq9DKJ9YOVXn03ZpA6h4tA-VZGqZthAW21blFQGnDCT0d_98c6J8imJTaMbMKnPoU3Fub5LJtUTpdF4mV982zTDCSmL6z4_N4MyoPqLGqEgOlw26vHJhzD-zBCtNWguC1rWBnwzwCZasauj8KTDM5bmJMTAdA"/>
-                                        </div>
-                                        <span class="font-medium text-on-surface transition-colors">Alexander Wright</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">alex.wright@techglobal.com</td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+1 (555) 123-4567</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">32</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Alexander+Wright'" title="View History">
-                                            <span class="material-symbols-outlined text-[20px]">history</span>
-                                        </button>
-                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Alexander Wright removed')" title="Remove User">
-                                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 2 -->
-                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Sarah Jenkins')">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold overflow-hidden border-2 border-white shadow-sm">
-                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3qOJyyK1BjkLly5jKJlJCcejrwv7aU314wjwXqDdCY5UXgkNI9JOrs6WF8NTIqzElJB55wzbuNEY-3drHIgofc7vzEQ5-x3CG-e-F74RObsTzOishkzM1O-2Ydd4oc96oNb1oAkwoUqlg0jqzafePctyU6uStWh3rakxt4dA21TikJ7D1I1Wpg9Qf5n3JeB_W2mCv-4IEUKf8HahYUGk9z5Mv4ZltvtvY7QXdXOKLVZlZbjvTdS66wHkHNdANnWHGbn8JhSDhyJvl"/>
-                                        </div>
-                                        <span class="font-medium text-on-surface transition-colors">Sarah Jenkins</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">s.jenkins@neuralis.ai</td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+1 (555) 987-6543</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">28</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Sarah+Jenkins'" title="View History">
-                                            <span class="material-symbols-outlined text-[20px]">history</span>
-                                        </button>
-                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Sarah Jenkins removed')" title="Remove User">
-                                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 3 -->
-                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Marcus Thorne')">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold overflow-hidden border-2 border-white shadow-sm">
-                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDUAmgTAbMa9yYuv8UVSonKStSTJqJpl_39xTyCvejUc9MKYxPz25Hg7LVywfWkk7_gVgWE4E_sDoDHXv9ADD0gvkPxZBcMa5I25BKHKTtnstt5FcOv-yjZCXdhntIaVE9X-1KbHVdN-3kpO_JJU0RK4l6j76x1ogAy4mr2qOfxNq5mDlQwiQ6KwdtyNXsoaikN4l7mc30r7iwJYUz7dIWKKIEa4y9JV8R9LIJ8jf4KRs89MqOsTOe4UEN8j7k-0-gvcMG-jqUbEDp"/>
-                                        </div>
-                                        <span class="font-medium text-on-surface transition-colors">Marcus Thorne</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">m.thorne@aerovance.co</td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+44 20 7946 0958</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">45</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Marcus+Thorne'" title="View History">
-                                            <span class="material-symbols-outlined text-[20px]">history</span>
-                                        </button>
-                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Marcus Thorne removed')" title="Remove User">
-                                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for Elena Rodriguez')">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold overflow-hidden border-2 border-white shadow-sm">
-                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl3OkS0VCs-ZAktU_Nhkw6HjeIU1bEwWODDsuFkBcL9H-aQxMwo8sBPpyykuI1btldXf2Ao8A8Rb6VlZEmoDUIKq9efxXYfeTr4a55nuxEGsTCQwrrSPasD5GGtiH3hp8f_gSbt2lWvdVLjZN1cqAbTUHAR4ObeoYGSG4OYOE19VC6uxXrwIQ1RhrhXUkdkklTw3i9LQ8yP9ZPDaip6_30Y1TqaT4PovhWapREVNTCa2x6wDbXZ1_jndwh0DGpUv5JgRdSKNRcsYuX"/>
-                                        </div>
-                                        <span class="font-medium text-on-surface transition-colors">Elena Rodriguez</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">elena.r@ecostrata.org</td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+34 91 123 45 67</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">36</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Female</td>
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=Elena+Rodriguez'" title="View History">
-                                            <span class="material-symbols-outlined text-[20px]">history</span>
-                                        </button>
-                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('Elena Rodriguez removed')" title="Remove User">
-                                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Row 5 -->
-                            <tr class="hover:bg-white/50 transition-colors group cursor-pointer" onclick="showToast('Opened profile for David Chen')">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold overflow-hidden border-2 border-white shadow-sm">
-                                            <img alt="User Avatar" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBms4M1ZP1ebVSwgWv4Gthb2RnSPaw8TbVMJgNIwbhqXzSV3wZ9MIxK5nJ5jDz_nLHAwP9O4dhgMdQ_9PpfSk2qIUrtZ_CTuACt78o82Kaen9pCSkct4OmDKFB2EysqQ2FA0MlDlPMWaPND-nKRkrCvU_4de5M8bjLHCT2MNUasaeSFgl2OyuW5ZrCBglFkwkC6ceLKNsKe5h5wFxzUT3Fe77EYFxgKkmiaMAtbY5F8fQtHfcI_6M9EQI5OfzrGX-5vXOl746sSh584"/>
-                                        </div>
-                                        <span class="font-medium text-on-surface transition-colors">David Chen</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">d.chen@fincore.solutions</td>
-                                <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">+65 6123 4567</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">41</td>
-                                <td class="px-8 py-5 text-on-surface-variant transition-colors">Male</td>
-                                <td class="px-8 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=David+Chen'" title="View History">
-                                            <span class="material-symbols-outlined text-[20px]">history</span>
-                                        </button>
-                                        <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); showToast('David Chen removed')" title="Remove User">
-                                            <span class="material-symbols-outlined text-[20px]">delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="users-table-body" class="divide-y divide-outline-variant/20 transition-colors duration-300">
+                            <!-- Rows will be populated dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -412,16 +288,146 @@
                     showToast('Dark mode enabled');
                 }
             });
+            // Fetch and display users dynamically
+            fetchUsers();
         });
 
+        // --- User Data Fetching and Display ---
+        async function fetchUsers() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = 'sign_in_out.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/admin/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    showToast('Access denied. Redirecting to user dashboard...', true);
+                    setTimeout(() => {
+                        window.location.href = 'user_dashboard.html';
+                    }, 2000);
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+
+                const users = await response.json();
+                populateUsersTable(users);
+                
+                // Update counter
+                const counterElement = document.querySelector('.bg-white\\/30 span');
+                if (counterElement) {
+                    counterElement.textContent = `Showing ${users.length} of ${users.length} users`;
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                showToast('Failed to load users data', true);
+            }
+        }
+
+        function populateUsersTable(users) {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = ''; // Clear existing rows
+            
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-8 py-5 text-center text-on-surface-variant">No users found.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-white/50 transition-colors group cursor-pointer';
+                row.onclick = () => showToast(`Opened profile for ${user.full_name}`);
+                
+                const initials = user.full_name ? user.full_name.substring(0, 2).toUpperCase() : 'U';
+                const defaultAvatarHtml = `<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-white shadow-sm">${initials}</div>`;
+                const profilePicUrl = user.profile_pic ? (user.profile_pic.startsWith('http') ? user.profile_pic : `http://127.0.0.1:8000${user.profile_pic}`) : null;
+                const avatarHtml = profilePicUrl ? 
+                    `<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm"><img src="${profilePicUrl}" alt="Avatar" class="w-full h-full object-cover"></div>` : 
+                    defaultAvatarHtml;
+
+                row.innerHTML = `
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-4">
+                            ${avatarHtml}
+                            <span class="font-medium text-on-surface transition-colors">${user.full_name || 'N/A'}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">${user.email}</td>
+                    <td class="px-8 py-5 text-on-surface-variant font-normal transition-colors">${user.phone || 'N/A'}</td>
+                    <td class="px-8 py-5 text-on-surface-variant transition-colors">${user.age || 'N/A'}</td>
+                    <td class="px-8 py-5 text-on-surface-variant transition-colors">${user.gender || 'N/A'}</td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex items-center justify-end gap-1">
+                            <button class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); window.location.href='admin_user-history.html?user=${encodeURIComponent(user.full_name || '')}'" title="View History">
+                                <span class="material-symbols-outlined text-[20px]">history</span>
+                            </button>
+                            <button class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all opacity-0 group-hover:opacity-100" onclick="event.stopPropagation(); deleteUser(${user.id}, '${(user.full_name || 'User').replace(/'/g, "\\'")}', this)" title="Remove User">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function deleteUser(userId, userName, btnElement) {
+            if (!confirm(`Are you sure you want to remove ${userName}?`)) return;
+            
+            const token = localStorage.getItem('access_token');
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showToast(`${userName} removed successfully`);
+                    const row = btnElement.closest('tr');
+                    if (row) row.remove();
+                    
+                    // Update counter
+                    const counterElement = document.querySelector('.bg-white\\/30 span');
+                    if (counterElement) {
+                        const match = counterElement.textContent.match(/(\d+) of (\d+)/);
+                        if (match) {
+                            const newTotal = parseInt(match[2]) - 1;
+                            counterElement.textContent = `Showing ${newTotal} of ${newTotal} users`;
+                        }
+                    }
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.detail || `Failed to remove ${userName}`, true);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showToast(`Network error when removing ${userName}`, true);
+            }
+        }
+
         // --- Toast Notification System ---
-        function showToast(message) {
+        function showToast(message, isError = false) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
             
+            if (isError) {
+                toast.style.borderLeftColor = '#ef4444'; // Red for errors
+            }
+            
             toast.innerHTML = `
-                <span class="material-symbols-outlined text-primary">info</span>
+                <span class="material-symbols-outlined ${isError ? 'text-red-500' : 'text-primary'}">${isError ? 'error' : 'info'}</span>
                 <p class="text-sm font-medium">${message}</p>
             `;
             
@@ -440,5 +446,38 @@
             }, 3000);
         }
     </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('access_token');
+    const headerProfileImg = document.getElementById('header-profile-img');
+    const headerUserName = document.getElementById('header-user-name');
+    const headerUserPoints = document.getElementById('header-user-points');
+    
+    if (token) {
+        try {
+            const API_BASE = 'http://127.0.0.1:8000';
+            const response = await fetch(`${API_BASE}/users/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const userData = await response.json();
+                if (headerProfileImg && userData.profile_pic) {
+                    headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+                }
+                if (headerUserName && userData.full_name) {
+                    headerUserName.textContent = userData.full_name;
+                }
+                if (headerUserPoints && userData.points !== undefined) {
+                    headerUserPoints.textContent = userData.points;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching profile data for header:', error);
+        }
+    }
+});
+</script>
 </body>
 </html>

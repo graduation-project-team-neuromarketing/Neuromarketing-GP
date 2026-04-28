@@ -83,17 +83,17 @@
                     <!-- Profile Dropdown -->
             <div class="relative" id="profile-menu-container">
                 <button onclick="toggleProfileDropdown(event)" class="h-8 w-8 rounded-full bg-primary-container overflow-hidden hover:ring-2 hover:ring-primary transition-all active:scale-95 focus:outline-none flex items-center justify-center">
-                    <img alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
+                    <img id="header-profile-img" alt="User Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV" class="w-full h-full object-cover"/>
                 </button>
                 
                 <!-- Dropdown Menu -->
                 <div id="profileDropdown" class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-outline-variant/30 dark:border-slate-700 py-2 hidden opacity-0 transform scale-95 transition-all duration-200 z-[100] origin-top-right">
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1">
-                        <p class="text-sm font-semibold text-on-surface">Account Options</p>
+                        <p id="header-user-name" class="text-sm font-semibold text-on-surface">Account Options</p>
                     </div>
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
                         <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total Points</span>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> 130</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> <span id="header-user-points">130</span></span>
                     </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -172,18 +172,16 @@
                     <div class="flex items-center gap-8">
                         <div class="relative group">
                             <div class="h-24 w-24 rounded-full bg-primary-container dark:bg-slate-700 overflow-hidden border-4 border-white dark:border-slate-800 shadow-md">
-                                <img alt="Large User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"/>
+                                <img id="profile-pic-img" alt="Large User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV"/>
                             </div>
-                            <button class="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full border-2 border-white dark:border-slate-800 shadow-sm hover:scale-105 transition-transform">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </button>
                         </div>
                         <div class="flex flex-col gap-2">
                             <div class="flex gap-3">
-                                <button class="px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">
+                                <input type="file" id="file-upload" accept="image/*" class="hidden">
+                                <button id="upload-new-btn" class="px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">
                                     Upload New
                                 </button>
-                                <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-600 text-on-surface-variant dark:text-slate-300 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                                <button id="remove-pic-btn" class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-600 text-on-surface-variant dark:text-slate-300 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
                                     Remove
                                 </button>
                             </div>
@@ -195,7 +193,7 @@
                 <!-- Personal Information Form -->
                 <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0px_20px_40px_rgba(0,31,63,0.04)]">
                     <h2 class="text-lg font-bold mb-6 text-on-surface dark:text-white">Personal Information</h2>
-                    <form class="space-y-6">
+                    <form id="personal-info-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="full-name">Full Name</label>
@@ -212,8 +210,8 @@
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1">Gender</label>
                                 <div class="grid gap-2 grid-cols-2">
-                                    <button class="py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button">Male</button>
-                                    <button class="py-2.5 px-3 border border-primary bg-primary/5 dark:bg-primary/20 rounded-xl text-sm font-bold text-primary dark:text-primary transition-colors" type="button">Female</button>
+                                    <button class="gender-btn py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button" data-gender="Male">Male</button>
+                                    <button class="gender-btn py-2.5 px-3 border border-outline-variant/30 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary dark:text-slate-200 active:bg-primary/5" type="button" data-gender="Female">Female</button>
                                 </div>
                             </div>
                             <div class="space-y-2">
@@ -244,7 +242,7 @@
                         </div>
                     </div>
                     
-                    <form class="space-y-6">
+                    <form id="security-settings-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-on-surface-variant dark:text-slate-300 ml-1" for="current-password">Current Password</label>
@@ -267,6 +265,239 @@
 </div>
     </div>
 </main>
+<!-- Toast Container -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3"></div>
+
 <script src="dark-mode.js"></script>
+<script>
+const API_BASE_URL = 'http://127.0.0.1:8000'; // Make sure this matches backend
+
+function showToast(message, isError = false) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `p-4 rounded-lg shadow-lg flex items-center gap-3 transition-transform transform translate-y-full ${isError ? 'bg-red-50 text-red-600 border-l-4 border-red-500' : 'bg-white text-on-surface border-l-4 border-primary dark:bg-slate-800 dark:text-white dark:border-primary'}`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined">${isError ? 'error' : 'check_circle'}</span>
+        <span class="text-sm font-medium">${message}</span>
+    `;
+    container.appendChild(toast);
+    
+    // Trigger reflow
+    void toast.offsetWidth;
+    toast.classList.remove('translate-y-full');
+    
+    setTimeout(() => {
+        toast.classList.add('translate-y-full');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+        window.location.href = 'sign_in_out.html';
+        return;
+    }
+
+    // Gender selection logic
+    let selectedGender = null;
+    document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.gender-btn').forEach(b => {
+                b.classList.remove('border-primary', 'bg-primary/5', 'dark:bg-primary/20', 'text-primary', 'font-bold');
+                b.classList.add('border-outline-variant/30', 'dark:border-slate-700', 'font-medium', 'dark:text-slate-200');
+            });
+            const target = e.currentTarget;
+            target.classList.remove('border-outline-variant/30', 'dark:border-slate-700', 'font-medium', 'dark:text-slate-200');
+            target.classList.add('border-primary', 'bg-primary/5', 'dark:bg-primary/20', 'text-primary', 'font-bold');
+            selectedGender = target.getAttribute('data-gender');
+        });
+    });
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            document.getElementById('full-name').value = userData.full_name || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('phone').value = userData.phone || '';
+            document.getElementById('age').value = userData.age || '';
+            if (userData.gender) {
+                const btn = document.querySelector(`.gender-btn[data-gender="${userData.gender}"]`);
+                if (btn) btn.click();
+            }
+            if (userData.profile_pic) {
+                document.getElementById('profile-pic-img').src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE_URL}${userData.profile_pic}`;
+            }
+        } else {
+            showToast('Failed to load profile data', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+
+    // Handle Profile Picture Upload
+    const uploadBtn = document.getElementById('upload-new-btn');
+    const fileInput = document.getElementById('file-upload');
+    const removeBtn = document.getElementById('remove-pic-btn');
+    const profileImg = document.getElementById('profile-pic-img');
+
+    uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/me/profile-pic`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                const newPic = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE_URL}${userData.profile_pic}`;
+                profileImg.src = newPic;
+                const headerImg = document.getElementById('header-profile-img');
+                if (headerImg) headerImg.src = newPic;
+                showToast('Profile photo updated successfully');
+            } else {
+                showToast('Failed to upload photo', true);
+            }
+        } catch (error) {
+            showToast('Network error during upload', true);
+        }
+    });
+
+    // Handle Profile Picture Remove
+    removeBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/me/profile-pic`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const defaultAvatar = "https://lh3.googleusercontent.com/aida-public/AB6AXuB0jemp10tm2-8wHFQjjDvxzFgbXcR5UeNME17qxV7gLIWnKa69r9gLb5FBzBz4U4st-Ko-M7Y7W-pshzG8_4w6pVU60B6g3U6TfBodvpktH3faA9Ry_NmBJVBHMNARuKTxXHZxfGF9UetPN_R7Na0THKdDttZ6BzDj8zQTdNLD3KZiPUxC59o9PsHEWPSR4juRUWR-N3pBT1o5xuSrQCXuiEwBd5UvPP0pfqjgZrO5nDD4_TI4NcH01PTlCBzNI9uecyzBBy5d65cV";
+                profileImg.src = defaultAvatar;
+                const headerImg = document.getElementById('header-profile-img');
+                if (headerImg) headerImg.src = defaultAvatar;
+                showToast('Profile photo removed');
+            } else {
+                showToast('Failed to remove photo', true);
+            }
+        } catch (error) {
+            showToast('Network error during removal', true);
+        }
+    });
+});
+
+document.getElementById('personal-info-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('access_token');
+    
+    const data = {
+        full_name: document.getElementById('full-name').value,
+        phone: document.getElementById('phone').value,
+        age: parseInt(document.getElementById('age').value) || null,
+        gender: document.querySelector('.gender-btn.border-primary')?.getAttribute('data-gender') || null
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/me`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showToast('Profile updated successfully');
+        } else {
+            showToast('Failed to update profile', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+});
+
+document.getElementById('security-settings-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('access_token');
+    
+    const data = {
+        current_password: document.getElementById('current-password').value,
+        new_password: document.getElementById('new-password').value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/change-password`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            showToast('Password updated successfully');
+            e.target.reset();
+        } else {
+            const errorData = await response.json();
+            showToast(errorData.detail || 'Failed to update password', true);
+        }
+    } catch (error) {
+        showToast('Network error', true);
+    }
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('access_token');
+    const headerProfileImg = document.getElementById('header-profile-img');
+    const headerUserName = document.getElementById('header-user-name');
+    const headerUserPoints = document.getElementById('header-user-points');
+    
+    if (token) {
+        try {
+            const API_BASE = 'http://127.0.0.1:8000';
+            const response = await fetch(`${API_BASE}/users/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const userData = await response.json();
+                if (headerProfileImg && userData.profile_pic) {
+                    headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+                }
+                if (headerUserName && userData.full_name) {
+                    headerUserName.textContent = userData.full_name;
+                }
+                if (headerUserPoints && userData.points !== undefined) {
+                    headerUserPoints.textContent = userData.points;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching profile data for header:', error);
+        }
+    }
+});
+</script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -10,6 +11,8 @@ import shutil
 import json
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Form
 from fastapi.staticfiles import StaticFiles
+import uuid
+
 
 # Adjust import based on the library used. Here we use 'jose'
 # Install via: pip install python-jose[cryptography] passlib[bcrypt]
@@ -40,6 +43,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount the uploads directory to serve static files
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Authentication Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "Rawan_Brain_Decoder_Super_Secret_HS256")
@@ -163,6 +169,110 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 @app.get("/users/me", response_model=schemas.UserOut)
 def read_users_me(current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
     return current_user
+
+@app.put("/users/me", response_model=schemas.UserOut)
+def update_user_me(user_update: schemas.UserUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
+    # Depending on the application, we might want this to apply to companies as well, but the instruction is for users
+    if hasattr(current_user, 'full_name'):
+        if user_update.full_name is not None:
+            current_user.full_name = user_update.full_name
+        if user_update.gender is not None:
+            current_user.gender = user_update.gender
+        if user_update.age is not None:
+            current_user.age = user_update.age
+        if user_update.phone is not None:
+            current_user.phone = user_update.phone
+        db.commit()
+        db.refresh(current_user)
+        return current_user
+    else:
+        raise HTTPException(status_code=400, detail="Only standard users can update their profile via this endpoint")
+
+@app.post("/users/me/profile-pic", response_model=schemas.UserOut)
+async def upload_profile_pic(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))
+):
+    if not hasattr(current_user, 'profile_pic'):
+        raise HTTPException(status_code=400, detail="Current user type does not support profile pictures")
+    
+    # Ensure uploads directory exists
+    os.makedirs("uploads", exist_ok=True)
+    
+    # Generate unique filename
+    ext = file.filename.split(".")[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+    filepath = os.path.join("uploads", filename)
+    
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    # Remove old profile pic if it's a local file
+    if current_user.profile_pic and current_user.profile_pic.startswith("/uploads/"):
+        old_file = current_user.profile_pic.lstrip("/")
+        if os.path.exists(old_file):
+            try:
+                os.remove(old_file)
+            except Exception:
+                pass
+
+    # Save the new URL in the database
+    # In a real production setup, this would be the server's public URL, but relative is fine if frontend prepends the base URL
+    current_user.profile_pic = f"/uploads/{filename}"
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+@app.delete("/users/me/profile-pic", response_model=schemas.UserOut)
+async def remove_profile_pic(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))
+):
+    if not hasattr(current_user, 'profile_pic'):
+        raise HTTPException(status_code=400, detail="Current user type does not support profile pictures")
+
+    # Remove old profile pic file if it exists locally
+    if current_user.profile_pic and current_user.profile_pic.startswith("/uploads/"):
+        old_file = current_user.profile_pic.lstrip("/")
+        if os.path.exists(old_file):
+            try:
+                os.remove(old_file)
+            except Exception:
+                pass
+
+    current_user.profile_pic = None
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+@app.post("/users/change-password")
+def change_password(password_data: schemas.UserPasswordChange, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin", "User", "Company"]))):
+    if not verify_password(password_data.current_password, current_user.password):
+        raise HTTPException(status_code=400, detail="Incorrect current password")
+    
+    current_user.password = get_password_hash(password_data.new_password)
+    db.commit()
+    return {"message": "Password updated successfully"}
+
+@app.get("/admin/users", response_model=List[schemas.UserOut])
+def get_all_users(db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin"]))):
+    users = db.query(models.User).filter(models.User.role == "User").all()
+    return users
+
+@app.delete("/admin/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin"]))):
+    user_to_delete = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user_to_delete:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # We shouldn't delete other Admins using this endpoint, though they're already filtered out in the get request
+    if user_to_delete.role == "Admin":
+         raise HTTPException(status_code=403, detail="Cannot delete an admin account")
+
+    db.delete(user_to_delete)
+    db.commit()
+    return {"message": "User deleted successfully"}
 
 # Example RBAC endpoint for Admin only
 @app.get("/admin/dashboard")

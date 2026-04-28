@@ -23,6 +23,16 @@ class UserOut(UserBase):
     class Config:
         from_attributes = True
 
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    gender: Optional[str] = None
+    age: Optional[int] = None
+    phone: Optional[str] = None
+
+class UserPasswordChange(BaseModel):
+    current_password: str
+    new_password: str
+
 # --- COMPANY SCHEMAS ---
 class CompanyBase(BaseModel):
     company_name: str
