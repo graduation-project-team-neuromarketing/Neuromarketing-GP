@@ -382,28 +382,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     const headerProfileImg = document.getElementById('header-profile-img');
     const headerUserName = document.getElementById('header-user-name');
-    const headerUserPoints = document.getElementById('header-user-points');
     
     if (token) {
         try {
             const API_BASE = 'http://127.0.0.1:8000';
-            const response = await fetch(`${API_BASE}/users/me`, {
+            const response = await fetch(`${API_BASE}/company/data`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
-                const userData = await response.json();
-                if (headerProfileImg && userData.profile_pic) {
-                    headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
+                const companyData = await response.json();
+                if (headerProfileImg && companyData.logo_url) {
+                    headerProfileImg.src = companyData.logo_url.startsWith('http') ? companyData.logo_url : `${API_BASE}${companyData.logo_url}`;
                 }
-                if (headerUserName && userData.full_name) {
-                    headerUserName.textContent = userData.full_name;
-                }
-                if (headerUserPoints && userData.points !== undefined) {
-                    headerUserPoints.textContent = userData.points;
+                if (headerUserName && companyData.company_name) {
+                    headerUserName.textContent = companyData.company_name;
                 }
             }
         } catch (error) {
-            console.error('Error fetching profile data for header:', error);
+            console.error('Error fetching company data for header:', error);
         }
     }
 });

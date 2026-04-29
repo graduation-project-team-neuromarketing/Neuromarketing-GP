@@ -201,16 +201,16 @@
 <span class="material-symbols-outlined text-primary text-4xl" style='font-variation-settings: "FILL" 1;'>celebration</span>
 </div>
 <h2 class="text-3xl font-extrabold text-on-surface dark:text-white mb-2">Thank You for Your Insights!</h2>
-<p class="text-on-surface-variant dark:text-slate-300 mb-8 px-4">Your feedback helps us evolve the Neuralis interface. As a token of our appreciation, here is an exclusive reward.</p>
+<p class="text-on-surface-variant dark:text-slate-300 mb-8 px-4">Your feedback helps us evolve the <span id="promo-company-name">Neuralis</span> interface. As a token of our appreciation, here is an exclusive reward.</p>
 <!-- Promo Code Card -->
 <div class="w-full bg-white/80 dark:bg-slate-900/80 rounded-2xl p-6 border border-primary/20 dark:border-primary/40 shadow-[0_8px_30px_rgb(0,122,255,0.1)] mb-8 group relative overflow-hidden">
 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
 <span class="text-xs font-bold text-primary dark:text-blue-400 tracking-widest uppercase mb-2 block">Exclusive Access Code</span>
 <div class="flex items-center justify-between gap-4">
 <div class="bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-primary/30 dark:border-primary/50 rounded-lg px-4 py-3 flex-1">
-<span class="text-2xl font-mono font-bold tracking-wider text-on-surface dark:text-white">NEURAL-2024</span>
+<span id="promo-code-display" class="text-2xl font-mono font-bold tracking-wider text-on-surface dark:text-white">NEURAL-2024</span>
 </div>
-<button onclick="navigator.clipboard.writeText('NEURAL-2024')" class="bg-primary hover:bg-blue-600 text-white p-3 rounded-xl transition-all shadow-md active:scale-95 group/btn" title="Copy to clipboard">
+<button id="promo-copy-btn" onclick="navigator.clipboard.writeText('NEURAL-2024')" class="bg-primary hover:bg-blue-600 text-white p-3 rounded-xl transition-all shadow-md active:scale-95 group/btn" title="Copy to clipboard">
 <span class="material-symbols-outlined block group-hover/btn:scale-110 transition-transform">content_copy</span>
 </button>
 </div>
@@ -219,11 +219,11 @@
 </p>
 </div>
 <div class="flex flex-col gap-3 w-full">
-<a href="user_dashboard.html" class="w-full py-4 bg-on-surface dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:bg-black dark:hover:bg-slate-200 transition-all active:scale-[0.98] text-center block">
-Return to Dashboard
+<a href="user_dashboard.html" id="return-dashboard-btn" class="w-full py-4 bg-on-surface dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:bg-black dark:hover:bg-slate-200 transition-all active:scale-[0.98] text-center block">
+Confirm & Submit & Return to Dashboard
 </a>
 <button type="button" id="close-modal-btn" class="text-on-surface-variant dark:text-slate-400 hover:text-on-surface dark:hover:text-white text-sm font-medium transition-colors">
-Maybe later
+Go Back to Edit
 </button>
 </div>
 </div>
@@ -235,12 +235,12 @@ Maybe later
 <div class="max-w-3xl w-full mx-auto">
 <div class="mb-12 flex justify-center">
 <div class="flex flex-col items-center gap-4 text-center">
-<div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary">
+<div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary" id="survey-logo-container">
 <span class="material-symbols-outlined text-5xl">neurology</span>
 </div>
 <div>
-<h1 class="text-4xl font-bold tracking-tight text-on-surface">Neuralis AI</h1>
-<p class="text-on-surface-variant mt-1 text-lg italic">Leading the frontier of neural-integrated market analysis.</p>
+<h1 id="survey-title" class="text-4xl font-bold tracking-tight text-on-surface">Neuralis AI</h1>
+<p id="survey-brand-description" class="text-on-surface-variant mt-1 text-lg italic">Leading the frontier of neural-integrated market analysis.</p>
 </div>
 </div>
 </div>
@@ -253,7 +253,8 @@ Maybe later
     <div id="dynamic-questions-container" class="space-y-8">
         <!-- Dynamic questions will be injected here -->
     </div>
-    <div class="flex justify-end pt-4">
+    <div class="flex flex-col items-end pt-4 gap-2">
+        <div id="form-global-error" class="hidden text-red-500 text-sm font-semibold mb-2"></div>
         <button id="submit-feedback-btn" class="px-10 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5" type="button">
             Submit Feedback
         </button>
@@ -277,8 +278,48 @@ Maybe later
             return;
         }
         
+        const originalBrandId = params.get('brandId');
+        let displayBrandName = originalBrandId ? decodeURIComponent(originalBrandId) : 'our';
+        // Format for display: e.g., 'global-tech' -> 'Global Tech'
+        displayBrandName = displayBrandName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        
+        const promoCompanyNameSpan = document.getElementById('promo-company-name');
+        if (promoCompanyNameSpan) {
+            promoCompanyNameSpan.textContent = displayBrandName;
+        }
+
         brandId = decodeURIComponent(brandId).toLowerCase().trim();
         if (brandId === 'global-tech') brandId = 'globaltech';
+
+        // Fetch company info for dynamic logo and name
+        try {
+            const compRes = await fetch('http://127.0.0.1:8000/admin/companies');
+            if (compRes.ok) {
+                const companies = await compRes.json();
+                const targetCompany = companies.find(c => c.company_name.toLowerCase().replace(/\s+/g, '') === brandId.replace(/\s+/g, ''));
+                if (targetCompany) {
+                    const surveyTitle = document.getElementById('survey-title');
+                    if (surveyTitle) surveyTitle.textContent = targetCompany.company_name;
+                    
+                    if (targetCompany.logo_url) {
+                        const logoContainer = document.getElementById('survey-logo-container');
+                        if (logoContainer) {
+                            logoContainer.innerHTML = `<img src="http://127.0.0.1:8000${targetCompany.logo_url}" alt="${targetCompany.company_name} Logo" class="w-full h-full object-contain rounded-2xl p-2">`;
+                        }
+                    }
+                    
+                    if (targetCompany.industry_category) {
+                        const desc = document.getElementById('survey-brand-description');
+                        if (desc) desc.textContent = targetCompany.industry_category;
+                    }
+                } else {
+                    const surveyTitle = document.getElementById('survey-title');
+                    if (surveyTitle) surveyTitle.textContent = brandId.charAt(0).toUpperCase() + brandId.slice(1);
+                }
+            }
+        } catch (err) {
+            console.error('Error fetching company list for header:', err);
+        }
 
         try {
             const response = await fetch(`http://127.0.0.1:8000/campaign/${brandId}`);
@@ -290,6 +331,20 @@ Maybe later
 
             const data = await response.json();
             currentCampaignId = data.id;
+
+            let finalPromoCode = data.promo_code;
+            if (!finalPromoCode) {
+                const formattedName = displayBrandName.replace(/\s+/g, '').toUpperCase();
+                finalPromoCode = `${formattedName}-2026`;
+            }
+
+            const promoCodeDisplay = document.getElementById('promo-code-display');
+            if (promoCodeDisplay) promoCodeDisplay.textContent = finalPromoCode;
+
+            const promoCopyBtn = document.getElementById('promo-copy-btn');
+            if (promoCopyBtn) {
+                promoCopyBtn.setAttribute('onclick', `navigator.clipboard.writeText('${finalPromoCode}')`);
+            }
 
             if (!data.questions_list || data.questions_list.length === 0) {
                 container.innerHTML = '<p class="text-on-surface-variant p-4">No survey available for this brand.</p>';
@@ -309,9 +364,10 @@ Maybe later
                 const questionHtml = `
                     <div class="space-y-4 question-item" data-question="${q.question}">
                         <label class="block text-sm font-semibold text-on-surface">${idx + 1}. ${q.question}</label>
-                        <div class="grid grid-cols-1 gap-4">
+                        <div class="grid grid-cols-1 gap-4 options-container transition-all">
                             ${optionsHtml}
                         </div>
+                        <p class="text-red-500 text-sm hidden font-medium error-msg flex items-center gap-1"><span class="material-symbols-outlined text-sm">error</span> Please select an option to continue.</p>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', questionHtml);
@@ -334,28 +390,81 @@ Maybe later
         let survey_data = {};
         let allAnswered = true;
 
+        const globalError = document.getElementById('form-global-error');
+        if (globalError) globalError.classList.add('hidden');
+
         questionItems.forEach((item, idx) => {
             const questionText = item.getAttribute('data-question');
             const selectedRadio = item.querySelector(`input[name="question_${idx}"]:checked`);
+            const errorMsg = item.querySelector('.error-msg');
+            const optionsContainer = item.querySelector('.options-container');
+
             if (selectedRadio) {
                 survey_data[questionText] = selectedRadio.value;
+                if (errorMsg) errorMsg.classList.add('hidden');
+                if (optionsContainer) {
+                    optionsContainer.classList.remove('border', 'border-red-500', 'p-3', 'rounded-xl', 'bg-red-50/50', 'dark:bg-red-900/10');
+                }
             } else {
                 allAnswered = false;
+                if (errorMsg) errorMsg.classList.remove('hidden');
+                if (optionsContainer) {
+                    optionsContainer.classList.add('border', 'border-red-500', 'p-3', 'rounded-xl', 'bg-red-50/50', 'dark:bg-red-900/10');
+                }
             }
         });
 
         if (!allAnswered) {
-            alert("Please answer all questions before submitting.");
+            const firstUnanswered = container.querySelector('.error-msg:not(.hidden)');
+            if (firstUnanswered) {
+                firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
 
         const token = localStorage.getItem('access_token') || localStorage.getItem('token');
         if (!token) {
-            alert('You must be logged in to submit a survey.');
+            if (globalError) {
+                globalError.textContent = 'You must be logged in to submit a survey.';
+                globalError.classList.remove('hidden');
+            }
             return;
         }
 
+        // Store data temporarily and show modal
+        window.pendingSurveyData = survey_data;
+        
+        const modal = document.getElementById('promo-modal');
+        const main = document.getElementById('main-content');
+        
+        modal.classList.remove('hidden');
+        main.classList.add('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
+        document.body.classList.add('overflow-hidden');
+    });
+
+    document.getElementById('return-dashboard-btn').addEventListener('click', async function(e) {
+        e.preventDefault();
+        console.log("Return to Dashboard clicked");
+
+        if (!window.pendingSurveyData) {
+            console.log("No pending survey data, redirecting immediately");
+            window.location.href = 'user_dashboard.html';
+            return;
+        }
+
+        const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+        if (!token) {
+            alert("No authentication token found! Please log in.");
+            window.location.href = 'sign_in_out.html';
+            return;
+        }
+        
+        const originalText = this.innerText;
+        this.innerText = 'Submitting...';
+        this.classList.add('opacity-75', 'pointer-events-none');
+
         try {
+            console.log("Sending data to backend...");
             const response = await fetch('http://127.0.0.1:8000/user/submit-result', {
                 method: 'POST',
                 headers: {
@@ -364,24 +473,27 @@ Maybe later
                 },
                 body: JSON.stringify({
                     campaign_id: currentCampaignId,
-                    survey_data: survey_data
+                    survey_data: window.pendingSurveyData
                 })
             });
 
+            console.log("Backend response status:", response.status);
+
             if (response.ok) {
-                const modal = document.getElementById('promo-modal');
-                const main = document.getElementById('main-content');
-                
-                modal.classList.remove('hidden');
-                main.classList.add('blur-sm', 'opacity-50', 'pointer-events-none', 'select-none');
-                document.body.classList.add('overflow-hidden');
+                console.log("Submission successful! Redirecting...");
+                window.location.replace('user_dashboard.html');
             } else {
                 const errData = await response.json();
+                console.error("Backend error:", errData);
                 alert(`Error submitting survey: ${errData.detail || 'Unknown error'}`);
+                this.innerText = originalText;
+                this.classList.remove('opacity-75', 'pointer-events-none');
             }
         } catch (error) {
-            console.error(error);
-            alert('Failed to submit survey.');
+            console.error("Fetch error:", error);
+            alert('Failed to submit survey. Please check your connection or backend server.');
+            this.innerText = originalText;
+            this.classList.remove('opacity-75', 'pointer-events-none');
         }
     });
 

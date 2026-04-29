@@ -44,8 +44,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount the uploads directory to serve static files
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 # Authentication Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "Rawan_Brain_Decoder_Super_Secret_HS256")
@@ -197,19 +196,19 @@ async def upload_profile_pic(
     if not hasattr(current_user, 'profile_pic'):
         raise HTTPException(status_code=400, detail="Current user type does not support profile pictures")
     
-    # Ensure uploads directory exists
-    os.makedirs("uploads", exist_ok=True)
+    # Ensure profile_pic directory exists
+    os.makedirs(os.path.join("static", "profile_pic"), exist_ok=True)
     
     # Generate unique filename
     ext = file.filename.split(".")[-1]
     filename = f"{uuid.uuid4()}.{ext}"
-    filepath = os.path.join("uploads", filename)
+    filepath = os.path.join("static", "profile_pic", filename)
     
     with open(filepath, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
     # Remove old profile pic if it's a local file
-    if current_user.profile_pic and current_user.profile_pic.startswith("/uploads/"):
+    if current_user.profile_pic and current_user.profile_pic.startswith("/static/profile_pic/"):
         old_file = current_user.profile_pic.lstrip("/")
         if os.path.exists(old_file):
             try:
@@ -219,7 +218,7 @@ async def upload_profile_pic(
 
     # Save the new URL in the database
     # In a real production setup, this would be the server's public URL, but relative is fine if frontend prepends the base URL
-    current_user.profile_pic = f"/uploads/{filename}"
+    current_user.profile_pic = f"/static/profile_pic/{filename}"
     db.commit()
     db.refresh(current_user)
     return current_user
@@ -233,7 +232,7 @@ async def remove_profile_pic(
         raise HTTPException(status_code=400, detail="Current user type does not support profile pictures")
 
     # Remove old profile pic file if it exists locally
-    if current_user.profile_pic and current_user.profile_pic.startswith("/uploads/"):
+    if current_user.profile_pic and current_user.profile_pic.startswith("/static/profile_pic/"):
         old_file = current_user.profile_pic.lstrip("/")
         if os.path.exists(old_file):
             try:
@@ -280,9 +279,9 @@ def get_admin_data(current_user: models.User = Depends(require_role(["Admin"])))
     return {"message": "Welcome to the Admin Dashboard", "user": current_user.email}
 
 # Example RBAC endpoint for Company only
-@app.get("/company/data")
+@app.get("/company/data", response_model=schemas.CompanyOut)
 def get_company_data(current_user: models.Company = Depends(require_role(["Company"]))):
-    return {"message": "Welcome to the Company Portal", "company_name": current_user.company_name}
+    return current_user
 
 @app.post("/admin/add-company", response_model=schemas.CompanyOut, status_code=status.HTTP_201_CREATED)
 def add_company(
@@ -327,6 +326,23 @@ def get_companies(industry_category: Optional[str] = None, db: Session = Depends
 @app.get("/admin/companies/{category}", response_model=List[schemas.CompanyOut])
 def get_companies_by_category(category: str, db: Session = Depends(get_db)):
     return db.query(models.Company).filter(models.Company.industry_category == category).all()
+
+@app.delete("/admin/companies/{company_id}")
+def delete_company(company_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Admin"]))):
+    company_to_delete = db.query(models.Company).filter(models.Company.id == company_id).first()
+    if not company_to_delete:
+        raise HTTPException(status_code=404, detail="Company not found")
+    
+    # Delete associated campaigns and their dependencies
+    campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company_to_delete.id).all()
+    for camp in campaigns:
+        db.query(models.Result).filter(models.Result.campaign_id == camp.id).delete()
+        db.query(models.History).filter(models.History.campaign_id == camp.id).delete()
+        db.delete(camp)
+    
+    db.delete(company_to_delete)
+    db.commit()
+    return {"message": "Company deleted successfully"}
 
 @app.post("/company/update-campaign", response_model=schemas.CampaignOut)
 def update_campaign(

@@ -167,7 +167,7 @@
     <div class="max-w-5xl mx-auto">
         <div class="mb-12">
             <div class="flex items-center gap-6">
-                <div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary">
+                <div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-outline-variant/30 flex items-center justify-center text-primary" id="brand-logo-container">
                     <span id="brand-icon" class="material-symbols-outlined text-5xl">neurology</span>
                 </div>
                 <div>
@@ -235,6 +235,34 @@
             return;
         }
         
+        // Fetch company details for logo and exact name
+        try {
+            const compRes = await fetch('http://127.0.0.1:8000/admin/companies');
+            if (compRes.ok) {
+                const companies = await compRes.json();
+                const targetCompany = companies.find(c => c.company_name.toLowerCase().replace(/\s+/g, '') === brandId.replace(/\s+/g, ''));
+                if (targetCompany) {
+                    document.getElementById('brand-title').textContent = targetCompany.company_name;
+                    if (targetCompany.logo_url) {
+                        const logoContainer = document.getElementById('brand-logo-container');
+                        if (logoContainer) {
+                            logoContainer.innerHTML = `<img src="http://127.0.0.1:8000${targetCompany.logo_url}" alt="${targetCompany.company_name} Logo" class="w-full h-full object-contain rounded-2xl p-2">`;
+                        }
+                    }
+                    
+                    if (targetCompany.industry_category) {
+                        const desc = document.getElementById('brand-description');
+                        if (desc) desc.textContent = targetCompany.industry_category;
+                    }
+                } else {
+                    document.getElementById('brand-title').textContent = brandId.charAt(0).toUpperCase() + brandId.slice(1);
+                }
+            }
+        } catch (err) {
+            console.error('Error fetching company list:', err);
+            document.getElementById('brand-title').textContent = brandId.charAt(0).toUpperCase() + brandId.slice(1);
+        }
+
         try {
             const response = await fetch(`http://127.0.0.1:8000/campaign/${brandId}`);
             
