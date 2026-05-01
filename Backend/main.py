@@ -439,6 +439,60 @@ class UserResultSubmit(BaseModel):
     campaign_id: int
     survey_data: dict
 
+class LogVisitRequest(BaseModel):
+    campaign_id: int
+
+@app.post("/users/log-visit")
+def log_visit(
+    visit_data: LogVisitRequest,
+    current_user: models.User = Depends(require_role(["User"])),
+    db: Session = Depends(get_db)
+):
+    existing_history = db.query(models.History).filter(
+        models.History.user_id == current_user.id,
+        models.History.campaign_id == visit_data.campaign_id
+    ).first()
+    
+    if not existing_history:
+        new_history = models.History(
+            user_id=current_user.id,
+            campaign_id=visit_data.campaign_id,
+            status='In Processing',
+            earned_points=10
+        )
+        db.add(new_history)
+        current_user.points += 10
+        db.commit()
+        return {"status": "success", "message": "Visit logged"}
+    return {"status": "success", "message": "Visit already logged"}
+
+@app.get("/users/my-history", response_model=List[schemas.HistoryOut])
+def get_my_history(
+    current_user: models.User = Depends(require_role(["User"])),
+    db: Session = Depends(get_db)
+):
+    history = db.query(models.History).filter(models.History.user_id == current_user.id).all()
+    result = []
+    for h in history:
+        campaign = db.query(models.Campaign).filter(models.Campaign.id == h.campaign_id).first()
+        company = db.query(models.Company).filter(models.Company.id == campaign.company_id).first() if campaign else None
+        
+        # Create a dict from the SQLAlchemy model
+        h_dict = {
+            "id": h.id,
+            "user_id": h.user_id,
+            "campaign_id": h.campaign_id,
+            "completion_date": h.completion_date,
+            "earned_points": h.earned_points,
+            "earned_promo_code": h.earned_promo_code,
+            "status": h.status,
+            "company_name": company.company_name if company else f"Brand #{h.campaign_id}",
+            "industry_category": company.industry_category if company else "Unknown",
+            "company_logo_url": company.logo_url if company else None
+        }
+        result.append(h_dict)
+    return result
+
 @app.post("/user/submit-result")
 def submit_result(
     result_data: UserResultSubmit,
@@ -451,6 +505,26 @@ def submit_result(
         survey_data=result_data.survey_data
     )
     db.add(new_result)
+    
+    history = db.query(models.History).filter(
+        models.History.user_id == current_user.id,
+        models.History.campaign_id == result_data.campaign_id
+    ).first()
+    
+    if history and history.status != 'Completed':
+        history.status = 'Completed'
+        history.earned_points = 20
+        current_user.points += 10
+        
+        campaign = db.query(models.Campaign).filter(models.Campaign.id == result_data.campaign_id).first()
+        company = db.query(models.Company).filter(models.Company.id == campaign.company_id).first() if campaign else None
+        
+        if campaign and campaign.promo_code:
+            history.earned_promo_code = campaign.promo_code
+        else:
+            comp_name = company.company_name.upper().replace(" ", "") if company else "NEURAL"
+            history.earned_promo_code = f"{comp_name}-2026"
+
     db.commit()
     db.refresh(new_result)
     return {"status": "success", "result_id": new_result.id}

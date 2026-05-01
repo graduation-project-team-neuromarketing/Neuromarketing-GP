@@ -72,6 +72,7 @@ class History(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     completion_date = Column(DateTime, default=datetime.utcnow)
+    status = Column(String, default="In Processing")
     earned_points = Column(Integer, default=0)
     earned_promo_code = Column(String, nullable=True)
 

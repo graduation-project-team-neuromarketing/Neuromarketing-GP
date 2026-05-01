@@ -204,10 +204,10 @@
 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
 <span class="text-xs font-bold text-primary dark:text-blue-400 tracking-widest uppercase mb-2 block">Exclusive Access Code</span>
 <div class="flex items-center justify-between gap-4">
-<div class="bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-primary/30 dark:border-primary/50 rounded-lg px-4 py-3 flex-1">
-<span class="text-2xl font-mono font-bold tracking-wider text-on-surface dark:text-white">NEURAL-2024</span>
+<div class="bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-primary/30 dark:border-primary/50 rounded-lg px-4 py-3 flex-1 text-center">
+<span id="promo-code-display" class="text-2xl font-mono font-bold tracking-wider text-on-surface dark:text-white">NEURAL-2024</span>
 </div>
-<button onclick="navigator.clipboard.writeText('NEURAL-2024')" class="bg-primary hover:bg-blue-600 text-white p-3 rounded-xl transition-all shadow-md active:scale-95 group/btn" title="Copy to clipboard">
+<button onclick="copyPromoCode()" class="bg-primary hover:bg-blue-600 text-white p-3 rounded-xl transition-all shadow-md active:scale-95 group/btn" title="Copy to clipboard">
 <span class="material-symbols-outlined block group-hover/btn:scale-110 transition-transform">content_copy</span>
 </button>
 </div>
@@ -236,9 +236,9 @@ Maybe later
                 <p class="text-on-surface-variant dark:text-slate-400 mt-1">Access and review your most recent neural feedback evaluations and brand insights.</p>
             </div>
             <div class="flex gap-2">
-                <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 text-on-surface-variant dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
+                <button id="filter-btn" onclick="toggleFilter()" class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 text-on-surface-variant dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">filter_list</span>
-                    Filter
+                    <span id="filter-text">All</span>
                 </button>
                 <button class="px-4 py-2 bg-white dark:bg-slate-800 border border-outline-variant/30 dark:border-slate-700 text-on-surface-variant dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">calendar_today</span>
@@ -258,147 +258,14 @@ Maybe later
                         <th class="px-8 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant/70 dark:text-slate-400 text-right">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-outline-variant/10 dark:divide-slate-700/50">
-                    <!-- Item 1 -->
-                    <tr class="group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-primary-container/30 dark:bg-primary/20 flex items-center justify-center text-primary dark:text-blue-400">
-                                    <span class="material-symbols-outlined text-2xl">neurology</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-on-surface dark:text-white">Neuralis AI</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Machine Learning Services</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <span class="text-sm text-on-surface-variant dark:text-slate-300">Oct 24, 2023 at 2:30 PM</span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]">stars</span> +50
-                            </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <button onclick="openPromoModal()" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>
-                        </td>
-                    </tr>
-                    <!-- Item 2 -->
-                    <tr class="group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400">
-                                    <span class="material-symbols-outlined text-2xl">business</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-on-surface dark:text-white">Global Tech</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">IT Infrastructure</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <span class="text-sm text-on-surface-variant dark:text-slate-300">Oct 23, 2023 at 11:15 AM</span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]">stars</span> +20
-                            </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <button onclick="openPromoModal()" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>
-                        </td>
-                    </tr>
-                    <!-- Item 3 -->
-                    <tr class="group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400">
-                                    <span class="material-symbols-outlined text-2xl">rocket_launch</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-on-surface dark:text-white">AeroVance</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Aerospace & Defense</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <span class="text-sm text-on-surface-variant dark:text-slate-300">Oct 21, 2023 at 4:50 PM</span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]">stars</span> +10
-                            </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <button onclick="openPromoModal()" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>
-                        </td>
-                    </tr>
-                    <!-- Item 4 -->
-                    <tr class="group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400">
-                                    <span class="material-symbols-outlined text-2xl">eco</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-on-surface dark:text-white">EcoStrata</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Sustainable Energy</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <span class="text-sm text-on-surface-variant dark:text-slate-300">Oct 20, 2023 at 9:00 AM</span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]">stars</span> +50
-                            </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <button onclick="openPromoModal()" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>
-                        </td>
-                    </tr>
-                    <!-- Item 5 -->
-                    <tr class="group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400">
-                                    <span class="material-symbols-outlined text-2xl">shield_with_heart</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-on-surface dark:text-white">BioTrust</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">Health & Security</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <span class="text-sm text-on-surface-variant dark:text-slate-300">Oct 18, 2023 at 3:15 PM</span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]">stars</span> +20
-                            </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <button onclick="openPromoModal()" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>
-                        </td>
-                    </tr>
+                <tbody id="history-table-body" class="divide-y divide-outline-variant/10 dark:divide-slate-700/50">
+                    <tr><td colspan="4" class="px-8 py-5 text-center text-slate-500">Loading history...</td></tr>
                 </tbody>
             </table>
 
             <div class="px-8 py-4 border-t border-outline-variant/10 dark:border-slate-700/50 bg-slate-50/30 dark:bg-slate-800/50 flex items-center justify-between">
-                <p class="text-xs text-on-surface-variant dark:text-slate-400">Showing 5 of 24 analyses</p>
-                <div class="flex gap-1">
-                    <button class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400">
-                        <span class="material-symbols-outlined text-xl">chevron_left</span>
-                    </button>
-                    <button class="p-1.5 rounded bg-primary text-white text-xs font-bold w-8 h-8">1</button>
-                    <button class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 text-xs font-bold w-8 h-8">2</button>
-                    <button class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 text-xs font-bold w-8 h-8">3</button>
-                    <button class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400">
-                        <span class="material-symbols-outlined text-xl">chevron_right</span>
-                    </button>
+                <p id="pagination-info" class="text-xs text-on-surface-variant dark:text-slate-400">Showing 0 analyses</p>
+                <div id="pagination-controls" class="flex gap-1">
                 </div>
             </div>
         </div>
@@ -406,7 +273,12 @@ Maybe later
 </main>
 
 <script>
-    function openPromoModal() {
+    let currentPromoCode = '';
+
+    function openPromoModal(code) {
+        currentPromoCode = code;
+        document.getElementById('promo-code-display').textContent = code;
+        
         const modal = document.getElementById('promo-modal');
         const main = document.getElementById('main-content');
         
@@ -424,9 +296,14 @@ Maybe later
         document.body.classList.remove('overflow-hidden');
     }
 
+    function copyPromoCode() {
+        navigator.clipboard.writeText(currentPromoCode).then(() => {
+            // Optional: Show a quick "Copied!" feedback
+        });
+    }
+
     document.getElementById('close-modal-btn-main').addEventListener('click', function() {
         closePromoModal();
-        window.location.href = 'user_dashboard.html';
     });
 
     document.getElementById('close-modal-btn').addEventListener('click', closePromoModal);
@@ -434,35 +311,199 @@ Maybe later
 
 <script src="dark-mode.js"></script>
 
-
 <script>
+let allHistoryData = [];
+let filteredData = [];
+let currentPage = 1;
+const ITEMS_PER_PAGE = 5;
+const FILTERS = ['All', 'Completed', 'In Processing'];
+let currentFilterIndex = 0;
+
+function toggleFilter() {
+    currentFilterIndex = (currentFilterIndex + 1) % FILTERS.length;
+    const currentFilter = FILTERS[currentFilterIndex];
+    document.getElementById('filter-text').textContent = currentFilter;
+    
+    if (currentFilter === 'All') {
+        filteredData = [...allHistoryData];
+    } else {
+        filteredData = allHistoryData.filter(item => item.status === currentFilter);
+    }
+    
+    currentPage = 1;
+    renderTable();
+}
+
+function renderTable() {
+    const tbody = document.getElementById('history-table-body');
+    const paginationInfo = document.getElementById('pagination-info');
+    const paginationControls = document.getElementById('pagination-controls');
+    
+    if (filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="px-8 py-5 text-center text-slate-500">No history found.</td></tr>';
+        paginationInfo.textContent = 'Showing 0 analyses';
+        paginationControls.innerHTML = '';
+        return;
+    }
+    
+    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredData.length);
+    const currentItems = filteredData.slice(startIndex, endIndex);
+    
+    tbody.innerHTML = '';
+    
+    currentItems.forEach(item => {
+        console.log("History Item:", item);
+        const tr = document.createElement('tr');
+        tr.className = "group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors";
+        
+        const dateObj = new Date(item.completion_date + 'Z');
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+        
+        let badgeClass = item.status === 'Completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 border-green-200 dark:border-green-800/50' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border-amber-200 dark:border-amber-800/50';
+        
+        const logoHtml = item.company_logo_url 
+            ? `<img src="http://127.0.0.1:8000${item.company_logo_url}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.outerHTML='<span class=\\'material-symbols-outlined text-2xl\\'>business</span>';">`
+            : `<span class="material-symbols-outlined text-2xl">business</span>`;
+            
+        tr.innerHTML = `
+            <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400 overflow-hidden">
+                        ${logoHtml}
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-on-surface dark:text-white">${item.company_name || 'Brand'}</h3>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400">${item.industry_category || 'Category'}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-8 py-5">
+                <span class="text-sm text-on-surface-variant dark:text-slate-300">${dateStr}</span>
+            </td>
+            <td class="px-8 py-5 text-right">
+                <div class="flex flex-col items-end gap-1">
+                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${badgeClass} shadow-sm">
+                        <span class="material-symbols-outlined text-[14px]">stars</span> +${item.earned_points || 0}
+                    </span>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">${item.status || 'In Processing'}</span>
+                </div>
+            </td>
+            <td class="px-8 py-5 text-right">
+                ${item.status === 'Completed' 
+                    ? `<button onclick="openPromoModal('${item.earned_promo_code || 'PROMO-CODE-UNAVAILABLE'}')" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>` 
+                    : `<span class="text-xs text-slate-400 font-medium">PENDING</span>`}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    
+    paginationInfo.textContent = `Showing ${startIndex + 1}-${endIndex} of ${filteredData.length} analyses`;
+    
+    // Build Pagination Controls
+    let controlsHtml = '';
+    
+    controlsHtml += `
+        <button onclick="goToPage(${currentPage - 1})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 disabled:opacity-50" ${currentPage === 1 ? 'disabled' : ''}>
+            <span class="material-symbols-outlined text-xl">chevron_left</span>
+        </button>
+    `;
+    
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            controlsHtml += `<button class="p-1.5 rounded bg-primary text-white text-xs font-bold w-8 h-8">${i}</button>`;
+        } else {
+            controlsHtml += `<button onclick="goToPage(${i})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 text-xs font-bold w-8 h-8">${i}</button>`;
+        }
+    }
+    
+    controlsHtml += `
+        <button onclick="goToPage(${currentPage + 1})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 disabled:opacity-50" ${currentPage === totalPages ? 'disabled' : ''}>
+            <span class="material-symbols-outlined text-xl">chevron_right</span>
+        </button>
+    `;
+    
+    paginationControls.innerHTML = controlsHtml;
+}
+
+function goToPage(page) {
+    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderTable();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     const headerProfileImg = document.getElementById('header-profile-img');
     const headerUserName = document.getElementById('header-user-name');
     const headerUserPoints = document.getElementById('header-user-points');
+    const tbody = document.getElementById('history-table-body');
     
-    if (token) {
-        try {
-            const API_BASE = 'http://127.0.0.1:8000';
-            const response = await fetch(`${API_BASE}/users/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const userData = await response.json();
-                if (headerProfileImg && userData.profile_pic) {
-                    headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
-                }
-                if (headerUserName && userData.full_name) {
-                    headerUserName.textContent = userData.full_name;
-                }
-                if (headerUserPoints && userData.points !== undefined) {
-                    headerUserPoints.textContent = userData.points;
-                }
+    if (!token) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-8 py-5 text-center text-slate-500">Please log in to view history.</td></tr>';
+        return;
+    }
+
+    const API_BASE = 'http://127.0.0.1:8000';
+    
+    try {
+        const response = await fetch(`${API_BASE}/users/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            if (headerProfileImg && userData.profile_pic) {
+                headerProfileImg.src = userData.profile_pic.startsWith('http') ? userData.profile_pic : `${API_BASE}${userData.profile_pic}`;
             }
-        } catch (error) {
-            console.error('Error fetching profile data for header:', error);
+            if (headerUserName && userData.full_name) {
+                headerUserName.textContent = userData.full_name;
+            }
+            if (headerUserPoints && userData.points !== undefined) {
+                headerUserPoints.textContent = userData.points;
+            }
         }
+    } catch (error) {
+        console.error('Error fetching profile data for header:', error);
+    }
+    
+    // Add event listener for All Time button
+    const allButtons = document.querySelectorAll('button');
+    for (const btn of allButtons) {
+        if (btn.textContent.includes('All Time')) {
+            btn.addEventListener('click', () => {
+                currentFilterIndex = 0;
+                const filterTextEl = document.getElementById('filter-text');
+                if (filterTextEl) filterTextEl.textContent = 'All';
+                filteredData = [...allHistoryData];
+                currentPage = 1;
+                renderTable();
+            });
+            break;
+        }
+    }
+    
+    // Fetch History
+    try {
+        const historyRes = await fetch(`${API_BASE}/users/my-history`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (historyRes.ok) {
+            allHistoryData = await historyRes.json();
+            
+            // Sort by completion_date descending (newest first)
+            allHistoryData.sort((a, b) => new Date(b.completion_date + 'Z') - new Date(a.completion_date + 'Z'));
+            
+            filteredData = [...allHistoryData];
+            renderTable();
+        } else {
+            if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-8 py-5 text-center text-red-500">Failed to load history.</td></tr>';
+        }
+    } catch (e) {
+        console.error('Error fetching history:', e);
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="px-8 py-5 text-center text-red-500">Error loading history.</td></tr>';
     }
 });
 </script>

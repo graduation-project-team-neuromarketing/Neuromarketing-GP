@@ -327,6 +327,21 @@
                 surveyLink.href = `user_survey.html?brandId=${brandId}`;
             }
             
+            // ADD ONLY THIS: Inside the successful fetch for the campaign, add a call to POST /users/log-visit
+            const token = localStorage.getItem('access_token');
+            if (token && data.id) {
+                try {
+                    fetch('http://127.0.0.1:8000/users/log-visit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ campaign_id: data.id })
+                    }).catch(e => console.error('Visit log error:', e));
+                } catch (e) {}
+            }
+            
             // Handle Product Data
             const productsContainer = document.getElementById('core-products-container');
             

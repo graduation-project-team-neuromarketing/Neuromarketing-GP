@@ -102,6 +102,7 @@ class ResultOut(ResultBase):
 
 # --- HISTORY SCHEMAS ---
 class HistoryBase(BaseModel):
+    status: Optional[str] = 'In Processing'
     earned_points: int = 0
     earned_promo_code: Optional[str] = None
 
@@ -114,6 +115,10 @@ class HistoryOut(HistoryBase):
     user_id: int
     campaign_id: int
     completion_date: datetime
+    status: Optional[str] = 'In Processing'
+    company_name: Optional[str] = None
+    industry_category: Optional[str] = None
+    company_logo_url: Optional[str] = None
 
     class Config:
         from_attributes = True
