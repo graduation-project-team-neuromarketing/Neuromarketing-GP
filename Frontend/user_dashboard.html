@@ -206,54 +206,7 @@
 
             <!-- Categories Grid -->
             <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('FMCG')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">shopping_cart</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
-                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Fast-Moving Consumer Goods
-                        </p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Beauty & Fragrances')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">spa</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
-                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Cosmetics and Scents</p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Sportswear & Athletics')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">directions_run</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
-                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Athletic Apparel & Gear</p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Consumer Electronics')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">devices</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
-                        <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">Consumer Electronics</p>
-                    </div>
-                </div>
+                <!-- Categories will be injected here dynamically -->
             </div>
 
             <!-- Company Logo Grid -->
@@ -299,6 +252,7 @@
                 }
             }
 
+            await renderCategories();
             await loadCompaniesForUser();
 
             const backBtn = document.getElementById('back-to-categories-btn');
@@ -312,6 +266,58 @@
             }
         });
 
+        async function renderCategories() {
+            function getDefaultIcon(name) {
+                if (!name) return 'category';
+                const lowerName = name.toLowerCase();
+                if (lowerName.includes('food') || lowerName.includes('qsr') || lowerName.includes('restaurant')) return 'restaurant';
+                if (lowerName.includes('telecom') || lowerName.includes('mobile') || lowerName.includes('phone')) return 'phone_iphone';
+                if (lowerName.includes('fmcg') || lowerName.includes('market') || lowerName.includes('store')) return 'shopping_cart';
+                if (lowerName.includes('electronics') || lowerName.includes('tech')) return 'devices';
+                if (lowerName.includes('beauty') || lowerName.includes('spa') || lowerName.includes('fragrance')) return 'spa';
+                if (lowerName.includes('sport') || lowerName.includes('gym') || lowerName.includes('athletics')) return 'sports_kabaddi';
+                return 'category';
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/categories`);
+                if (response.ok) {
+                    const categories = await response.json();
+                    const categoriesGrid = document.getElementById('categories-grid');
+                    if (!categoriesGrid) return;
+
+                    categoriesGrid.innerHTML = '';
+                    categories.forEach(cat => {
+                        let iconHtml;
+                        if (cat.icon_url && cat.icon_url.includes('/')) {
+                            iconHtml = `<img src="${API_BASE}${cat.icon_url}" class="w-10 h-10 object-contain" />`;
+                        } else if (!cat.icon_url || cat.icon_url === 'category' || cat.icon_url === 'default_icon.png') {
+                            const iconName = getDefaultIcon(cat.name);
+                            iconHtml = `<span class="material-symbols-outlined text-4xl">${iconName}</span>`;
+                        } else {
+                            iconHtml = `<span class="material-symbols-outlined text-4xl">${cat.icon_url}</span>`;
+                        }
+
+                        const newCardHTML = `
+                            <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                                onclick="selectCategory('${cat.name}')">
+                                <div class="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                    ${iconHtml}
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="font-semibold text-lg text-on-surface dark:text-white">${cat.name}</h3>
+                                    <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-1">${cat.description || 'View companies'}</p>
+                                </div>
+                            </div>
+                        `;
+                        categoriesGrid.insertAdjacentHTML('beforeend', newCardHTML);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        }
+
         async function loadCompaniesForUser() {
             try {
                 const response = await fetch(`${API_BASE}/admin/companies`);
@@ -324,10 +330,11 @@
 
                     companies.forEach(company => {
                         const brandId = encodeURIComponent(company.company_name.toLowerCase().replace(/\s+/g, ''));
+                        const categoryName = company.category ? company.category.name : company.industry_category;
 
                         const newCardHTML = `
                             <a href="user_brand-details.html?brandId=${brandId}" 
-                            data-category="${company.industry_category}" 
+                            data-category="${categoryName}" 
                             class="company-item group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
                                 <div class="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
                                     ${company.logo_url 
@@ -336,7 +343,7 @@
                                 </div>
                                 <div class="text-center">
                                     <h3 class="font-semibold text-on-surface dark:text-white">${company.company_name}</h3>
-                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">${company.industry_category}</p>
+                                    <p class="text-xs text-on-surface-variant dark:text-slate-400">${categoryName}</p>
                                 </div>
                                 <div class="view-offers-btn opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 mt-2 w-full">
                                     <div class="w-full py-2 bg-primary text-white text-center text-xs font-bold uppercase rounded-lg">Start Survey</div>

@@ -323,113 +323,64 @@
 
             <!-- Categories Grid -->
             <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('FMCG')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">shopping_cart</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">FMCG</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Fast-Moving Consumer Goods</p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Beauty & Fragrances')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">spa</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Beauty & Fragrances</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Cosmetics and Scents</p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Sportswear & Athletics')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">directions_run</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Sportswear</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Athletic Apparel & Gear</p>
-                    </div>
-                </div>
-
-                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer"
-                    onclick="selectCategory('Consumer Electronics')">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">devices</span>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">Electronics</h3>
-                        <p class="text-xs text-on-surface-variant mt-1">Consumer Electronics</p>
-                    </div>
-                </div>
+                <!-- Categories will be injected here dynamically -->
             </div>
 
             <!-- Company Logo Grids -->
-            <div id="fmcg-container"
-                class="company-grid-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
-            </div>
-            <div id="beauty-container"
-                class="company-grid-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
-            </div>
-            <div id="sportswear-container"
-                class="company-grid-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
-            </div>
-            <div id="electronics-container"
-                class="company-grid-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
-            </div>
-            <div id="other-container"
-                class="company-grid-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
+            <div id="companies-container"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 hidden">
             </div>
         </div>
     </main>
     <script>
-        function selectCategory(category) {
+        let allCompanies = [];
+        let allCategories = [];
+
+        window.selectCategory = function(categoryId, categoryName) {
             document.getElementById('categories-grid').classList.add('hidden');
-
-            // Hide all company grids
-            document.querySelectorAll('.company-grid-container').forEach(container => {
-                container.classList.add('hidden');
-                container.style.display = ''; // Reset inline style
+            
+            const container = document.getElementById('companies-container');
+            container.classList.remove('hidden');
+            container.innerHTML = '';
+            
+            const filteredCompanies = allCompanies.filter(c => c.category_id === categoryId || c.industry_category === categoryName);
+            
+            filteredCompanies.forEach(company => {
+                const newCardHTML = `
+                    <div class="company-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                        <button class="absolute top-3 right-3 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all z-10" onclick="event.stopPropagation(); deleteCompany(${company.id}, this);" title="Delete Company">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                            ${company.logo_url ? `<img src="http://127.0.0.1:8000${company.logo_url}" class="w-full h-full object-cover" />` : '<span class="material-symbols-outlined text-4xl">business</span>'}
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-semibold text-on-surface dark:text-white">${company.company_name}</h3>
+                            <p class="text-xs text-on-surface-variant mt-1">${company.category ? company.category.name : company.industry_category}</p>
+                        </div>
+                        <button class="w-full py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="event.stopPropagation(); window.location.href='admin_analytics.html'">Show Analytics</button>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', newCardHTML);
             });
-
-            let targetContainerId = '';
-            switch (category) {
-                case 'FMCG': targetContainerId = 'fmcg-container'; break;
-                case 'Beauty & Fragrances': targetContainerId = 'beauty-container'; break;
-                case 'Sportswear & Athletics': targetContainerId = 'sportswear-container'; break;
-                case 'Consumer Electronics': targetContainerId = 'electronics-container'; break;
-                default: targetContainerId = 'other-container'; break;
-            }
-
-            const targetContainer = document.getElementById(targetContainerId);
-            if (targetContainer) {
-                targetContainer.classList.remove('hidden');
-            }
 
             document.getElementById('back-to-categories-btn').classList.remove('hidden');
             document.getElementById('new-category-btn').classList.add('hidden');
             document.getElementById('new-company-btn').classList.remove('hidden');
-            document.body.setAttribute('data-active-category', targetContainerId);
+            document.body.setAttribute('data-active-category-id', categoryId);
+            document.body.setAttribute('data-active-category-name', categoryName);
         }
 
         document.getElementById('back-to-categories-btn').addEventListener('click', () => {
             document.getElementById('categories-grid').classList.remove('hidden');
-            document.querySelectorAll('.company-grid-container').forEach(container => {
-                container.classList.add('hidden');
-                container.style.display = '';
-            });
+            document.getElementById('companies-container').classList.add('hidden');
+            document.getElementById('companies-container').innerHTML = '';
+            
             document.getElementById('back-to-categories-btn').classList.add('hidden');
             document.getElementById('new-category-btn').classList.remove('hidden');
             document.getElementById('new-company-btn').classList.add('hidden');
-            document.body.removeAttribute('data-active-category');
+            document.body.removeAttribute('data-active-category-id');
+            document.body.removeAttribute('data-active-category-name');
 
             // Clear any search states
             document.getElementById('search-input').value = '';
@@ -496,6 +447,23 @@
         </div>
     </div>
 
+    <!-- Delete Category Modal -->
+    <div id="delete-category-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="modal-content bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700 mx-4 transform scale-95 translate-y-4 transition-all duration-300">
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4 text-red-500">
+                    <span class="material-symbols-outlined text-4xl">warning</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Delete Category?</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Are you sure? This will un-categorize all companies in this category.</p>
+                <div class="flex gap-3 justify-center">
+                    <button type="button" id="cancel-cat-delete-btn" class="flex-1 px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-colors">Cancel</button>
+                    <button type="button" id="confirm-cat-delete-btn" class="flex-1 px-4 py-2.5 text-sm font-medium bg-red-500 text-white hover:bg-red-600 rounded-xl shadow-sm shadow-red-500/30 transition-all">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div id="toast-container"></div>
 
@@ -539,61 +507,69 @@
             const searchInput = document.getElementById('search-input');
             const emptyState = document.getElementById('empty-state');
 
-            // --- Fetch Companies on Load ---
-            async function loadCompanies() {
-
-                const categoriesMap = {
-                    'FMCG': 'fmcg-container',
-                    'Beauty & Fragrances': 'beauty-container',
-                    'Sportswear & Athletics': 'sportswear-container',
-                    'Consumer Electronics': 'electronics-container'
-                };
+            // --- Fetch Categories and Companies on Load ---
+            async function loadData() {
+                function getDefaultIcon(name) {
+                    if (!name) return 'category';
+                    const lowerName = name.toLowerCase();
+                    if (lowerName.includes('food') || lowerName.includes('qsr') || lowerName.includes('restaurant')) return 'restaurant';
+                    if (lowerName.includes('telecom') || lowerName.includes('mobile') || lowerName.includes('phone')) return 'phone_iphone';
+                    if (lowerName.includes('fmcg') || lowerName.includes('market') || lowerName.includes('store')) return 'shopping_cart';
+                    if (lowerName.includes('electronics') || lowerName.includes('tech')) return 'devices';
+                    if (lowerName.includes('beauty') || lowerName.includes('spa') || lowerName.includes('fragrance')) return 'spa';
+                    if (lowerName.includes('sport') || lowerName.includes('gym') || lowerName.includes('athletics')) return 'sports_kabaddi';
+                    return 'category';
+                }
 
                 try {
+                    const [catResponse, compResponse] = await Promise.all([
+                        fetch('http://127.0.0.1:8000/admin/categories'),
+                        fetch('http://127.0.0.1:8000/admin/companies')
+                    ]);
+                    
+                    if (catResponse.ok) {
+                        allCategories = await catResponse.json();
+                        const categoriesGrid = document.getElementById('categories-grid');
+                        categoriesGrid.innerHTML = '';
+                        
+                        allCategories.forEach(cat => {
+                            let iconHtml;
+                            if (cat.icon_url && cat.icon_url.includes('/')) {
+                                iconHtml = `<img src="http://127.0.0.1:8000${cat.icon_url}" class="w-10 h-10 object-contain" />`;
+                            } else if (!cat.icon_url || cat.icon_url === 'category' || cat.icon_url === 'default_icon.png') {
+                                const iconName = getDefaultIcon(cat.name);
+                                iconHtml = `<span class="material-symbols-outlined text-4xl">${iconName}</span>`;
+                            } else {
+                                iconHtml = `<span class="material-symbols-outlined text-4xl">${cat.icon_url}</span>`;
+                            }
+                                
+                            const catCardHtml = `
+                                <div class="category-card group relative bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant/30 dark:border-slate-700 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-[0px_20px_40px_rgba(0,31,63,0.06)] hover:-translate-y-1 cursor-pointer"
+                                    onclick="selectCategory(${cat.id}, '${cat.name}')">
+                                    <button class="absolute top-3 right-3 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all z-10" onclick="deleteCategory(event, ${cat.id}, this);" title="Delete Category">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </button>
+                                    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        ${iconHtml}
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="font-semibold text-lg text-on-surface dark:text-white">${cat.name}</h3>
+                                        <p class="text-xs text-on-surface-variant mt-1">${cat.description || 'View companies'}</p>
+                                    </div>
+                                </div>
+                            `;
+                            categoriesGrid.insertAdjacentHTML('beforeend', catCardHtml);
+                        });
+                    }
 
-                    const response = await fetch(`http://127.0.0.1:8000/admin/companies`);
-                    if (!response.ok) throw new Error("Failed to fetch");
-
-                    const companies = await response.json();
-
-
-                    Object.values(categoriesMap).forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.innerHTML = '';
-                    });
-
-
-                    companies.forEach(company => {
-                        const containerId = categoriesMap[company.industry_category];
-                        const container = document.getElementById(containerId);
-
-                        if (container) {
-                            const newCardHTML = `
-                    <div class="company-card group relative bg-white rounded-2xl border border-outline-variant/30 p-8 flex flex-col items-center gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
-                        <button class="absolute top-3 right-3 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all z-10" onclick="event.stopPropagation(); deleteCompany(${company.id}, this);" title="Delete Company">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                        <div class="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center">
-                            ${company.logo_url ? `<img src="http://127.0.0.1:8000${company.logo_url}" class="w-full h-full object-cover" />` : '<span class="material-symbols-outlined text-4xl">business</span>'}
-                        </div>
-                        <div class="text-center">
-                            <h3 class="font-semibold text-on-surface">${company.company_name}</h3>
-                            <p class="text-xs text-on-surface-variant mt-1">${company.industry_category}</p>
-                        </div>
-                        <button class="w-full py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="event.stopPropagation(); window.location.href='admin_analytics.html'">Show Analytics</button>
-                    </div>
-                `;
-                            container.insertAdjacentHTML('beforeend', newCardHTML);
-                        } else {
-                            console.warn(`Container not found for category: ${company.industry_category}`);
-                        }
-                    });
-
+                    if (compResponse.ok) {
+                        allCompanies = await compResponse.json();
+                    }
                 } catch (error) {
-                    console.error("Error loading companies:", error);
+                    console.error("Error loading data:", error);
                 }
             }
-            loadCompanies();
+            loadData();
 
             let companyToDeleteId = null;
             let companyToDeleteBtn = null;
@@ -640,24 +616,77 @@
                 } catch (err) {
                     console.error("Error deleting company:", err);
                     showToast("Connection error while deleting company.");
+                } finally {
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    modalContent.classList.add('scale-95', 'translate-y-4');
+                    companyToDeleteId = null;
+                    companyToDeleteBtn = null;
                 }
+            });
+
+            // --- Category Deletion Logic ---
+            let categoryToDeleteId = null;
+            let categoryToDeleteBtn = null;
+
+            window.deleteCategory = function(event, categoryId, btnElement) {
+                event.stopPropagation();
+                categoryToDeleteId = categoryId;
+                categoryToDeleteBtn = btnElement;
                 
+                const modal = document.getElementById('delete-category-modal');
+                const modalContent = modal.querySelector('.modal-content');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95', 'translate-y-4');
+            };
+
+            document.getElementById('cancel-cat-delete-btn').addEventListener('click', () => {
+                const modal = document.getElementById('delete-category-modal');
+                const modalContent = modal.querySelector('.modal-content');
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 modalContent.classList.add('scale-95', 'translate-y-4');
-                companyToDeleteId = null;
-                companyToDeleteBtn = null;
+                categoryToDeleteId = null;
+                categoryToDeleteBtn = null;
+            });
+
+            document.getElementById('confirm-cat-delete-btn').addEventListener('click', async () => {
+                if (!categoryToDeleteId) return;
+                
+                const modal = document.getElementById('delete-category-modal');
+                const modalContent = modal.querySelector('.modal-content');
+                
+                const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/admin/categories/${categoryToDeleteId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    if (response.ok) {
+                        showToast("Category deleted successfully");
+                        categoryToDeleteBtn.closest('.category-card').remove();
+                        // Re-fetch data to reflect nullified categories for companies
+                        loadData();
+                    } else {
+                        const errorData = await response.json();
+                        showToast("Failed to delete category: " + (errorData.detail || "Unknown error"));
+                    }
+                } catch (err) {
+                    console.error("Error deleting category:", err);
+                    showToast("Connection error while deleting category.");
+                } finally {
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    modalContent.classList.add('scale-95', 'translate-y-4');
+                    categoryToDeleteId = null;
+                    categoryToDeleteBtn = null;
+                }
             });
 
             searchInput.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 let hasVisibleCards = false;
 
-                const activeContainerId = document.body.getAttribute('data-active-category');
-
-                if (activeContainerId) {
-                    const activeContainer = document.getElementById(activeContainerId);
-                    if (!activeContainer) return;
-
+                const activeContainer = document.getElementById('companies-container');
+                if (activeContainer && !activeContainer.classList.contains('hidden')) {
                     const dynamicCards = activeContainer.querySelectorAll('.company-card');
 
                     dynamicCards.forEach(card => {
@@ -676,11 +705,35 @@
                         emptyState.classList.add('active');
                         activeContainer.style.display = 'none';
                     } else if (!hasVisibleCards && dynamicCards.length === 0) {
-                        // Empty container to begin with
                         emptyState.classList.add('active');
                     } else {
                         emptyState.classList.remove('active');
                         activeContainer.style.display = 'grid';
+                    }
+                } else {
+                    // Search across categories when not in a specific category
+                    const categoriesGrid = document.getElementById('categories-grid');
+                    if (categoriesGrid && !categoriesGrid.classList.contains('hidden')) {
+                        const dynamicCards = categoriesGrid.querySelectorAll('.category-card');
+                        dynamicCards.forEach(card => {
+                            const catName = card.querySelector('h3').textContent.toLowerCase();
+                            const catDesc = card.querySelector('p').textContent.toLowerCase();
+
+                            if (catName.includes(searchTerm) || catDesc.includes(searchTerm)) {
+                                card.style.display = 'flex';
+                                hasVisibleCards = true;
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                        
+                        if (!hasVisibleCards && dynamicCards.length > 0) {
+                            emptyState.classList.add('active');
+                            categoriesGrid.style.display = 'none';
+                        } else {
+                            emptyState.classList.remove('active');
+                            categoriesGrid.style.display = 'grid';
+                        }
                     }
                 }
             });

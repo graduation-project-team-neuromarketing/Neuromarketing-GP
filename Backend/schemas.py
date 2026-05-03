@@ -33,18 +33,35 @@ class UserPasswordChange(BaseModel):
     current_password: str
     new_password: str
 
+# --- CATEGORY SCHEMAS ---
+class CategoryBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    icon_url: Optional[str] = None
+
+class CategoryCreate(CategoryBase):
+    pass
+
+class CategoryOut(CategoryBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
 # --- COMPANY SCHEMAS ---
 class CompanyBase(BaseModel):
     company_name: str
     email: EmailStr
     logo_url: Optional[str] = None
     industry_category: Optional[str] = None
+    category_id: Optional[int] = None
 
 class CompanyCreate(CompanyBase):
     password: str
 
 class CompanyOut(CompanyBase):
     id: int
+    category: Optional[CategoryOut] = None
 
     class Config:
         from_attributes = True
