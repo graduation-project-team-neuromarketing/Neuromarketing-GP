@@ -462,8 +462,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (headerUserName && userData.full_name) {
                     headerUserName.textContent = userData.full_name;
                 }
-                if (headerUserPoints && userData.points !== undefined) {
-                    headerUserPoints.textContent = userData.points;
+                if (headerUserPoints) {
+                    headerUserPoints.textContent = userData.points ?? 0;
                 }
             }
         } catch (error) {

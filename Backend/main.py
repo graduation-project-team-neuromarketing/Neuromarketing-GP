@@ -493,18 +493,65 @@ def get_my_history(
         result.append(h_dict)
     return result
 
+@app.get("/admin/user-history/{user_id}")
+def get_user_history_admin(
+    user_id: int,
+    current_user: models.User = Depends(require_role(["Admin"])),
+    db: Session = Depends(get_db)
+):
+    history = db.query(models.History).filter(models.History.user_id == user_id).all()
+    result = []
+    for h in history:
+        campaign = db.query(models.Campaign).filter(models.Campaign.id == h.campaign_id).first()
+        company = db.query(models.Company).filter(models.Company.id == campaign.company_id).first() if campaign else None
+        
+        survey_data = None
+        res_record = db.query(models.Result).filter(
+            models.Result.user_id == user_id, 
+            models.Result.campaign_id == h.campaign_id
+        ).first()
+        if res_record:
+            survey_data = res_record.survey_data
+
+        # Create a dict from the SQLAlchemy model
+        h_dict = {
+            "id": h.id,
+            "user_id": h.user_id,
+            "campaign_id": h.campaign_id,
+            "completion_date": h.completion_date,
+            "earned_points": h.earned_points,
+            "earned_promo_code": h.earned_promo_code,
+            "status": h.status,
+            "company_name": company.company_name if company else f"Brand #{h.campaign_id}",
+            "industry_category": company.industry_category if company else "Unknown",
+            "company_logo_url": company.logo_url if company else None,
+            "survey_data": survey_data
+        }
+        result.append(h_dict)
+    return result
+
 @app.post("/user/submit-result")
 def submit_result(
     result_data: UserResultSubmit,
     current_user: models.User = Depends(require_role(["User"])),
     db: Session = Depends(get_db)
 ):
-    new_result = models.Result(
-        user_id=current_user.id,
-        campaign_id=result_data.campaign_id,
-        survey_data=result_data.survey_data
-    )
-    db.add(new_result)
+    existing_result = db.query(models.Result).filter(
+        models.Result.user_id == current_user.id,
+        models.Result.campaign_id == result_data.campaign_id
+    ).first()
+
+    if existing_result:
+        existing_result.survey_data = result_data.survey_data
+        result_to_return = existing_result
+    else:
+        new_result = models.Result(
+            user_id=current_user.id,
+            campaign_id=result_data.campaign_id,
+            survey_data=result_data.survey_data
+        )
+        db.add(new_result)
+        result_to_return = new_result
     
     history = db.query(models.History).filter(
         models.History.user_id == current_user.id,
@@ -526,5 +573,5 @@ def submit_result(
             history.earned_promo_code = f"{comp_name}-2026"
 
     db.commit()
-    db.refresh(new_result)
-    return {"status": "success", "result_id": new_result.id}
+    db.refresh(result_to_return)
+    return {"status": "success", "result_id": result_to_return.id}

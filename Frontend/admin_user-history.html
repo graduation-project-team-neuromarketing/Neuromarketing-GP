@@ -369,14 +369,262 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    let allHistoryData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 5;
+    const FILTERS = ['All', 'Completed', 'In Processing'];
+    let currentFilterIndex = 0;
+
+    document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(window.location.search);
-        const user = params.get('user');
-        if (user) {
-            document.getElementById('history-title').textContent = 'History for ' + user;
-            document.title = 'History: ' + user + ' | Admin Neuromarketing';
+        const userId = params.get('userId');
+        const userName = params.get('userName') || 'User';
+        
+        if (userName) {
+            document.getElementById('history-title').textContent = 'History for ' + userName;
+            document.title = 'History: ' + userName + ' | Admin Neuromarketing';
+        }
+
+        // Attach event listeners to filter/all-time buttons dynamically without touching HTML
+        const headerButtons = document.querySelectorAll('.flex.gap-2 button');
+        if (headerButtons.length >= 2) {
+            const filterBtn = headerButtons[0];
+            const allTimeBtn = headerButtons[1];
+            
+            // Setup Filter Button UI text and click event
+            filterBtn.innerHTML = `
+                <span class="material-symbols-outlined text-lg">filter_list</span>
+                <span id="filter-text">All</span>
+            `;
+            filterBtn.addEventListener('click', toggleFilter);
+
+            // Setup All Time Button click event
+            allTimeBtn.addEventListener('click', () => {
+                currentFilterIndex = 0;
+                document.getElementById('filter-text').textContent = 'All';
+                filteredData = [...allHistoryData];
+                currentPage = 1;
+                renderTable();
+            });
+        }
+
+        if (userId) {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = 'sign_in_out.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/admin/user-history/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    allHistoryData = await response.json();
+                    
+                    // Sort by completion_date descending
+                    allHistoryData.sort((a, b) => new Date(b.completion_date + 'Z') - new Date(a.completion_date + 'Z'));
+                    
+                    filteredData = [...allHistoryData];
+                    renderTable();
+                } else {
+                    console.error('Failed to fetch user history');
+                    allHistoryData = [];
+                    filteredData = [];
+                    renderTable();
+                }
+            } catch (error) {
+                console.error('Error fetching user history:', error);
+                allHistoryData = [];
+                filteredData = [];
+                renderTable();
+            }
         }
     });
+
+    function toggleFilter() {
+        currentFilterIndex = (currentFilterIndex + 1) % FILTERS.length;
+        const currentFilter = FILTERS[currentFilterIndex];
+        const filterTextSpan = document.getElementById('filter-text');
+        if(filterTextSpan) filterTextSpan.textContent = currentFilter;
+        
+        if (currentFilter === 'All') {
+            filteredData = [...allHistoryData];
+        } else {
+            filteredData = allHistoryData.filter(item => item.status === currentFilter);
+        }
+        
+        currentPage = 1;
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector('tbody');
+        const paginationInfo = document.querySelector('.px-8.py-4.border-t p');
+        const paginationControls = document.querySelector('.px-8.py-4.border-t .flex.gap-1');
+        
+        if (filteredData.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="px-8 py-5 text-center text-on-surface-variant">No history found for this user.</td>
+                </tr>
+            `;
+            if (paginationInfo) paginationInfo.textContent = 'Showing 0 analyses';
+            if (paginationControls) paginationControls.innerHTML = '';
+            return;
+        }
+
+        const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredData.length);
+        const currentItems = filteredData.slice(startIndex, endIndex);
+
+        tbody.innerHTML = '';
+
+        currentItems.forEach(item => {
+            const row = document.createElement('tr');
+            row.className = 'group hover:bg-white/60 dark:hover:bg-slate-700/50 transition-colors';
+            
+            const dateObj = new Date(item.completion_date + 'Z');
+            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+            
+            let badgeClass = item.status === 'Completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 border-green-200 dark:border-green-800/50' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border-amber-200 dark:border-amber-800/50';
+
+            const logoUrl = item.company_logo_url ? 
+                            (item.company_logo_url.startsWith('http') ? item.company_logo_url : `http://127.0.0.1:8000${item.company_logo_url}`) : 
+                            '';
+            const iconHtml = logoUrl ? 
+                             `<img src="${logoUrl}" alt="${item.company_name} logo" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.outerHTML='<span class=\\'material-symbols-outlined text-2xl\\'>business</span>';">` : 
+                             `<span class="material-symbols-outlined text-2xl">business</span>`;
+
+            const surveyDataStr = JSON.stringify(item.survey_data || null).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+
+            row.innerHTML = `
+                <td class="px-8 py-5">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-surface-container dark:bg-slate-800 flex items-center justify-center text-primary/40 dark:text-slate-400 overflow-hidden">
+                            ${iconHtml}
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-on-surface dark:text-white">${item.company_name || 'Brand'}</h3>
+                            <p class="text-xs text-on-surface-variant dark:text-slate-400">${item.industry_category || 'Category'}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-8 py-5">
+                    <span class="text-sm text-on-surface-variant dark:text-slate-300">${dateStr}</span>
+                </td>
+                <td class="px-8 py-5 text-right">
+                    <div class="flex flex-col items-end gap-1">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${badgeClass} shadow-sm">
+                            <span class="material-symbols-outlined text-[14px]">stars</span> +${item.earned_points || 0}
+                        </span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">${item.status || 'In Processing'}</span>
+                    </div>
+                </td>
+                <td class="px-8 py-5 text-right">
+                    <button onclick="showSurveyResults(${surveyDataStr})" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View Results</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        if (paginationInfo) {
+            paginationInfo.textContent = `Showing ${startIndex + 1}-${endIndex} of ${filteredData.length} analyses`;
+        }
+
+        buildPagination(totalPages);
+    }
+
+    function buildPagination(totalPages) {
+        const paginationControls = document.querySelector('.px-8.py-4.border-t .flex.gap-1');
+        if (!paginationControls) return;
+
+        let controlsHtml = '';
+        
+        controlsHtml += `
+            <button onclick="goToPage(${currentPage - 1})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 disabled:opacity-50" ${currentPage === 1 ? 'disabled' : ''}>
+                <span class="material-symbols-outlined text-xl">chevron_left</span>
+            </button>
+        `;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                controlsHtml += `<button class="p-1.5 rounded bg-primary text-white text-xs font-bold w-8 h-8">${i}</button>`;
+            } else {
+                controlsHtml += `<button onclick="goToPage(${i})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 text-xs font-bold w-8 h-8">${i}</button>`;
+            }
+        }
+        
+        controlsHtml += `
+            <button onclick="goToPage(${currentPage + 1})" class="p-1.5 rounded hover:bg-slate-200/50 dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-400 disabled:opacity-50" ${currentPage === totalPages ? 'disabled' : ''}>
+                <span class="material-symbols-outlined text-xl">chevron_right</span>
+            </button>
+        `;
+        
+        paginationControls.innerHTML = controlsHtml;
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+            renderTable();
+        }
+    }
+
+    function showSurveyResults(data) {
+        if (!data || Object.keys(data).length === 0) {
+            if (typeof showToast === 'function') {
+                showToast("No survey data found for this analysis.", true);
+            } else {
+                alert("No survey data found for this analysis.");
+            }
+            return;
+        }
+
+        let resultsHtml = '';
+        for (const [question, answer] of Object.entries(data)) {
+            resultsHtml += `
+                <div class="mb-4 bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-outline-variant/30 dark:border-slate-700">
+                    <p class="font-bold text-sm text-on-surface dark:text-white mb-2">${question}</p>
+                    <p class="text-sm text-primary dark:text-blue-400">${answer}</p>
+                </div>
+            `;
+        }
+
+        let modal = document.getElementById('results-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'results-modal';
+            modal.className = 'fixed inset-0 z-[60] flex items-center justify-center p-6 bg-slate-900/10 dark:bg-slate-900/60 backdrop-blur-md hidden transition-opacity duration-300';
+            modal.innerHTML = `
+                <div class="modal-glass max-w-lg w-full rounded-3xl overflow-hidden relative animate-in fade-in zoom-in duration-300 dark:bg-slate-800 dark:border-slate-700 flex flex-col max-h-[80vh]">
+                    <div class="p-6 border-b border-outline-variant/30 dark:border-slate-700 flex justify-between items-center bg-white/50 dark:bg-slate-800/50 backdrop-blur-md">
+                        <h2 class="text-xl font-bold text-on-surface dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">poll</span> Survey Results
+                        </h2>
+                        <button onclick="document.getElementById('results-modal').classList.add('hidden')" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors text-slate-500">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div id="results-modal-content" class="p-6 overflow-y-auto flex-1 bg-white/40 dark:bg-slate-900/40">
+                    </div>
+                    <div class="p-6 border-t border-outline-variant/30 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md">
+                        <button onclick="document.getElementById('results-modal').classList.add('hidden')" class="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-blue-600 transition-all active:scale-[0.98]">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        document.getElementById('results-modal-content').innerHTML = resultsHtml;
+        modal.classList.remove('hidden');
+    }
 </script>
 
 <script src="dark-mode.js"></script>
@@ -403,8 +651,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (headerUserName && userData.full_name) {
                     headerUserName.textContent = userData.full_name;
                 }
-                if (headerUserPoints && userData.points !== undefined) {
-                    headerUserPoints.textContent = userData.points;
+                if (headerUserPoints) {
+                    headerUserPoints.textContent = userData.points ?? 0;
                 }
             }
         } catch (error) {
