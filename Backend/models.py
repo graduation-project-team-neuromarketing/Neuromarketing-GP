@@ -20,6 +20,16 @@ class User(Base):
     results = relationship("Result", back_populates="user")
     histories = relationship("History", back_populates="user")
 
+class Category(Base):
+    __tablename__ = "categories"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    name = Column(String, unique=True, index=True)
+    description = Column(String, nullable=True)
+    icon_url = Column(String, nullable=True)
+
+    companies = relationship("Company", back_populates="category")
+
 class Company(Base):
     __tablename__ = "companies"
 
@@ -28,8 +38,10 @@ class Company(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)  # hashed password
     logo_url = Column(String, nullable=True)
-    industry_category = Column(String)
+    industry_category = Column(String) # To be deleted later
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
 
+    category = relationship("Category", back_populates="companies")
     campaigns = relationship("Campaign", back_populates="company")
 
 class Campaign(Base):

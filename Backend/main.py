@@ -292,12 +292,66 @@ def get_admin_data(current_user: models.User = Depends(require_role(["Admin"])))
 def get_company_data(current_user: models.Company = Depends(require_role(["Company"]))):
     return current_user
 
+@app.get("/admin/categories", response_model=List[schemas.CategoryOut])
+def get_categories(db: Session = Depends(get_db)):
+    return db.query(models.Category).all()
+
+@app.post("/admin/categories", response_model=schemas.CategoryOut, status_code=status.HTTP_201_CREATED)
+def create_category(
+    name: str = Form(...),
+    description: Optional[str] = Form(None),
+    icon_name: Optional[str] = Form(None),
+    icon: Optional[UploadFile] = File(None),
+    db: Session = Depends(get_db)
+):
+    if db.query(models.Category).filter(models.Category.name == name).first():
+        raise HTTPException(status_code=400, detail="Category with this name already exists")
+    
+    icon_url = icon_name if icon_name else None
+    if icon and icon.filename:
+        icon_filename = f"cat_{int(datetime.utcnow().timestamp())}_{icon.filename}"
+        os.makedirs("static/categories", exist_ok=True)
+        icon_path = os.path.join("static", "categories", icon_filename)
+        with open(icon_path, "wb") as buffer:
+            shutil.copyfileobj(icon.file, buffer)
+        icon_url = f"/{icon_path}".replace("\\", "/")
+    
+    db_category = models.Category(
+        name=name,
+        description=description,
+        icon_url=icon_url
+    )
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+    return db_category
+
+@app.delete("/admin/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_category(
+    category_id: int,
+    db: Session = Depends(get_db),
+    current_admin: models.User = Depends(require_role(["Admin"]))
+):
+    category = db.query(models.Category).filter(models.Category.id == category_id).first()
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    # Nullify category_id for associated companies
+    companies = db.query(models.Company).filter(models.Company.category_id == category_id).all()
+    for company in companies:
+        company.category_id = None
+    
+    db.delete(category)
+    db.commit()
+    return None
+
 @app.post("/admin/add-company", response_model=schemas.CompanyOut, status_code=status.HTTP_201_CREATED)
 def add_company(
     company_name: str = Form(...),
     email: str = Form(...),
     password: str = Form(...),
-    industry_category: str = Form(...),
+    industry_category: str = Form(None), # temporarily optional
+    category_id: Optional[int] = Form(None),
     logo: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
@@ -318,7 +372,8 @@ def add_company(
         email=email,
         password=hashed_password,
         logo_url=logo_url,
-        industry_category=industry_category
+        industry_category=industry_category,
+        category_id=category_id
     )
     db.add(db_company)
     db.commit()
@@ -497,8 +552,45 @@ def get_my_history(
             "earned_promo_code": h.earned_promo_code,
             "status": h.status,
             "company_name": company.company_name if company else f"Brand #{h.campaign_id}",
-            "industry_category": company.industry_category if company else "Unknown",
+            "industry_category": (company.category.name if getattr(company, 'category', None) else company.industry_category) if company else "Unknown",
             "company_logo_url": company.logo_url if company else None
+        }
+        result.append(h_dict)
+    return result
+
+@app.get("/admin/user-history/{user_id}")
+def get_user_history_admin(
+    user_id: int,
+    current_user: models.User = Depends(require_role(["Admin"])),
+    db: Session = Depends(get_db)
+):
+    history = db.query(models.History).filter(models.History.user_id == user_id).all()
+    result = []
+    for h in history:
+        campaign = db.query(models.Campaign).filter(models.Campaign.id == h.campaign_id).first()
+        company = db.query(models.Company).filter(models.Company.id == campaign.company_id).first() if campaign else None
+        
+        survey_data = None
+        res_record = db.query(models.Result).filter(
+            models.Result.user_id == user_id, 
+            models.Result.campaign_id == h.campaign_id
+        ).first()
+        if res_record:
+            survey_data = res_record.survey_data
+
+        # Create a dict from the SQLAlchemy model
+        h_dict = {
+            "id": h.id,
+            "user_id": h.user_id,
+            "campaign_id": h.campaign_id,
+            "completion_date": h.completion_date,
+            "earned_points": h.earned_points,
+            "earned_promo_code": h.earned_promo_code,
+            "status": h.status,
+            "company_name": company.company_name if company else f"Brand #{h.campaign_id}",
+            "industry_category": (company.category.name if getattr(company, 'category', None) else company.industry_category) if company else "Unknown",
+            "company_logo_url": company.logo_url if company else None,
+            "survey_data": survey_data
         }
         result.append(h_dict)
     return result

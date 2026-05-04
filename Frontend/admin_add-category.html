@@ -224,16 +224,22 @@
                         <textarea class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none" id="category-description" rows="3" placeholder="Write a short description..." required></textarea>
                     </div>
                     <div class="space-y-2">
+                        <label class="text-sm font-medium text-on-surface transition-colors" for="category-icon-name">Icon Name (Material Symbol)</label>
+                        <input class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="category-icon-name" placeholder="e.g. shopping_cart, devices" type="text"/>
+                        <p class="text-xs text-on-surface-variant mt-1">(Optional: Enter a Material Symbol name or leave blank for automatic icon assignment)</p>
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-sm font-medium text-on-surface transition-colors">Category Icon</label>
-                        <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group" onclick="showToast('File explorer opened')">
+                        <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface/30 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group" onclick="document.getElementById('category-icon').click()">
                             <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
                                 <span class="material-symbols-outlined text-2xl">cloud_upload</span>
                             </div>
                             <div class="text-center">
-                                <p class="text-sm font-medium text-on-surface transition-colors">Click to upload or drag and drop</p>
+                                <p class="text-sm font-medium text-on-surface transition-colors" id="icon-file-name">Click to upload or drag and drop</p>
                                 <p class="text-xs text-on-surface-variant mt-1 transition-colors">SVG, PNG, JPG (max. 800x800px)</p>
                             </div>
                         </div>
+                        <input type="file" id="category-icon" accept="image/*" class="hidden" onchange="document.getElementById('icon-file-name').textContent = this.files[0] ? this.files[0].name : 'Click to upload or drag and drop'" />
                     </div>
                     <div class="pt-4">
                         <button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2" type="submit">
@@ -291,16 +297,53 @@
             });
 
             // --- Form Submission Logic ---
-            const form = document.getElementById('add-company-form');
-            form.addEventListener('submit', (e) => {
+            const form = document.getElementById('add-category-form');
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const companyName = document.getElementById('company-name').value;
-                showToast(`Company '${companyName}' created successfully! Redirecting...`);
-                
-                // Simulate saving and redirect
-                setTimeout(() => {
-                    window.location.href = 'admin_directory.html';
-                }, 1500);
+                const categoryName = document.getElementById('category-name').value;
+                const categoryDescription = document.getElementById('category-description').value;
+                const categoryIconName = document.getElementById('category-icon-name').value;
+                const categoryIconInput = document.getElementById('category-icon');
+                const categoryIcon = categoryIconInput ? categoryIconInput.files[0] : null;
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Adding...';
+                submitBtn.disabled = true;
+
+                const formData = new FormData();
+                formData.append('name', categoryName);
+                if (categoryDescription) {
+                    formData.append('description', categoryDescription);
+                }
+                if (categoryIconName) {
+                    formData.append('icon_name', categoryIconName);
+                }
+                if (categoryIcon) {
+                    formData.append('icon', categoryIcon);
+                }
+
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/admin/categories', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        showToast(`Category '${categoryName}' created successfully! Redirecting...`);
+                        window.location.href = 'admin_directory.html';
+                    } else {
+                        const errorData = await response.json();
+                        showToast(`Error: ${errorData.detail || 'Failed to create category'}`);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                } catch (error) {
+                    showToast('Error connecting to the server.');
+                    console.error(error);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
             });
         });
 

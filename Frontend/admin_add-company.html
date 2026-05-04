@@ -276,11 +276,7 @@
                         <select id="industry-category"
                             class="w-full px-4 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                             required>
-                            <option value="" disabled selected>Select a category</option>
-                            <option value="FMCG">FMCG</option>
-                            <option value="Beauty & Fragrances">Beauty & Fragrances</option>
-                            <option value="Sportswear & Athletics">Sportswear & Athletics</option>
-                            <option value="Consumer Electronics">Consumer Electronics</option>
+                            <option value="" disabled selected>Loading categories...</option>
                         </select>
                     </div>
                     <div class="space-y-2">
@@ -360,6 +356,30 @@
                 }
             });
 
+            // --- Fetch Categories on Load ---
+            async function loadCategories() {
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/admin/categories');
+                    const selectElement = document.getElementById('industry-category');
+                    if (response.ok) {
+                        const categories = await response.json();
+                        selectElement.innerHTML = '<option value="" disabled selected>Select a category</option>';
+                        categories.forEach(cat => {
+                            const option = document.createElement('option');
+                            option.value = cat.id;
+                            option.textContent = cat.name;
+                            selectElement.appendChild(option);
+                        });
+                    } else {
+                        selectElement.innerHTML = '<option value="" disabled selected>Failed to load categories</option>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                    document.getElementById('industry-category').innerHTML = '<option value="" disabled selected>Error loading categories</option>';
+                }
+            }
+            loadCategories();
+
             // --- Form Submission Logic ---
             const form = document.getElementById('add-company-form');
             form.addEventListener('submit', async (e) => {
@@ -380,11 +400,16 @@
                 submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Adding...';
                 submitBtn.disabled = true;
 
+                const categorySelect = document.getElementById('industry-category');
+                const selectedCategoryName = categorySelect.options[categorySelect.selectedIndex].text;
+                const categoryId = categorySelect.value;
+
                 const formData = new FormData();
                 formData.append('company_name', companyName);
                 formData.append('email', email);
                 formData.append('password', password);
-                formData.append('industry_category', industryCategory);
+                formData.append('industry_category', selectedCategoryName);
+                formData.append('category_id', categoryId);
                 formData.append('logo', logoFile);
 
                 try {
