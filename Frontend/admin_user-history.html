@@ -169,7 +169,7 @@
             <span class="material-symbols-outlined">business</span>
             <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Companies</span>
         </a>
-        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="#">
+        <a class="nav-item p-3 bg-primary/10 shadow-sm text-primary rounded-lg relative group transition-all" href="admin_team.html">
             <span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>group</span>
             <span class="absolute left-14 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">Users</span>
         </a>
@@ -576,25 +576,6 @@
     }
 
     function showSurveyResults(data) {
-        if (!data || Object.keys(data).length === 0) {
-            if (typeof showToast === 'function') {
-                showToast("No survey data found for this analysis.", true);
-            } else {
-                alert("No survey data found for this analysis.");
-            }
-            return;
-        }
-
-        let resultsHtml = '';
-        for (const [question, answer] of Object.entries(data)) {
-            resultsHtml += `
-                <div class="mb-4 bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-outline-variant/30 dark:border-slate-700">
-                    <p class="font-bold text-sm text-on-surface dark:text-white mb-2">${question}</p>
-                    <p class="text-sm text-primary dark:text-blue-400">${answer}</p>
-                </div>
-            `;
-        }
-
         let modal = document.getElementById('results-modal');
         if (!modal) {
             modal = document.createElement('div');
@@ -603,7 +584,7 @@
             modal.innerHTML = `
                 <div class="modal-glass max-w-lg w-full rounded-3xl overflow-hidden relative animate-in fade-in zoom-in duration-300 dark:bg-slate-800 dark:border-slate-700 flex flex-col max-h-[80vh]">
                     <div class="p-6 border-b border-outline-variant/30 dark:border-slate-700 flex justify-between items-center bg-white/50 dark:bg-slate-800/50 backdrop-blur-md">
-                        <h2 class="text-xl font-bold text-on-surface dark:text-white flex items-center gap-2">
+                        <h2 id="modal-header-title" class="text-xl font-bold text-on-surface dark:text-white flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary">poll</span> Survey Results
                         </h2>
                         <button onclick="document.getElementById('results-modal').classList.add('hidden')" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors text-slate-500">
@@ -622,7 +603,34 @@
             document.body.appendChild(modal);
         }
 
-        document.getElementById('results-modal-content').innerHTML = resultsHtml;
+        const headerTitle = modal.querySelector('#modal-header-title');
+        const contentDiv = document.getElementById('results-modal-content');
+
+        if (!data || Object.keys(data).length === 0) {
+            headerTitle.innerHTML = `<span class="material-symbols-outlined text-red-500">error</span> Data Retrieval Error`;
+            contentDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4 text-red-500">
+                        <span class="material-symbols-outlined text-4xl">warning</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Survey Data Not Found</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">We encountered an issue retrieving the survey data for this analysis. The data might be corrupted or missing.</p>
+                </div>
+            `;
+        } else {
+            headerTitle.innerHTML = `<span class="material-symbols-outlined text-primary">poll</span> Survey Results`;
+            let resultsHtml = '';
+            for (const [question, answer] of Object.entries(data)) {
+                resultsHtml += `
+                    <div class="mb-4 bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-outline-variant/30 dark:border-slate-700">
+                        <p class="font-bold text-sm text-on-surface dark:text-white mb-2">${question}</p>
+                        <p class="text-sm text-primary dark:text-blue-400">${answer}</p>
+                    </div>
+                `;
+            }
+            contentDiv.innerHTML = resultsHtml;
+        }
+
         modal.classList.remove('hidden');
     }
 </script>

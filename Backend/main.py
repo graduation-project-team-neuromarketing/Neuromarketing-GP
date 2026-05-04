@@ -336,10 +336,15 @@ def delete_category(
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     
-    # Nullify category_id for associated companies
+    # Delete associated companies and their campaigns, results, and history
     companies = db.query(models.Company).filter(models.Company.category_id == category_id).all()
     for company in companies:
-        company.category_id = None
+        campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company.id).all()
+        for camp in campaigns:
+            db.query(models.Result).filter(models.Result.campaign_id == camp.id).delete(synchronize_session=False)
+            db.query(models.History).filter(models.History.campaign_id == camp.id).delete(synchronize_session=False)
+            db.delete(camp)
+        db.delete(company)
     
     db.delete(category)
     db.commit()
