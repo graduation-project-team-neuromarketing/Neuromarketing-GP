@@ -447,6 +447,7 @@ from pydantic import BaseModel
 class UserResultSubmit(BaseModel):
     campaign_id: int
     survey_data: dict
+    neural_score: Optional[float] = None
 
 class LogVisitRequest(BaseModel):
     campaign_id: int
@@ -511,7 +512,8 @@ def submit_result(
     new_result = models.Result(
         user_id=current_user.id,
         campaign_id=result_data.campaign_id,
-        survey_data=result_data.survey_data
+        survey_data=result_data.survey_data,
+        neural_score=result_data.neural_score
     )
     db.add(new_result)
     
@@ -741,27 +743,8 @@ async def analyze_eeg(
             
             conf_val = confidence.item()
             pred_idx = predicted_class.item()
-            
-            # Store the raw 0 or 1 prediction in neural_score
-            result_entry = db.query(models.Result).filter(
-                models.Result.user_id == current_user.id,
-                models.Result.campaign_id == campaign_id
-            ).first()
-            
-            if result_entry:
-                result_entry.neural_score = float(pred_idx)
-            else:
-                new_result = models.Result(
-                    user_id=current_user.id,
-                    campaign_id=campaign_id,
-                    survey_data={},
-                    neural_score=float(pred_idx)
-                )
-                db.add(new_result)
-            
-            db.commit()
                 
-        return {"prediction": pred_idx, "confidence": round(conf_val, 4)}
+        return {"prediction": pred_idx, "confidence": round(conf_val, 4), "neural_score": float(pred_idx)}
         
     except Exception as e:
         import traceback

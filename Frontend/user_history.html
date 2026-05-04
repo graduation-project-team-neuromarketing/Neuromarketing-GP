@@ -393,7 +393,7 @@ function renderTable() {
             <td class="px-8 py-5 text-right">
                 ${item.status === 'Completed' 
                     ? `<button onclick="openPromoModal('${item.earned_promo_code || 'PROMO-CODE-UNAVAILABLE'}')" type="button" class="inline-block px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm">View promo code</button>` 
-                    : `<span class="text-xs text-slate-400 font-medium">PENDING</span>`}
+                    : `<a href="user_brand-details.html?brandId=${encodeURIComponent((item.company_name || '').toLowerCase().replace(/\\s+/g, ''))}" class="inline-block px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all active:scale-95 shadow-sm">complete a survey</a>`}
             </td>
         `;
         tbody.appendChild(tr);

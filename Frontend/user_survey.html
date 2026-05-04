@@ -465,27 +465,50 @@ Go Back to Edit
 
         try {
             console.log("Sending data to backend...");
+            
+            const payload = {
+                campaign_id: currentCampaignId,
+                survey_data: window.pendingSurveyData
+            };
+            
+            try {
+                let ns = localStorage.getItem(`pending_neural_score_${currentCampaignId}`);
+                if (ns !== null && ns !== undefined && ns !== "NaN" && ns !== "undefined") {
+                    let parsed = parseFloat(ns);
+                    if (!isNaN(parsed)) {
+                        payload.neural_score = parsed;
+                    }
+                }
+            } catch (e) {
+                console.error("Local storage error:", e);
+            }
+
             const response = await fetch('http://127.0.0.1:8000/user/submit-result', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    campaign_id: currentCampaignId,
-                    survey_data: window.pendingSurveyData
-                })
+                body: JSON.stringify(payload)
             });
 
             console.log("Backend response status:", response.status);
 
             if (response.ok) {
                 console.log("Submission successful! Redirecting...");
-                window.location.replace('user_dashboard.html');
+                try {
+                    localStorage.removeItem(`pending_neural_score_${currentCampaignId}`);
+                } catch(e) {}
+                window.location.href = 'user_dashboard.html';
             } else {
-                const errData = await response.json();
-                console.error("Backend error:", errData);
-                alert(`Error submitting survey: ${errData.detail || 'Unknown error'}`);
+                let errText = "Unknown error";
+                try {
+                    const errData = await response.json();
+                    errText = errData.detail || errText;
+                } catch(e) {
+                    errText = "Server error or invalid response";
+                }
+                alert(`Error submitting survey: ${errText}`);
                 this.innerText = originalText;
                 this.classList.remove('opacity-75', 'pointer-events-none');
             }
