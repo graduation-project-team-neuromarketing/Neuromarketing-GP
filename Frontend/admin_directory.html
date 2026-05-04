@@ -358,7 +358,7 @@
                             <h3 class="font-semibold text-on-surface dark:text-white">${company.company_name}</h3>
                             <p class="text-xs text-on-surface-variant mt-1">${company.category ? company.category.name : company.industry_category}</p>
                         </div>
-                        <button class="w-full py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="event.stopPropagation(); window.location.href='admin_analytics.html'">Show Analytics</button>
+                        <button class="w-full py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="event.stopPropagation(); window.location.href='admin_analytics.html?companyId=${company.id}'">Show Analytics</button>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', newCardHTML);

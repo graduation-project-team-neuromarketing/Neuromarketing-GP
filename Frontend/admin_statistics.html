@@ -222,54 +222,56 @@
                         <span class="material-symbols-outlined text-lg">calendar_today</span>
                         Last 30 Days
                     </button>
-                    <button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2 text-sm active:scale-95" onclick="showToast('Report export started...')">
-                        <span class="material-symbols-outlined text-lg">download</span>
+                    <button onclick="exportSystemReport()" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium hover:bg-blue-600 hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2 text-sm active:scale-95">
+                        <span class="material-symbols-outlined text-lg">ios_share</span>
                         Export Report
                     </button>
                 </div>
             </div>
 
             <!-- KPI Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
                     <div class="flex items-center justify-between mb-4">
                         <span class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-primary material-symbols-outlined">groups</span>
-                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">trending_up</span> +12%
-                        </span>
                     </div>
-                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Total Participants</h3>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Total Respondents</h3>
                     <div class="flex items-baseline gap-2 mt-1">
-                        <span class="text-3xl font-bold text-on-surface transition-colors">12,482</span>
-                        <span class="text-xs text-on-surface-variant/60 transition-colors">Live session</span>
+                        <span id="card-total-respondents" class="text-3xl font-bold text-on-surface transition-colors">0</span>
+                        <span class="text-xs text-on-surface-variant/60 transition-colors">Total participants</span>
                     </div>
                 </div>
                 
-                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-emerald-500/30 transition-transform hover:-translate-y-1 duration-300">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400 material-symbols-outlined">psychology</span>
-                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">trending_up</span> +4.2%
-                        </span>
+                        <span class="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg text-emerald-600 dark:text-emerald-400 material-symbols-outlined">sentiment_very_satisfied</span>
                     </div>
-                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Avg. Cognitive Resonance</h3>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Overall Positivity</h3>
                     <div class="flex items-baseline gap-2 mt-1">
-                        <span class="text-3xl font-bold text-on-surface transition-colors">78.4</span>
-                        <span class="text-xs text-on-surface-variant/60 transition-colors">μV scale</span>
+                        <span id="card-overall-positivity" class="text-3xl font-bold text-on-surface transition-colors">0%</span>
+                        <span class="text-[10px] text-emerald-500 uppercase tracking-wider font-semibold">Target: > 50%</span>
                     </div>
                 </div>
                 
-                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-white/50 transition-transform hover:-translate-y-1 duration-300">
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-rose-500/30 transition-transform hover:-translate-y-1 duration-300">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400 material-symbols-outlined">favorite</span>
-                        <span class="text-emerald-500 text-xs font-bold bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">trending_down</span> -0.5%
-                        </span>
+                        <span class="p-2 bg-rose-50 dark:bg-rose-900/30 rounded-lg text-rose-600 dark:text-rose-400 material-symbols-outlined">sentiment_dissatisfied</span>
                     </div>
-                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Positive Sentiment %</h3>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Resistance Index</h3>
                     <div class="flex items-baseline gap-2 mt-1">
-                        <span class="text-3xl font-bold text-on-surface transition-colors">64.2%</span>
-                        <span class="text-xs text-on-surface-variant/60 transition-colors">Baseline target: 60%</span>
+                        <span id="card-resistance-index" class="text-3xl font-bold text-on-surface transition-colors">0%</span>
+                        <span class="text-[10px] text-rose-500 uppercase tracking-wider font-semibold">Negative Feedback</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none border border-primary/20 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-400 material-symbols-outlined">psychology</span>
+                    </div>
+                    <h3 class="text-on-surface-variant text-sm font-medium transition-colors">Ad Resonance Score</h3>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="card-ad-resonance" class="text-3xl font-bold text-on-surface transition-colors">0</span>
+                        <span class="text-xs text-on-surface-variant/60 transition-colors">Score out of 100</span>
                     </div>
                 </div>
             </div>
@@ -281,85 +283,75 @@
                     <div class="flex items-center justify-between mb-8">
                         <div>
                             <h3 class="text-lg font-bold text-on-surface transition-colors">Neural Acceptance Trends</h3>
-                            <p class="text-sm text-on-surface-variant transition-colors">Distribution across 4 core emotional classes</p>
+                            <p class="text-sm text-on-surface-variant transition-colors">Positivity rate across the system</p>
                         </div>
-                        <div class="flex gap-2">
-                            <button class="px-3 py-1 text-xs font-medium bg-primary text-white rounded-md transition-colors">Daily</button>
-                            <button class="px-3 py-1 text-xs font-medium text-on-surface-variant hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-colors">Weekly</button>
+                        <div class="flex gap-4">
+                            <span class="flex items-center gap-1.5 text-xs font-medium text-emerald-500 dark:text-emerald-400">
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Positivity %
+                            </span>
+                            <span class="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                                <span class="w-3 h-[2px] bg-slate-400 border-dashed border-t-2 border-slate-400"></span> Baseline (50%)
+                            </span>
                         </div>
                     </div>
                     
-                    <div class="h-64 relative flex items-end justify-between px-2 gap-4 flex-1">
-                        <!-- Simulated Line Chart with SVG -->
-                        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-                            <defs>
-                                <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%" stop-color="#007AFF" stop-opacity="0.2"></stop>
-                                    <stop offset="100%" stop-color="#007AFF" stop-opacity="0"></stop>
-                                </linearGradient>
-                                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-                                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#007AFF" flood-opacity="0.3"/>
-                                </filter>
-                            </defs>
-                            <path d="M0,80 Q10,70 20,75 T40,50 T60,60 T80,30 T100,45 V100 H0 Z" fill="url(#chartGradient)"></path>
-                            <path d="M0,80 Q10,70 20,75 T40,50 T60,60 T80,30 T100,45" fill="none" stroke="#007AFF" stroke-width="2.5" filter="url(#shadow)"></path>
-                        </svg>
-                        
-                        <div class="absolute bottom-0 w-full flex justify-between text-[10px] text-on-surface-variant font-medium pt-4 transition-colors">
-                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    <div class="h-64 relative flex items-end justify-between gap-1 mt-4 flex-1">
+                        <!-- Background Grid Lines -->
+                        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                            <div class="border-t border-slate-100 dark:border-slate-700 w-full h-0"></div>
+                            <div class="border-t border-slate-100 dark:border-slate-700 w-full h-0"></div>
+                            <div class="border-t border-slate-100 dark:border-slate-700 w-full h-0"></div>
+                            <div class="border-t border-slate-100 dark:border-slate-700 w-full h-0"></div>
+                            <div class="border-t border-slate-100 dark:border-slate-700 w-full h-0"></div>
                         </div>
+                        
+                        <!-- Baseline -->
+                        <div class="absolute w-full h-[1px] bg-transparent border-t-2 border-dashed border-slate-400 opacity-50 z-0" style="bottom: 50%;"></div>
+                        
+                        <!-- Line Chart SVG -->
+                        <svg id="trend-chart-svg" class="absolute inset-0 w-full h-full overflow-visible z-10" preserveAspectRatio="none" viewBox="0 0 100 100">
+                            <!-- Drop Shadow for primary line -->
+                            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#10b981" flood-opacity="0.3"/>
+                            </filter>
+                            <path id="trend-path" d="M 0 50 L 100 50" fill="none" stroke="#10b981" stroke-width="2.5" vector-effect="non-scaling-stroke" filter="url(#shadow)"></path>
+                        </svg>
                     </div>
                 </div>
 
                 <!-- Pie Chart Section -->
                 <div class="glass-panel rounded-2xl p-8 border border-white/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none flex flex-col">
                     <h3 class="text-lg font-bold text-on-surface mb-1 transition-colors">Sentiment Distribution</h3>
-                    <p class="text-sm text-on-surface-variant mb-8 transition-colors">Distribution across 4 core emotional classes</p>
+                    <p class="text-sm text-on-surface-variant mb-8 transition-colors">Overall Binary Feedback</p>
                     
                     <div class="relative w-48 h-48 mx-auto flex items-center justify-center flex-1 my-4">
                         <!-- Robust SVG Donut Chart -->
                         <svg class="w-full h-full transform -rotate-90 drop-shadow-md" viewBox="0 0 42 42">
-                            <!-- Background ring -->
-                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#f1f5f9" stroke-width="8" class="dark:stroke-slate-700"></circle>
-                            
-                            <!-- Neutral: 40% -->
-                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#94a3b8" stroke-width="8" stroke-dasharray="40 100" stroke-dashoffset="0"></circle>
-                            
-                            <!-- Sad: 20% -->
-                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#a855f7" stroke-width="8" stroke-dasharray="20 100" stroke-dashoffset="-40"></circle>
-                            
-                            <!-- Fear: 15% -->
-                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#4f46e5" stroke-width="8" stroke-dasharray="15 100" stroke-dashoffset="-60"></circle>
-                            
-                            <!-- Happy: 25% -->
-                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#007AFF" stroke-width="8" stroke-dasharray="25 100" stroke-dashoffset="-75"></circle>
+                            <!-- Negative (Rose Red background ring) -->
+                            <circle r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#f43f5e" stroke-width="8" class="opacity-80"></circle>
+                            <!-- Positive (Emerald Green) -->
+                            <circle id="donut-positive" r="15.91549430918954" cx="21" cy="21" fill="transparent" stroke="#10b981" stroke-width="8" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
                         </svg>
                         
                         <!-- Inner Text -->
                         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                             <div class="bg-white dark:bg-slate-800 w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-sm">
-                                <span class="text-2xl font-bold text-on-surface transition-colors">40%</span>
-                                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider transition-colors">Neutral</span>
+                                <span id="donut-percentage" class="text-2xl font-bold text-on-surface transition-colors">0%</span>
+                                <span class="text-[10px] text-emerald-500 uppercase font-bold tracking-wider transition-colors">Positive</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mt-8 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-400"></span><span class="text-sm text-on-surface-variant transition-colors">Neutral</span></div>
-                            <span class="text-sm font-semibold text-on-surface transition-colors">40.0%</span>
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-4 mt-8">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-medium text-on-surface transition-colors">Positive</span>
+                            <span id="legend-positive" class="ml-auto text-xs font-bold text-on-surface transition-colors">0%</span>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-500"></span><span class="text-sm text-on-surface-variant transition-colors">Sad</span></div>
-                            <span class="text-sm font-semibold text-on-surface transition-colors">20.0%</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-indigo-600"></span><span class="text-sm text-on-surface-variant transition-colors">Fear</span></div>
-                            <span class="text-sm font-semibold text-on-surface transition-colors">15.0%</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span><span class="text-sm text-on-surface-variant transition-colors">Happy</span></div>
-                            <span class="text-sm font-semibold text-on-surface transition-colors">25.0%</span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                            <span class="text-xs font-medium text-on-surface transition-colors">Negative</span>
+                            <span id="legend-negative" class="ml-auto text-xs font-bold text-on-surface transition-colors">0%</span>
                         </div>
                     </div>
                 </div>
@@ -368,56 +360,14 @@
                 <div class="lg:col-span-3 glass-panel rounded-2xl p-8 border border-white/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none mt-2">
                     <div class="flex items-center justify-between mb-8">
                         <div>
-                            <h3 class="text-lg font-bold text-on-surface transition-colors">Corporate Benchmarking</h3>
-                            <p class="text-sm text-on-surface-variant transition-colors">Distribution across 4 core emotional classes</p>
+                            <h3 class="text-lg font-bold text-on-surface transition-colors">System-wide Company Engagement</h3>
+                            <p class="text-sm text-on-surface-variant transition-colors">Top performing companies by positivity</p>
                         </div>
                         <button class="text-primary text-sm font-semibold hover:underline" onclick="window.location.href='admin_directory.html'">View All Clients</button>
                     </div>
                     
-                    <div class="space-y-6">
-                        <!-- Global Tech -->
-                        <div class="space-y-2 group">
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">Global Tech</span>
-                                <span class="font-bold text-primary">92/100</span>
-                            </div>
-                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="92%"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Neuralis AI -->
-                        <div class="space-y-2 group">
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">Neuralis AI</span>
-                                <span class="font-bold text-primary">88/100</span>
-                            </div>
-                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="88%"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- AeroVance -->
-                        <div class="space-y-2 group">
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">AeroVance</span>
-                                <span class="font-bold text-primary">76/100</span>
-                            </div>
-                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="76%"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- EcoStrata -->
-                        <div class="space-y-2 group">
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-on-surface transition-colors group-hover:text-primary">EcoStrata</span>
-                                <span class="font-bold text-primary">64/100</span>
-                            </div>
-                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                                <div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="64%"></div>
-                            </div>
-                        </div>
+                    <div id="campaign-engagement-container" class="space-y-6">
+                        <p class="text-sm text-slate-500 italic">Loading company data...</p>
                     </div>
                 </div>
             </div>
@@ -525,11 +475,105 @@ document.addEventListener('DOMContentLoaded', async () => {
                     headerUserPoints.textContent = userData.points ?? 0;
                 }
             }
+
+            // Fetch Overview Analytics Data
+            const analyticsRes = await fetch(`${API_BASE}/admin/analytics/overview`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (analyticsRes.ok) {
+                const analytics = await analyticsRes.json();
+                
+                // Update Cards
+                document.getElementById('card-total-respondents').textContent = analytics.total_respondents;
+                document.getElementById('card-overall-positivity').textContent = `${analytics.overall_positivity}%`;
+                document.getElementById('card-resistance-index').textContent = `${analytics.resistance_index}%`;
+                document.getElementById('card-ad-resonance').textContent = analytics.ad_resonance_score;
+
+                // Update Donut Chart
+                document.getElementById('donut-positive').setAttribute('stroke-dasharray', `${analytics.overall_positivity} 100`);
+                document.getElementById('donut-percentage').textContent = `${analytics.overall_positivity}%`;
+                document.getElementById('legend-positive').textContent = `${analytics.overall_positivity}%`;
+                document.getElementById('legend-negative').textContent = `${analytics.resistance_index}%`;
+
+                // Update Trend Line
+                const trendPath = document.getElementById('trend-path');
+                const pts = analytics.positivity_trend;
+                if (pts && pts.length > 0) {
+                    let pathD = `M 0 ${100 - pts[0]}`;
+                    const step = 100 / (pts.length - 1);
+                    for(let i=1; i<pts.length; i++) {
+                        pathD += ` L ${i * step} ${100 - pts[i]}`;
+                    }
+                    trendPath.setAttribute('d', pathD);
+                }
+
+                // Update Company Engagement
+                const engagementContainer = document.getElementById('campaign-engagement-container');
+                engagementContainer.innerHTML = '';
+                if (analytics.campaign_engagement && analytics.campaign_engagement.length > 0) {
+                    // Sort companies by engagement descending
+                    const sortedCampaigns = analytics.campaign_engagement.sort((a, b) => b.engagement - a.engagement);
+                    sortedCampaigns.forEach(camp => {
+                        engagementContainer.innerHTML += `
+                        <div class="space-y-2 group">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-on-surface transition-colors group-hover:text-emerald-500">${camp.name} <span class="text-xs text-slate-400 font-normal ml-1">(${camp.respondents || 0} Users)</span></span>
+                                <span class="font-bold text-emerald-500">${camp.engagement}% <span class="font-normal text-xs text-slate-400">Positivity</span></span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out" style="width: ${camp.engagement}%"></div>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    engagementContainer.innerHTML = '<p class="text-sm text-slate-500 italic">No company data available.</p>';
+                }
+            }
         } catch (error) {
-            console.error('Error fetching profile data for header:', error);
+            console.error('Error fetching data:', error);
         }
     }
 });
+
+async function exportSystemReport() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+    
+    showToast('Generating system overview report... Please wait.');
+    
+    try {
+        const API_BASE = 'http://127.0.0.1:8000';
+        const response = await fetch(`${API_BASE}/admin/export-system-report`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            
+            // Try to extract filename from header
+            let filename = 'System_Overview_Report.pdf';
+            const contentDisposition = response.headers.get('content-disposition');
+            if (contentDisposition && contentDisposition.indexOf('filename=') !== -1) {
+                filename = contentDisposition.split('filename=')[1];
+            }
+            
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            showToast('Report downloaded successfully!');
+        } else {
+            showToast('Error generating report. Please try again.', true);
+        }
+    } catch (err) {
+        console.error('Export error:', err);
+        showToast('Error connecting to the server.', true);
+    }
+}
 </script>
 </body>
 </html>

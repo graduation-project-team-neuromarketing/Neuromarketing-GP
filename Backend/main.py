@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -33,7 +33,8 @@ except ImportError:
 
 
 import models, schemas
-from database import engine, get_db
+from database import engine, get_db, Base
+from pdf_generator import generate_analytics_pdf, generate_system_pdf
 
 # Create the database tables
 models.Base.metadata.create_all(bind=engine)
@@ -636,6 +637,224 @@ def submit_result(
     db.commit()
     db.refresh(new_result)
     return {"status": "success", "result_id": new_result.id}
+
+def calculate_binary_analytics(results: List[models.Result], campaigns: List[models.Campaign]):
+    if not results:
+        return {
+            "total_respondents": 0,
+            "overall_positivity": 0,
+            "resistance_index": 0,
+            "ad_resonance_score": 0,
+            "positivity_trend": [50, 50, 50, 50, 50, 50],
+            "campaign_engagement": []
+        }
+    
+    total = len(results)
+    positive_count = 0
+    total_resonance = 0
+    
+    # Calculate pos/neg
+    for res in results:
+        score = res.neural_score if res.neural_score is not None else 0.0
+        
+        # Normalize to 0-100
+        if score <= 1.0 and score > 0:
+            score = score * 100
+            
+        if score > 50:
+            positive_count += 1
+            
+        # Resonance: (score * 0.7) + (survey quality * 0.3)
+        survey_quality = 100 if res.survey_data and len(res.survey_data.keys()) > 0 else 50
+        resonance = (score * 0.7) + (survey_quality * 0.3)
+        total_resonance += resonance
+
+    positivity = int((positive_count / total) * 100)
+    resistance = 100 - positivity
+    avg_resonance = int(total_resonance / total)
+    
+    # Mock trend data based on average (for visualization)
+    trend = [
+        max(0, positivity - 10), 
+        min(100, positivity + 5), 
+        positivity - 5, 
+        min(100, positivity + 8), 
+        positivity - 2, 
+        positivity
+    ]
+
+    # Calculate engagement per campaign
+    campaign_engagement = []
+    if campaigns:
+        for camp in campaigns:
+            camp_results = [r for r in results if r.campaign_id == camp.id]
+            if camp_results:
+                c_pos = 0
+                for r in camp_results:
+                    sc = r.neural_score if r.neural_score is not None else 0.0
+                    if sc <= 1.0 and sc > 0:
+                        sc = sc * 100
+                    if sc > 50:
+                        c_pos += 1
+                engagement = int((c_pos / len(camp_results)) * 100)
+            else:
+                engagement = 0
+            
+            campaign_engagement.append({
+                "id": camp.id,
+                "name": camp.product_name or f"Campaign {camp.id}",
+                "engagement": engagement
+            })
+
+    return {
+        "total_respondents": total,
+        "overall_positivity": positivity,
+        "resistance_index": resistance,
+        "ad_resonance_score": avg_resonance,
+        "positivity_trend": trend,
+        "campaign_engagement": campaign_engagement
+    }
+
+@app.get("/admin/analytics/overview", response_model=schemas.BinaryAnalyticsOut)
+def get_admin_analytics_overview(db: Session = Depends(get_db), current_admin: models.User = Depends(require_role(["Admin"]))):
+    results = db.query(models.Result).all()
+    campaigns = db.query(models.Campaign).all()
+    companies = db.query(models.Company).all()
+    
+    analytics = calculate_binary_analytics(results, campaigns)
+    
+    # Overwrite campaign_engagement with company engagement for the global overview
+    company_engagement = []
+    for comp in companies:
+        comp_campaigns = [c.id for c in campaigns if c.company_id == comp.id]
+        comp_results = [r for r in results if r.campaign_id in comp_campaigns]
+        if comp_results:
+            c_pos = 0
+            for r in comp_results:
+                sc = r.neural_score if r.neural_score is not None else 0.0
+                if sc <= 1.0 and sc > 0:
+                    sc = sc * 100
+                if sc > 50:
+                    c_pos += 1
+            engagement = int((c_pos / len(comp_results)) * 100)
+        else:
+            engagement = 0 # Show 0% engagement for companies with no results
+            
+        company_engagement.append({
+            "id": comp.id,
+            "name": comp.company_name,
+            "engagement": engagement,
+            "respondents": len(comp_results)
+        })
+        
+    analytics["campaign_engagement"] = company_engagement
+    return analytics
+
+@app.get("/admin/export-report/{company_id}")
+def export_admin_report(company_id: int, db: Session = Depends(get_db), current_admin: models.User = Depends(require_role(["Admin"]))):
+    company = db.query(models.Company).filter(models.Company.id == company_id).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+        
+    category_name = "FMCG"
+    if company.category_id:
+        cat = db.query(models.Category).filter(models.Category.id == company.category_id).first()
+        if cat:
+            category_name = cat.name
+            
+    campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company.id).order_by(models.Campaign.id.desc()).all()
+    if not campaigns:
+        raise HTTPException(status_code=400, detail="No campaigns found for this company")
+        
+    latest_campaign = campaigns[0]
+    
+    # Calculate stats
+    camp_ids = [c.id for c in campaigns]
+    results = db.query(models.Result).filter(models.Result.campaign_id.in_(camp_ids)).all() if camp_ids else []
+    stats = calculate_binary_analytics(results, campaigns)
+    
+    pdf_bytes = generate_analytics_pdf(
+        company_name=company.company_name,
+        company_logo=company.logo_url,
+        product_name=latest_campaign.product_name,
+        product_image=latest_campaign.product_photo_url,
+        product_description=latest_campaign.product_description,
+        stats=stats,
+        category=category_name
+    )
+    
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename={company.company_name.replace(' ', '_')}_Report.pdf"}
+    )
+
+@app.get("/admin/export-system-report")
+def export_system_report(db: Session = Depends(get_db), current_admin: models.User = Depends(require_role(["Admin"]))):
+    stats = get_admin_analytics_overview(db=db, current_admin=current_admin)
+    pdf_bytes = generate_system_pdf(stats)
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": "attachment; filename=System_Overview_Report.pdf"}
+    )
+
+@app.get("/company/export-report")
+def export_company_report(db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Company"]))):
+    company = db.query(models.Company).filter(models.Company.email == current_user.email).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+        
+    category_name = "FMCG"
+    if company.category_id:
+        cat = db.query(models.Category).filter(models.Category.id == company.category_id).first()
+        if cat:
+            category_name = cat.name
+            
+    campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company.id).order_by(models.Campaign.id.desc()).all()
+    if not campaigns:
+        raise HTTPException(status_code=400, detail="No campaigns found for this company")
+        
+    latest_campaign = campaigns[0]
+    
+    # Calculate stats
+    camp_ids = [c.id for c in campaigns]
+    results = db.query(models.Result).filter(models.Result.campaign_id.in_(camp_ids)).all() if camp_ids else []
+    stats = calculate_binary_analytics(results, campaigns)
+    
+    pdf_bytes = generate_analytics_pdf(
+        company_name=company.company_name,
+        company_logo=company.logo_url,
+        product_name=latest_campaign.product_name,
+        product_image=latest_campaign.product_photo_url,
+        product_description=latest_campaign.product_description,
+        stats=stats,
+        category=category_name
+    )
+    
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename={company.company_name.replace(' ', '_')}_Report.pdf"}
+    )
+
+@app.get("/admin/analytics/{company_id}", response_model=schemas.BinaryAnalyticsOut)
+def get_admin_company_analytics(company_id: int, db: Session = Depends(get_db), current_admin: models.User = Depends(require_role(["Admin"]))):
+    campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company_id).all()
+    camp_ids = [c.id for c in campaigns]
+    results = db.query(models.Result).filter(models.Result.campaign_id.in_(camp_ids)).all() if camp_ids else []
+    return calculate_binary_analytics(results, campaigns)
+
+@app.get("/company/analytics", response_model=schemas.BinaryAnalyticsOut)
+def get_company_analytics(db: Session = Depends(get_db), current_user: models.User = Depends(require_role(["Company"]))):
+    company = db.query(models.Company).filter(models.Company.email == current_user.email).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+        
+    campaigns = db.query(models.Campaign).filter(models.Campaign.company_id == company.id).all()
+    camp_ids = [c.id for c in campaigns]
+    results = db.query(models.Result).filter(models.Result.campaign_id.in_(camp_ids)).all() if camp_ids else []
+    return calculate_binary_analytics(results, campaigns)
 
 # --- ML MODEL INTEGRATION ---
 

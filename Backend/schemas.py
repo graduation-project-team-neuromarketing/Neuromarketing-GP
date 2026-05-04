@@ -149,3 +149,13 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: Optional[str] = None
     role: Optional[str] = None
+
+# --- ANALYTICS SCHEMAS ---
+class BinaryAnalyticsOut(BaseModel):
+    total_respondents: int
+    overall_positivity: int
+    resistance_index: int
+    ad_resonance_score: int
+    positivity_trend: List[int]
+    campaign_engagement: List[Dict[str, Any]]
+
