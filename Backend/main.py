@@ -12,6 +12,15 @@ import json
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile, Form
 from fastapi.staticfiles import StaticFiles
 import uuid
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+import pywt
+from scipy import signal
+import scipy.io as sio
+import pandas as pd
+import io
 
 
 # Adjust import based on the library used. Here we use 'jose'
@@ -493,6 +502,7 @@ from pydantic import BaseModel
 class UserResultSubmit(BaseModel):
     campaign_id: int
     survey_data: dict
+    neural_score: Optional[float] = None
 
 class LogVisitRequest(BaseModel):
     campaign_id: int
@@ -591,22 +601,13 @@ def submit_result(
     current_user: models.User = Depends(require_role(["User"])),
     db: Session = Depends(get_db)
 ):
-    existing_result = db.query(models.Result).filter(
-        models.Result.user_id == current_user.id,
-        models.Result.campaign_id == result_data.campaign_id
-    ).first()
-
-    if existing_result:
-        existing_result.survey_data = result_data.survey_data
-        result_to_return = existing_result
-    else:
-        new_result = models.Result(
-            user_id=current_user.id,
-            campaign_id=result_data.campaign_id,
-            survey_data=result_data.survey_data
-        )
-        db.add(new_result)
-        result_to_return = new_result
+    new_result = models.Result(
+        user_id=current_user.id,
+        campaign_id=result_data.campaign_id,
+        survey_data=result_data.survey_data,
+        neural_score=result_data.neural_score
+    )
+    db.add(new_result)
     
     history = db.query(models.History).filter(
         models.History.user_id == current_user.id,
@@ -628,5 +629,216 @@ def submit_result(
             history.earned_promo_code = f"{comp_name}-2026"
 
     db.commit()
-    db.refresh(result_to_return)
-    return {"status": "success", "result_id": result_to_return.id}
+    db.refresh(new_result)
+    return {"status": "success", "result_id": new_result.id}
+
+# --- ML MODEL INTEGRATION ---
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Device: {device}')
+
+# Preprocessing Functions
+def BandPassFilter(eeg_data):
+    b, a = signal.butter(4, Wn=[0.3, 50.0], btype='bandpass', fs=200)
+    return signal.filtfilt(b, a, eeg_data, axis=-1)
+
+def Notch(eeg_data):
+    b, a = signal.iirnotch(w0=50.0, Q=30.0, fs=200)
+    return signal.filtfilt(b, a, eeg_data, axis=-1)
+
+def BaselineRemoval(eeg_data):
+    # Simple mean subtraction across the time dimension (last axis)
+    mean = np.mean(eeg_data, axis=-1, keepdims=True)
+    return eeg_data - mean
+
+def calculate_de(coeffs):
+    variance = np.var(coeffs, ddof=1)
+    return 0.5 * np.log2(2 * np.pi * np.exp(1) * (variance + 1e-10))
+
+def seed_iv_advanced_features_fn(x):
+    num_channels = x.shape[0]
+    num_bands = 5
+    de_matrix = np.zeros((num_channels, num_bands))
+
+    for ch in range(num_channels):
+        coeffs = pywt.wavedec(x[ch], 'db4', level=5)
+        for i in range(1, 6):
+            de_matrix[ch, i - 1] = calculate_de(coeffs[i])
+
+    return de_matrix.astype(np.float32)
+
+# Model Classes
+class GradientReversalLayer(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, x, alpha):
+        ctx.alpha = alpha
+        return x.view_as(x)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        return grad_output.neg() * ctx.alpha, None
+
+def grl(x, alpha):
+    return GradientReversalLayer.apply(x, alpha)
+
+class DynamicAttentionConv(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.W = nn.Linear(in_channels, out_channels, bias=False)
+        self.A = nn.Parameter(torch.Tensor(out_channels, out_channels))
+        nn.init.xavier_uniform_(self.A, gain=0.1)
+        self.scale = out_channels ** 0.5
+
+    def forward(self, x_dense):
+        H = self.W(x_dense)
+        H_A = torch.matmul(H, self.A)
+        H_A_Ht = torch.matmul(H_A, H.transpose(1, 2)) / self.scale
+        A_att = F.softmax(H_A_Ht, dim=-1)
+        A_att = (A_att + A_att.transpose(1, 2)) / 2.0
+        Z = torch.matmul(A_att, H)
+        return Z
+
+class GlobalAttentionPooling(nn.Module):
+    def __init__(self, in_channels):
+        super().__init__()
+        self.attn = nn.Linear(in_channels, 1, bias=False)
+
+    def forward(self, Z):
+        omega = self.attn(Z)
+        beta = F.softmax(omega, dim=1)
+        Z_prime = (beta * Z).sum(dim=1)
+        return Z_prime
+
+class AttGraph(nn.Module):
+    def __init__(self, in_channels=5, hidden=64, num_nodes=62, num_classes=3, num_subjects=15, dropout=0.3):
+        super().__init__()
+        self.conv1 = DynamicAttentionConv(in_channels, hidden)
+        self.conv2 = DynamicAttentionConv(hidden, hidden)
+        self.conv3 = DynamicAttentionConv(hidden, hidden)
+
+        self.bn1 = nn.BatchNorm1d(hidden)
+        self.bn2 = nn.BatchNorm1d(hidden)
+        self.bn3 = nn.BatchNorm1d(hidden)
+
+        self.dropout = nn.Dropout(dropout)
+        self.pool = GlobalAttentionPooling(hidden)
+
+        self.classifier = nn.Sequential(
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, num_classes),
+        )
+
+        self.domain_classifier = nn.Sequential(
+            nn.Linear(hidden, 100),
+            nn.BatchNorm1d(100),
+            nn.ReLU(),
+            nn.Linear(100, num_subjects),
+            nn.LogSoftmax(dim=1),
+        )
+
+    def forward(self, x, alpha=0.0):
+        x = self.conv1(x)
+        x = x.transpose(1, 2)
+        x = self.bn1(x).transpose(1, 2)
+        x = F.leaky_relu(x, 0.2)
+
+        x = self.dropout(x)
+        x = self.conv2(x)
+        x = x.transpose(1, 2)
+        x = self.bn2(x).transpose(1, 2)
+        x = F.leaky_relu(x, 0.2)
+
+        x = self.dropout(x)
+        x = self.conv3(x)
+        x = x.transpose(1, 2)
+        x = self.bn3(x).transpose(1, 2)
+        x = F.leaky_relu(x, 0.2)
+
+        z_prime = self.pool(x)
+        emotion_out = self.classifier(z_prime)
+
+        z_rev = grl(z_prime, alpha)
+        domain_out = self.domain_classifier(z_rev)
+
+        return emotion_out, domain_out
+
+att_graph_model = None
+EMOTION_LABELS = ['Neutral', 'Negative', 'Positive']
+
+def load_ml_model():
+    global att_graph_model
+    try:
+        import os
+        model_path = "Best_AttGraph_loso_test1.pt"
+        if not os.path.exists(model_path):
+            print(f"Model file not found: {model_path}")
+            return
+            
+        state_dict = torch.load(model_path, map_location=device)
+        classifier_weight = state_dict.get('classifier.6.weight', None)
+        num_classes = classifier_weight.shape[0] if classifier_weight is not None else len(EMOTION_LABELS)
+        
+        att_graph_model = AttGraph(num_classes=num_classes)
+        att_graph_model.load_state_dict(state_dict)
+        att_graph_model.to(device)
+        att_graph_model.eval()
+        print(f"ML Model loaded successfully on {device}")
+    except Exception as e:
+        print(f"Warning: Failed to load ML model: {e}")
+
+load_ml_model()
+
+@app.post("/analyze")
+async def analyze_eeg(
+    file: UploadFile = File(...),
+    campaign_id: int = Form(...),
+    current_user: models.User = Depends(require_role(["User"])),
+    db: Session = Depends(get_db)
+):
+    if att_graph_model is None:
+        raise HTTPException(status_code=500, detail="ML model is not loaded. Please ensure Best_AttGraph_loso_test1.pt exists in the backend directory.")
+        
+    try:
+        content = await file.read()
+        filename = file.filename.lower()
+        
+        if filename.endswith(".npy"):
+            eeg_data = np.load(io.BytesIO(content))
+        elif filename.endswith(".csv"):
+            df = pd.read_csv(io.BytesIO(content), header=None) # Assume raw data, no header
+            eeg_data = df.to_numpy()
+        elif filename.endswith(".mat"):
+            mat = sio.loadmat(io.BytesIO(content))
+            keys = [k for k in mat.keys() if not k.startswith('__')]
+            eeg_data = mat[keys[0]]
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file format. Use .npy, .csv, or .mat")
+            
+        eeg_data = eeg_data.astype(np.float64)
+        
+        filtered_data = BandPassFilter(eeg_data)
+        notched_data = Notch(filtered_data)
+        baselined_data = BaselineRemoval(notched_data)
+        de_features = seed_iv_advanced_features_fn(baselined_data)
+        
+        tensor_input = torch.tensor(de_features, dtype=torch.float32).unsqueeze(0).to(device)
+        
+        with torch.no_grad():
+            emotion_out, _ = att_graph_model(tensor_input)
+            probabilities = F.softmax(emotion_out, dim=1)
+            confidence, predicted_class = torch.max(probabilities, 1)
+            
+            conf_val = confidence.item()
+            pred_idx = predicted_class.item()
+                
+        return {"prediction": pred_idx, "confidence": round(conf_val, 4), "neural_score": float(pred_idx)}
+        
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error analyzing file: {str(e)}")

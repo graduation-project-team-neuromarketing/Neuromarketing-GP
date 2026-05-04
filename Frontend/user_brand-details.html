@@ -98,7 +98,7 @@
                     </div>
                     <div class="px-4 py-2 border-b border-outline-variant/30 dark:border-slate-700 mb-1 flex items-center justify-between">
                         <span class="text-sm font-medium text-on-surface-variant dark:text-slate-300">Total Points</span>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> <span id="header-user-points">0</span></span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 shadow-sm"><span class="material-symbols-outlined text-[12px]">stars</span> <span id="header-user-points">130</span></span>
                     </div>
                     <a href="sign_in_out.html" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -206,6 +206,36 @@
             </div>
         </div>
 
+        <!-- EEG Upload Section -->
+        <div class="mt-12 bg-white dark:bg-slate-800 rounded-3xl border border-outline-variant/30 dark:border-slate-700 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <h3 class="text-xl font-bold mb-2 text-on-surface dark:text-white">Direct EEG Analysis</h3>
+            <p class="text-sm text-on-surface-variant dark:text-slate-400 mb-6">Upload your raw EEG data (.npy, .csv, .mat) for instant emotion recognition.</p>
+            
+            <div id="drop-zone" class="border-2 border-dashed border-outline-variant/60 dark:border-slate-600 rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
+                <span class="material-symbols-outlined text-5xl text-slate-400 mb-3">cloud_upload</span>
+                <p class="text-on-surface-variant dark:text-slate-300 font-medium text-lg">Drag & drop your EEG file here</p>
+                <p class="text-sm text-slate-500 mt-1">or click to browse</p>
+                <input type="file" id="eeg-file-input" class="hidden" accept=".npy,.csv,.mat" />
+            </div>
+
+            <div id="upload-result" class="mt-6 hidden">
+                <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-700/50 flex flex-col md:flex-row items-center justify-between border border-outline-variant/20 dark:border-slate-600 gap-4">
+                    <div class="flex items-center gap-6 w-full">
+                        <div id="emotion-icon" class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary transition-all duration-500 shrink-0">
+                            <span class="material-symbols-outlined text-3xl animate-spin">sync</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-on-surface-variant dark:text-slate-300 uppercase tracking-wider">Analysis Result</p>
+                            <p id="prediction-text" class="text-2xl font-bold text-primary mt-1">Processing...</p>
+                        </div>
+                        <button type="button" id="reset-upload-btn" class="hidden px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                            Try Another File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Company Products Section -->
         <div class="mt-12">
             <h3 class="text-xl font-bold mb-6 text-on-surface">Featured Product</h3>
@@ -215,8 +245,9 @@
         </div>
 
         <!-- Survey Button Section -->
-        <div class="mt-16 mb-24 flex justify-end">
-            <a href="user_survey.html" class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5 inline-block text-center">
+        <div class="mt-16 mb-24 flex flex-col items-end gap-3">
+            <p id="eeg-required-msg" class="text-red-500 font-semibold text-sm hidden flex items-center gap-1 transition-all"><span class="material-symbols-outlined text-sm">error</span> Please upload your EEG signal first.</p>
+            <a href="user_survey.html" id="go-to-survey-btn" class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl shadow-[0_8px_20px_rgba(0,122,255,0.3)] transition-all active:scale-[0.98] hover:-translate-y-0.5 inline-block text-center">
                 go to survey -&gt;
             </a>
         </div>
@@ -322,9 +353,45 @@
             }
             
             // Update Survey Link
-            const surveyLink = document.querySelector('a[href^="user_survey.html"]');
+            const surveyLink = document.getElementById('go-to-survey-btn') || document.querySelector('a[href^="user_survey.html"]');
             if (surveyLink) {
                 surveyLink.href = `user_survey.html?brandId=${brandId}`;
+                surveyLink.addEventListener('click', function(e) {
+                    const neuralScore = localStorage.getItem(`pending_neural_score_${window.currentCampaignId}`);
+                    
+                    if (neuralScore === null || neuralScore === undefined || neuralScore === "NaN" || neuralScore === "undefined") {
+                        e.preventDefault(); // Stop navigation
+                        const msg = document.getElementById('eeg-required-msg');
+                        if (msg) {
+                            msg.classList.remove('hidden');
+                            msg.classList.add('animate-pulse');
+                            setTimeout(() => msg.classList.remove('animate-pulse'), 1500);
+                        }
+                        
+                        const eegZone = document.getElementById('drop-zone');
+                        if (eegZone && !eegZone.classList.contains('hidden')) {
+                            // Highlight drop zone
+                            eegZone.classList.add('border-red-500', 'bg-red-50', 'dark:bg-red-900/10');
+                            eegZone.classList.remove('border-outline-variant/60', 'dark:border-slate-600');
+                            eegZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            // Remove highlight after a few seconds
+                            setTimeout(() => {
+                                eegZone.classList.remove('border-red-500', 'bg-red-50', 'dark:bg-red-900/10');
+                                eegZone.classList.add('border-outline-variant/60', 'dark:border-slate-600');
+                            }, 3000);
+                        } else {
+                            const uploadResult = document.getElementById('upload-result');
+                            if (uploadResult && !uploadResult.classList.contains('hidden')) {
+                                uploadResult.classList.add('border-red-500', 'shadow-[0_0_15px_rgba(239,68,68,0.3)]');
+                                uploadResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                setTimeout(() => {
+                                    uploadResult.classList.remove('border-red-500', 'shadow-[0_0_15px_rgba(239,68,68,0.3)]');
+                                }, 3000);
+                            }
+                        }
+                    }
+                });
             }
             
             // ADD ONLY THIS: Inside the successful fetch for the campaign, add a call to POST /users/log-visit
@@ -371,10 +438,146 @@
             `;
             productsContainer.innerHTML = productHTML;
             
+            // Setup EEG Upload Logic
+            window.currentCampaignId = data.id;
+            
         } catch (error) {
             console.error('Error:', error);
         }
     });
+
+    // EEG File Upload Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('eeg-file-input');
+
+        if (dropZone && fileInput) {
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-primary', 'bg-primary/5');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-primary', 'bg-primary/5');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-primary', 'bg-primary/5');
+                if (e.dataTransfer.files.length > 0) {
+                    handleFileUpload(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                e.preventDefault();
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
+        const resetBtn = document.getElementById('reset-upload-btn');
+        const uploadResult = document.getElementById('upload-result');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (fileInput) fileInput.value = '';
+                if (dropZone) dropZone.classList.remove('hidden');
+                if (uploadResult) uploadResult.classList.add('hidden');
+            });
+        }
+    });
+
+    // Prevent default drag behaviors to avoid accidental page navigation
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        window.addEventListener(eventName, e => e.preventDefault(), false);
+    });
+
+    async function handleFileUpload(file) {
+        if (!window.currentCampaignId) {
+            alert('Campaign data not loaded yet. Please wait.');
+            return;
+        }
+
+        const validExtensions = ['.npy', '.csv', '.mat'];
+        const extension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        
+        if (!validExtensions.includes(extension)) {
+            alert('Invalid file format. Please upload .npy, .csv, or .mat files.');
+            return;
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        const uploadResult = document.getElementById('upload-result');
+        const predictionText = document.getElementById('prediction-text');
+        const emotionIcon = document.getElementById('emotion-icon');
+        const resetBtn = document.getElementById('reset-upload-btn');
+
+        // Hide drop zone, show result card
+        if (dropZone) dropZone.classList.add('hidden');
+        if (uploadResult) uploadResult.classList.remove('hidden');
+        if (resetBtn) resetBtn.classList.add('hidden');
+
+        predictionText.textContent = 'Processing...';
+        predictionText.className = 'text-2xl font-bold text-primary mt-1';
+        emotionIcon.innerHTML = '<span class="material-symbols-outlined text-3xl animate-spin">sync</span>';
+        emotionIcon.className = 'w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary transition-all duration-500 shrink-0';
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('campaign_id', window.currentCampaignId);
+
+        try {
+            const token = localStorage.getItem('access_token');
+            const headers = {};
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(`http://127.0.0.1:8000/analyze`, {
+                method: 'POST',
+                headers: headers,
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                
+                if (result.neural_score !== undefined) {
+                    localStorage.setItem(`pending_neural_score_${window.currentCampaignId}`, result.neural_score);
+                } else if (result.prediction !== undefined) {
+                    localStorage.setItem(`pending_neural_score_${window.currentCampaignId}`, result.prediction);
+                }
+                
+                if (result.neural_score === 1 || result.prediction === 1) {
+                    emotionIcon.innerHTML = '<span class="material-symbols-outlined text-3xl text-green-500">sentiment_satisfied</span>';
+                    emotionIcon.className = 'w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-500 transition-all duration-500 shrink-0';
+                    predictionText.textContent = 'Positive Emotion Detected';
+                    predictionText.className = 'text-2xl font-bold text-green-500 mt-1';
+                } else {
+                    emotionIcon.innerHTML = '<span class="material-symbols-outlined text-3xl text-slate-500">sentiment_neutral</span>';
+                    emotionIcon.className = 'w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 transition-all duration-500 shrink-0';
+                    predictionText.textContent = 'Negative/Neutral Emotion Detected';
+                    predictionText.className = 'text-2xl font-bold text-slate-500 mt-1';
+                }
+            } else {
+                const error = await response.json();
+                predictionText.textContent = 'Analysis Failed';
+                predictionText.className = 'text-2xl font-bold text-red-500 mt-1';
+                emotionIcon.innerHTML = '<span class="material-symbols-outlined text-3xl text-red-500">error</span>';
+                emotionIcon.className = 'w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0';
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            predictionText.textContent = 'Connection Error';
+            predictionText.className = 'text-2xl font-bold text-red-500 mt-1';
+            emotionIcon.innerHTML = '<span class="material-symbols-outlined text-3xl text-red-500">cloud_off</span>';
+            emotionIcon.className = 'w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0';
+        } finally {
+            if (resetBtn) resetBtn.classList.remove('hidden');
+        }
+    }
 </script>
 <script src="dark-mode.js"></script>
 
@@ -400,8 +603,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (headerUserName && userData.full_name) {
                     headerUserName.textContent = userData.full_name;
                 }
-                if (headerUserPoints) {
-                    headerUserPoints.textContent = userData.points ?? 0;
+                if (headerUserPoints && userData.points !== undefined) {
+                    headerUserPoints.textContent = userData.points;
                 }
             }
         } catch (error) {
